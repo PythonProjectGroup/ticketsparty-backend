@@ -1,7 +1,7 @@
 # This is simple ticket project  
 Stay Tuned!
 
-#Niezbędne
+# Niezbędne
 > pip install djoser <br>
 > pip install djangorestframework-simplejwt <br>
 > pip install django-user-accounts <br>
