@@ -2,11 +2,7 @@
 from django.contrib import admin
 from . import models
 
-# rejestrujemy modele w panelu administracyjnym
-admin.site.register(models.Client)
-admin.site.register(models.Product)
-admin.site.register(models.Entry)
-admin.site.register(models.Order)
+
 
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
