@@ -2,7 +2,10 @@
 from django.contrib import admin
 from . import models
 
-
+admin.site.register(models.TicketType)
+admin.site.register(models.Event)
+admin.site.register(models.Client)
+admin.site.register(models.ClientTickets)
 
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin

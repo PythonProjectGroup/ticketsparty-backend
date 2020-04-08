@@ -1,12 +1,71 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth import get_user_model
 import json
-from django import template
+
+
+class Event(models.Model):
+    id = models.AutoField(primary_key=True)
+    event_name = models.CharField(max_length=50, verbose_name="nazwa eventu")
+    descriptions = models.TextField(max_length=800, verbose_name="Opisy")
+    pictures = models.TextField(max_length=800, verbose_name="Zdjęcia")
+    event_date = models.DateTimeField(verbose_name="Data")
+    city = models.CharField(max_length=20, verbose_name="Miasto")
+    street = models.CharField(max_length=30, verbose_name="Ulica")
+    post_code = models.CharField(max_length=6, verbose_name="Kod pocztowy")
+    street_address = models.CharField(max_length=4, verbose_name="Numer adresu")
+    country = models.CharField(max_length=20, verbose_name="Państwo")
+
+    class Meta:
+        verbose_name = "Wydarzenie"
+        verbose_name_plural = "Wydarzenia"
+
+
+class TicketType(models.Model):
+    id = models.AutoField(primary_key=True)
+    event_id = models.ForeignKey(Event, on_delete=models.CASCADE, verbose_name="ID wydarzenia")
+    start_of_selling = models.DateTimeField(verbose_name="Początek sprzedaży")
+    end_of_selling = models.DateTimeField(verbose_name="Koniec sprzedaży")
+    price = models.FloatField(verbose_name="Koszt biletu")
+    available_amount = models.IntegerField(default=0, verbose_name="Dostępna ilość biletów")
+    max_per_client = models.IntegerField(default=2, verbose_name="Ograniczenie na jednego klienta")
+
+    class Meta:
+        verbose_name = "Rodzaj biletu"
+        verbose_name_plural = "Rodzaje biletów"
+
+
+class Client(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=20, verbose_name="Nazwisko")
+    surname = models.CharField(max_length=20, verbose_name="Imię")
+    email = models.EmailField(verbose_name="Adres mailowy")
+    password = models.CharField(max_length=25, verbose_name="Hasło")
+
+    class Meta:
+        verbose_name = "Klient"
+        verbose_name_plural = "Klienci"
+
+
+class ClientTickets(models.Model):
+    id = models.AutoField(primary_key=True)
+    client_id = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name="ID klienta")
+    event_id = models.ForeignKey(Event, on_delete=models.CASCADE, verbose_name="ID eventu")
+    ticket_id = models.ForeignKey(TicketType, on_delete=models.CASCADE, verbose_name="ID rodzaju ticketu")
+    bought_date = models.DateTimeField(verbose_name="Data zakupu")
+    amount = models.IntegerField(verbose_name="Ilość biletów")
+    used = models.BooleanField(default=False, verbose_name="Wykorzystany")
+    names = models.TextField(verbose_name="Zakupiony dla")
+
+    def save(self, *args, **kwargs):
+        self.names = json.dumps(self.names)
+        super(ClientTickets, self).save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = "Bilet klienta"
+        verbose_name_plural = "Bilety klientów"
 
 
 class UserManager(BaseUserManager):
