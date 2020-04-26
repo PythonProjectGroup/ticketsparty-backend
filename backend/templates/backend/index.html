@@ -1,77 +1,46 @@
 <!DOCTYPE html>
 {% load static %}
-    {% block content %}
-<html lang="pl" xmlns="http://www.w3.org/1999/html">
+{% block content %}
+    <html lang="pl" xmlns="http://www.w3.org/1999/html">
 
-<head>
-    <meta charset="UTF-8">
-    <title>Tickets-Patry.</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <head>
+        <meta charset="UTF-8">
+        <title>Tickets-Party.</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
-</head>
+    </head>
 
-<body>
+    <body>
     <main>
-            <section>
-                    <div class="tickets">
-                        <header>
-                            <div id ="logo">Tickets - Party</div>
-                            <button class="button">Zarejstruj</button>
-                            <button class="button">Zaloguj</button>
-                            <p> Tutaj będzie opis tej strony (jeszcza
-                            nie wiem do końca co ona robi</p>
-                        </header>
-                       <!-- {% for key, value in img.items %}
+        <section>
+            <div class="tickets">
+                <header>
+                    <div id="logo">Tickets - Party</div>
+                    <button class="button">Zarejstruj</button>
+                    <button class="button">Zaloguj</button>
+                    <p> Tutaj będzie opis tej strony (jeszcza
+                        nie wiem do końca co ona robi</p>
+                </header>
+
+                {% if all_events_info %}
+                    {% for event in all_events_info %}
                         <div class="ticket">
-                            <figure>
-                                <a href="#"><img src="{{ value }}" alt= "{{ key }}"></a>
-                                <figcaption>Wydarzenie 0</figcaption>
+                            <figure class="figure">
+                                <img class="figure-img img-fluid rounded" src="{{ event.pictures }}" alt="TEST">
+                                <figcaption>{{ event.event_name }}</figcaption>
                             </figure>
                         </div>
-                        {% endfor %}-->
-                        <div class="ticket">
-                            <figure>
-                                <a href="#"><img src="{% static 'img/0.bilet.jpg' %}"alt="Wydarzenie0"></a>
-                                <figcaption>Wydarzenie 1</figcaption>
-                            </figure>
-                        </div>
-                        <div class="ticket">
-                            <figure>
-                                <a href="#"><img src="{% static 'img/1.bilet.jpg' %}"alt="Wydarzenie1"></a>
-                                <figcaption>Wydarzenie 1</figcaption>
-                            </figure>
-                        </div>
-                        <div class="ticket">
-                            <figure>
-                                <a href="#"><img src="{% static 'img/2.bilet.jpg' %}"alt="Wydarzenie2"></a>
-                                <figcaption>Wydarzenie 2</figcaption>
-                            </figure>
-                        </div>
-                        <div class="ticket">
-                            <figure>
-                                <a href="#"><img src="{% static 'img/3.bilet.jpg' %}"alt="Wydarzenie3"></a>
-                                <figcaption>Wydarzenie 3</figcaption>
-                            </figure>
-                        </div>
-                        <div class="ticket">
-                            <figure>
-                                <a href="#"><img src="{% static 'img/4.bilet.jpg' %}"alt="Wydarzenie4"></a>
-                                <figcaption>Wydarzenie 4</figcaption>
-                            </figure>
-                        </div>
-                        <div class="ticket">
-                            <figure>
-                                <a href="#"><img src="{% static 'img/5.bilet.jpg' %}"alt="Wydarzenie5"></a>
-                                <figcaption>Wydarzenie 5</figcaption>
-                            </figure>
-                        </div>
-                    </div>
-            </section>
+                    {% endfor %}
+                {% else %}
+                    Nie ma eventów :(
+                {% endif %}
+            </div>
+        </section>
     </main>
 
-</body>
-    {% endblock %}
+    </body>
+{% endblock %}
 </html>
