@@ -1,8 +1,8 @@
-body{
-   background-color: azure;
+body {
+    background-color: white;
 }
-
-#logo{
+.box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
+#logo {
     margin-bottom: 100px;
     margin-right: 500px;
     margin-left: 20px;
@@ -11,7 +11,8 @@ body{
     color: blue;
     display: inline-block;
 }
-.button{
+
+.button {
     margin-bottom: 100px;
     background-color: blue;
     color: azure;
@@ -21,26 +22,25 @@ body{
     display: inline-block;
     font-size: 16px;
 }
-.rectangle{
+
+.rectangle {
     width: 100%;
     margin: 30px;
     color: yellow;
 }
 
-.tickets{
-    margin-left: auto;
-    margin-right: auto;
-    width: 1100px;
-    text-align: center;
-    padding: 0;
-}
-.ticket{
-    display: inline-block;
-    width: 30%;
-}
-.ticket img{
+
+
+
+.ticket {
     width: 100%;
 }
-.ticket figure{
+
+.ticket-img {
+    width: 100%;
+    height: 200px;
+}
+
+.ticket figure {
     margin: 10px;
 }

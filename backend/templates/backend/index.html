@@ -7,38 +7,44 @@
         <meta charset="UTF-8">
         <title>Tickets Party.</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
     </head>
 
     <body>
     <main>
-        <section>
-            <div class="tickets">
-                <header>
-                    <div id="logo">Tickets Party</div>
-                    <button type="button" class="btn btn-primary">Zarejestruj</button>
-                    <button type="button" class="btn btn-primary">Zaloguj</button>
-                    <p> Tutaj będzie opis tej strony (jeszcza
-                        nie wiem do końca co ona robi</p>
-                </header>
-
-                {% if all_events_info %}
-                    {% for event in all_events_info %}
-                        <div class="ticket">
-                            <figure class="figure">
-                                <img class="figure-img img-fluid rounded" src="{{ event.pictures }}" alt="TEST">
-                                <figcaption>{{ event.event_name }}</figcaption>
-                            </figure>
+        <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+            <h5 class="my-0 mr-md-auto font-weight-normal">Tickets Party</h5>
+            <nav>
+                <button class="btn btn-primary" href="#">Zaloguj się</button>
+                <button class="btn btn-primary" href="#">Zarejestruj się</button>
+            </nav>
+        </div>
+        <div class="container  justify-content-center" >
+            {% if all_events_info %}
+                <div class="row  justify-content-center">
+                    {% for event in all_events_info%}
+                        <div class="col-md-3">
+                            <div class="ticket">
+                                <figure class="figure">
+                                    <img class="figure-img img-fluid rounded " src="{{ event.pictures }}" alt="TEST">
+                                    <figcaption>{{ event.event_name }}</figcaption>
+                                </figure>
+                            </div>
                         </div>
+                        {% if forloop.counter|divisibleby:3 and not forloop.last %}
+                            </div>
+                            <div class="row  justify-content-center">
+                        {% endif %}
                     {% endfor %}
-                {% else %}
-                    Nie ma eventów :(
-                {% endif %}
-            </div>
-        </section>
+                    </div>
+            {% else %}
+                Nie ma eventów :(
+            {% endif %}
+        </div>
+
     </main>
 
     </body>
