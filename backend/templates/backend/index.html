@@ -22,24 +22,25 @@
                 <button class="btn btn-primary" href="#">Zarejestruj się</button>
             </nav>
         </div>
-        <div class="container  justify-content-center" >
+        <div class="container">
             {% if all_events_info %}
-                <div class="row  justify-content-center">
-                    {% for event in all_events_info%}
-                        <div class="col-md-3">
-                            <div class="ticket">
-                                <figure class="figure">
-                                    <img class="figure-img img-fluid rounded " src="{{ event.pictures }}" alt="TEST">
-                                    <figcaption>{{ event.event_name }}</figcaption>
-                                </figure>
+                {% for row in all_events_info %}
+                    <div class="row ">
+                        {% for event in row %}
+                            <div class="col-lg-4 ">
+                                <div class="card box-shadow events-card" >
+                                    <img class="card-img-top " src="{{ event.pictures }}" alt="TEST">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ event.event_name }}</h5>
+                                        <p class="card-text">{{ event.descriptions }}</p>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        {% if forloop.counter|divisibleby:3 and not forloop.last %}
-                            </div>
-                            <div class="row  justify-content-center">
-                        {% endif %}
-                    {% endfor %}
+                        {% endfor %}
                     </div>
+                {% endfor %}
+
+                </div>
             {% else %}
                 Nie ma eventów :(
             {% endif %}

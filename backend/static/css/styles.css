@@ -1,7 +1,11 @@
 body {
     background-color: white;
 }
-.box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
 #logo {
     margin-bottom: 100px;
     margin-right: 500px;
@@ -30,17 +34,21 @@ body {
 }
 
 
-
-
 .ticket {
     width: 100%;
 }
 
-.ticket-img {
-    width: 100%;
-    height: 200px;
+.events-card {
+    margin-top: 10px;
+    margin-bottom: 30px;
 }
 
 .ticket figure {
     margin: 10px;
+}
+
+.card-img-top {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
 }
