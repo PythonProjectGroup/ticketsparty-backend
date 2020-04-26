@@ -2,6 +2,45 @@ body{
    background-color: azure;
 }
 
-h1 a, h2 a {
-    color: #C25100;
+#logo{
+    margin-bottom: 100px;
+    margin-right: 500px;
+    margin-left: 20px;
+    font-size: 36px;
+    font-weight: 400;
+    color: blue;
+    display: inline-block;
+}
+.button{
+    margin-bottom: 100px;
+    background-color: blue;
+    color: azure;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+.rectangle{
+    width: 100%;
+    margin: 30px;
+    color: yellow;
+}
+
+.tickets{
+    margin-left: auto;
+    margin-right: auto;
+    width: 1100px;
+    text-align: center;
+    padding: 0;
+}
+.ticket{
+    display: inline-block;
+    width: 30%;
+}
+.ticket img{
+    width: 100%;
+}
+.ticket figure{
+    margin: 10px;
 }

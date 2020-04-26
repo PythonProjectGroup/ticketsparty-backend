@@ -14,7 +14,64 @@
 </head>
 
 <body>
-Jakiś textfsafasfas
+    <main>
+            <section>
+                    <div class="tickets">
+                        <header>
+                            <div id ="logo">Tickets - Party</div>
+                            <button class="button">Zarejstruj</button>
+                            <button class="button">Zaloguj</button>
+                            <p> Tutaj będzie opis tej strony (jeszcza
+                            nie wiem do końca co ona robi</p>
+                        </header>
+                       <!-- {% for key, value in img.items %}
+                        <div class="ticket">
+                            <figure>
+                                <a href="#"><img src="{{ value }}" alt= "{{ key }}"></a>
+                                <figcaption>Wydarzenie 0</figcaption>
+                            </figure>
+                        </div>
+                        {% endfor %}-->
+                        <div class="ticket">
+                            <figure>
+                                <a href="#"><img src="{% static 'img/0.bilet.jpg' %}"alt="Wydarzenie0"></a>
+                                <figcaption>Wydarzenie 1</figcaption>
+                            </figure>
+                        </div>
+                        <div class="ticket">
+                            <figure>
+                                <a href="#"><img src="{% static 'img/1.bilet.jpg' %}"alt="Wydarzenie1"></a>
+                                <figcaption>Wydarzenie 1</figcaption>
+                            </figure>
+                        </div>
+                        <div class="ticket">
+                            <figure>
+                                <a href="#"><img src="{% static 'img/2.bilet.jpg' %}"alt="Wydarzenie2"></a>
+                                <figcaption>Wydarzenie 2</figcaption>
+                            </figure>
+                        </div>
+                        <div class="ticket">
+                            <figure>
+                                <a href="#"><img src="{% static 'img/3.bilet.jpg' %}"alt="Wydarzenie3"></a>
+                                <figcaption>Wydarzenie 3</figcaption>
+                            </figure>
+                        </div>
+                        <div class="ticket">
+                            <figure>
+                                <a href="#"><img src="{% static 'img/4.bilet.jpg' %}"alt="Wydarzenie4"></a>
+                                <figcaption>Wydarzenie 4</figcaption>
+                            </figure>
+                        </div>
+                        <div class="ticket">
+                            <figure>
+                                <a href="#"><img src="{% static 'img/5.bilet.jpg' %}"alt="Wydarzenie5"></a>
+                                <figcaption>Wydarzenie 5</figcaption>
+                            </figure>
+                        </div>
+                    </div>
+            </section>
+    </main>
+
 </body>
     {% endblock %}
 </html>
