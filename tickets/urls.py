@@ -32,6 +32,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^', include('backend.urls')),
     url(r'^backend/', include('backend.urls')),
+    url(r'^login/$', login.as_view(), {'template_name': 'login.html'}, name='login'),
+    url(r'^signup/$', core_views.signup, name='signup'),
+    url(r'^logout/$', core_views.my_logout, name='logout'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += staticfiles_urlpatterns()

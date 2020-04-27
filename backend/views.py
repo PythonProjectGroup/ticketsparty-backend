@@ -8,7 +8,9 @@ from django.shortcuts import redirect
 from django import template
 import numpy as np
 from django.db import transaction
+from django.contrib.auth import get_user_model
 
+from backend.forms import SignUpForm
 from backend.models import Event
 
 register = template.Library()
@@ -19,6 +21,21 @@ def index(request):
     events_in_rows = [events[r * 3:(r + 1) * 3] for r in range(len(events))]
     print(events_in_rows)
     return render(request, 'backend/index.html', {'all_events_info': events_in_rows})
+
+def signup(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            user.refresh_from_db()
+            user.save()
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=user.email, password=raw_password)
+            login(request, user)
+            return redirect('/')
+    else:
+        form = SignUpForm()
+    return render(request, 'registration/signup.html', {'form': form})
 
 
 def my_logout(request):

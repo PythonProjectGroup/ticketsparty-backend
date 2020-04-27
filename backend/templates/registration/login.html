@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns="http://www.w3.org/1999/html">
+{% load static %} {% block content %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Logowanie</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+    <h1>Zaloguj</h1>
+
+    {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+            {{error}}
+        {% endfor %}
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+            {% for field in form %}
+                <p>
+                    {{ field }}
+                </p>
+            {% endfor %}
+        <button type="submit" value="login" id="login_button">Zaloguj się</button>
+    </form>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</body>
+
+</html>
+
+<script>
+    $(document).ready(function() {
+        $("#id_username").attr("placeholder", "e-mail").val("").focus().blur();
+        $("#id_password").attr("placeholder", "hasło").val("").focus().blur();
+    })
+</script>
+
+{% endblock %}
