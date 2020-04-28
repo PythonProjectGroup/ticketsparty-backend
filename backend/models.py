@@ -19,9 +19,6 @@ class UserManager(BaseUserManager):
             raise ValueError('The given email must be set')
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
-        if isAdmin:
-            polska = Country.objects.create(name="polska")
-            self.country = polska
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -36,9 +33,6 @@ class UserManager(BaseUserManager):
         """Create and save a SuperUser with the given email and password."""
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('is_lawyer', True)
-
-        extra_fields.setdefault('is_lawyer', True)
 
         if extra_fields.get('is_staff') is not True:
             raise ValueError('Superuser must have is_staff=True.')
