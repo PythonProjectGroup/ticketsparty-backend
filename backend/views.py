@@ -12,6 +12,8 @@ from django.contrib.auth import get_user_model
 
 from backend.forms import SignUpForm
 from backend.models import Event
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 register = template.Library()
 
@@ -46,3 +48,15 @@ def my_logout(request):
 
 def e404(request):
     return render(request, 'backend/404.html')
+
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        #data['add'] = self.user.add
+        data['id'] = self.user.id
+        return data
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer

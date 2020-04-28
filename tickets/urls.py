@@ -26,15 +26,19 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from tickets import settings
 from rest_framework import routers, serializers, viewsets
+import backend.views as views
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^', include('backend.urls')),
-    url(r'^backend/', include('backend.urls')),
+    url(r'^$', views.index, name='index'),
+    url(r'^api/', include('backend.urls')),
     url(r'^login/$', login.as_view(), {'template_name': 'login.html'}, name='login'),
     url(r'^signup/$', core_views.signup, name='signup'),
     url(r'^logout/$', core_views.my_logout, name='logout'),
+    path('auth/jwt/create/', views.CustomTokenObtainPairView.as_view(), name='custom_token_obtain_pair'),
+    path('auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls.jwt')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += staticfiles_urlpatterns()
