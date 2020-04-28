@@ -4,5 +4,5 @@ from . import views  # import widoków aplikacji
 
 app_name = 'backend'  # przestrzeń nazw aplikacji
 urlpatterns = [
-    url(r'^$', views.index, name='index')
+
 ]

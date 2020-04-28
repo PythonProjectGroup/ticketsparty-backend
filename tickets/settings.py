@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_registration',
      'rest_framework',
+    'rest_framework_simplejwt',
+    'djoser',
 ]
 
 DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
@@ -72,6 +74,11 @@ TEMPLATES = [
         },
     },
 ]
+
+REST_AUTH_SERIALIZERS = {
+'USER_DETAILS_SERIALIZER': 'backend.serializers.UserSerializer',
+}
+
 
 WSGI_APPLICATION = 'tickets.wsgi.application'
 
@@ -109,7 +116,8 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ]
 }
 
@@ -141,3 +149,4 @@ STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'backend.User'
 
+SITE_ID = 2
