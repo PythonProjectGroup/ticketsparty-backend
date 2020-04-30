@@ -6,29 +6,52 @@
     <meta charset="UTF-8">
     <title>Logowanie</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap-theme.min.css">
+     <link rel="stylesheet" href="{% static 'css/login.css' %}">
 </head>
 
 <body>
+    <div id="login">
+        <div class="container">
+            <div id="login-row" class="row justify-content-center align-items-center">
+                <div id="login-column" class="col-md-6">
+                    <div id="login-box" class="col-md-12">
+                        <form id="login-form" class="form" action="" method="post">
+                            <h3 class="text-center text-info">Zaloguj się</h3>
 
-    <h1>Zaloguj</h1>
+                                {% if form.non_field_errors %}
+                                    {% for error in form.non_field_errors %}
+                                        {{error}}
+                                    {% endfor %}
+                                {% endif %}
 
-    {% if form.non_field_errors %}
-        {% for error in form.non_field_errors %}
-            {{error}}
-        {% endfor %}
-    {% endif %}
+                            <div class="form">
+                                <form method="post">
+                                    {% csrf_token %}
+                                        {% for field in form %}
+                                            <div class="d-flex justify-content-center">
+                                                <p>
+                                                    {{ field }}
+                                                </p>
+                                            </div>
+                                        {% endfor %}
+                                    <div class="center-block text-center">
+                                        <button class="btn btn-info btn-md " type="submit" value="login" id="login_button">Potwierdź</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div id="register-link" class="text-right">
+                                <a href="/signup" class="text-info">Zarejestruj się tutaj</a>
+                            </div>
 
-    <form method="post">
-        {% csrf_token %}
-            {% for field in form %}
-                <p>
-                    {{ field }}
-                </p>
-            {% endfor %}
-        <button type="submit" value="login" id="login_button">Zaloguj się</button>
-    </form>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
