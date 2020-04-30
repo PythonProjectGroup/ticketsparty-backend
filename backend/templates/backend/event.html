@@ -7,32 +7,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/event.css' %}">
 
 </head>
 <body>
-Witamy na wydarzeniu numer {{ event.id }}!!!
-{{ event.descriptions }}
-itd....
-Trzeba ładnie napisać html
-{% if ticket_types %}
-    {% for ticket_type in ticket_types %}
+<div class="bg-light">
+    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+        <h5 class="my-0 mr-md-auto font-weight-normal">Tickets Party</h5>
+        <h2 class="my-0 mr-md-auto font-weight-normal">{{ event.event_name }}</h2>
+        <nav>
+            {% if user.is_authenticated %}
+                <a href="/logout" class="btn btn-primary" role="button">Wyloguj się</a>
+            {% else %}
+                <a href="/login" class="btn btn-primary" role="button">Zaloguj się</a>
+                <a href="/signup" class="btn btn-primary" role="button">Zarejestruj się</a>
+            {% endif %}
+        </nav>
+    </div>
+
+    <div class="d-flex flex-column flex-md-row justify-content-around ">
         <div class="row ">
-            <div class="col-md-4 d-flex pb-3 ">
-                <div class="card box-shadow events-card ">
+                <div class="card box-shadow events-card " style="width: 45rem; height: auto">
+                    <img class="card-img " src="{{ event.pictures }}" alt="TEST" style="object-fit: fill;">
+                    <div class="card-img-overlay">
+                    </div>
+                </div>
+                 <div class="card box-shadow events-card ">
+                    <div class="card-body align-items-center d-flex justify-content-center " style="max-width: 100%;">
+                        <div class="text-wrap" style="width: 35rem;">
+                            <p class="card-text text-center ">{{ event.descriptions }}</p>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+
+{% if ticket_types %}
+     <div class="row ">
+        {% for ticket_type in ticket_types %}
+            <div class="d-flex col-md-4 d-flex pb-3 d-flex justify-content-around  ">
+                <div class="card box-shadow events-card" style="width: 30rem; height: auto">
                     <div class="card-body ">
-                        <h5 class="card-title">{{ ticket_type.start_of_selling }}</h5>
-                        <p class="card-text">{{ ticket_type.price }}</p>
-                        <p class="font-weight-bold text-md-left">{{ ticket_type.end_of_selling }}</p>
-                        <p class="blockquote-footer">{{ ticket_type.max_per_client }}</p>
+                        <h5 class="card-title">Cena: {{ ticket_type.price }} PLN</h5>
+                        <p class="font-weight-bold text-md-left">Początek sprzedaży: {{ ticket_type.start_of_selling }}</p>
+                        <p class="font-weight-bold text-md-left">Koniec sprzedaży: {{ ticket_type.end_of_selling }}</p>
+                        <p class="font-weight-light text-md-center">Zostało jeszcze: {{ ticket_type.available_amount }} biletów</p>
+                        <p class="blockquote-footer">Jednorazowo możesz kupić: {{ ticket_type.max_per_client }} bilety</p>
                     </div>
                 </div>
             </div>
-        </div>
-    {% endfor %}
+        {% endfor %}
+    </div>
 {% else %}
     Nie ma ticketów :(
 {% endif %}
 
+{% if ticket_types|length >= 4 %}
+<div class="d-flex justify-content-center p-3 px-md-4 mb-3  bg-white border-bottom box-shadow">
+    <a id="back-to-top" href="#" class="btn btn-lg center-block" role="button"  data-toggle="tooltip">
+        <span class="glyphicon glyphicon-chevron-up"></span>Przewiń do góry</a>
+</div>
+{% endif %}
+</div>
 </body>
 </html>
