@@ -36,6 +36,7 @@ urlpatterns = [
     url(r'^login/$', login.as_view(), {'template_name': 'login.html'}, name='login'),
     url(r'^signup/$', core_views.signup, name='signup'),
     url(r'^logout/$', core_views.my_logout, name='logout'),
+    path('event/<int:event_id>', views.event, name='event'),
     path('auth/jwt/create/', views.CustomTokenObtainPairView.as_view(), name='custom_token_obtain_pair'),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
