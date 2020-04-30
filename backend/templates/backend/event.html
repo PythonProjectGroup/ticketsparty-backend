@@ -1,10 +1,38 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{ event_id }}</title>
+    <title> {{ event.event_name }} </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
 </head>
 <body>
-    Witamy na wydarzeniu numer {{ event_id }}!!!
+Witamy na wydarzeniu numer {{ event.id }}!!!
+{{ event.descriptions }}
+itd....
+Trzeba ładnie napisać html
+{% if ticket_types %}
+    {% for ticket_type in ticket_types %}
+        <div class="row ">
+            <div class="col-md-4 d-flex pb-3 ">
+                <div class="card box-shadow events-card ">
+                    <div class="card-body ">
+                        <h5 class="card-title">{{ ticket_type.start_of_selling }}</h5>
+                        <p class="card-text">{{ ticket_type.price }}</p>
+                        <p class="font-weight-bold text-md-left">{{ ticket_type.end_of_selling }}</p>
+                        <p class="blockquote-footer">{{ ticket_type.max_per_client }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    Nie ma ticketów :(
+{% endif %}
+
 </body>
 </html>
