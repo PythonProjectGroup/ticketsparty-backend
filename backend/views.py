@@ -8,20 +8,25 @@ from django.shortcuts import redirect
 from django import template
 from django.db import transaction
 from django.contrib.auth import get_user_model
+from django.http import HttpResponse, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from backend.forms import SignUpForm
-from backend.models import Event, TicketType
+from backend.models import Event, TicketType, ClientTickets
+from rest_framework.parsers import JSONParser
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+
+from serializers import ClientTickets, TicketSerializer, TicketListSerializer, EventListSerializer, EventSerializer
 
 register = template.Library()
 
 
-def event(request,event_id):
+def event(request, event_id):
     event = Event.objects.get(id=event_id)
     ticket_types = TicketType.objects.filter(event_id=event_id)
     print(ticket_types)
-    return render(request, 'backend/event.html', {'event': event,'ticket_types':ticket_types})
+    return render(request, 'backend/event.html', {'event': event, 'ticket_types': ticket_types})
 
 
 def index(request):
@@ -71,3 +76,71 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
+
+
+@csrf_exempt
+def event_list(request):
+    if request.method == 'GET':
+        events = Event.objects.all()
+        serializer = EventListSerializer(events, many=True)
+        return JsonResponse(serializer.data, safe=False)
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = EventListSerializer(data=data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
+
+@csrf_exempt
+def event_details(request, event_id):
+    try:
+        event = Event.objects.get(id=event_id)
+    except Event.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = EventSerializer(event)
+        return JsonResponse(serializer.data)
+
+# @csrf_exempt
+# def client_ticket_list(request):
+#     if request.method == 'GET':
+#         tickets = ClientTickets.objects.all()
+#         serializer = TicketListSerializer(tickets, many=True)
+#         return JsonResponse(serializer.data, safe=False)
+
+# @csrf_exempt
+# def ticket_details(request, event_id):
+#     try:
+#         ticket = ClientTickets.objects.get(id=event_id)
+#     except ClientTickets.DoesNotExist:
+#         return HttpResponse(status=404)
+#
+#     if request.method == 'GET':
+#         serializer = TicketSerializer(ticket)
+#         return JsonResponse(serializer.data)
+
+@csrf_exempt
+def check_ticket(request, id):
+    try:
+        ticket = ClientTickets.objects.get(id=id)
+    except TicketType.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = TicketSerializer(ticket)
+        return JsonResponse(serializer.data)
+
+# @csrf_exempt
+# def validate_ticket(request, id):
+#     try:
+#         ticket = ClientTickets.objects.get(id=id)
+#     except TicketType.DoesNotExist:
+#         return HttpResponse(status=404)
+#
+#     if request.method == 'PUT':
+#         ticket.used = True
+#         ticket.save()
+#         return HttpResponse(status=200)

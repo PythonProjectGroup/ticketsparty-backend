@@ -42,7 +42,6 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, True, **extra_fields)
 
 
-
 class User(AbstractUser):
     username = None
     email = models.EmailField(_('email address'), unique=True)
@@ -87,8 +86,6 @@ class TicketType(models.Model):
         verbose_name_plural = "Rodzaje biletów"
 
 
-
-
 class ClientTickets(models.Model):
     id = models.AutoField(primary_key=True)
     client_id = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name="ID klienta")
@@ -106,5 +103,3 @@ class ClientTickets(models.Model):
     class Meta:
         verbose_name = "Bilet klienta"
         verbose_name_plural = "Bilety klientów"
-
-

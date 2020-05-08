@@ -34,12 +34,14 @@ Do każdego połączenia z serwerem należy dołączyć do adresu zmienną Beare
 | Kod   | Opis                                           |
 | :---: | ---------------------------------------------- |
 | 200   | Sukces                                         |
-| 201   | Sukces                                         |
+| 201   | Sukces - pomyślnie utworzono obiekt(y)         |
 
 ### Błąd
 | Kod   | Opis                                                      |
 | :---: | --------------------------------------------------------- |
+| 400   | Serwer otrzymał złe dane                                  |
 | 401   | Serwer nie otrzymał danych                                |
+| 404   | Żądany obiekt nie istnieje                                |
 
 
 ## Funkcje
@@ -98,3 +100,29 @@ Do każdego połączenia z serwerem należy dołączyć do adresu zmienną Beare
 | DELETE      |                  |              |                  | Brak                                                                                        |
 
 > curl -X POST -d '{"email": "arus@arus.com","password": "maslotoniehaslo"}' -H 'Content-Type: application/json' http://127.0.0.1:8000/auth/jwt/create
+
+### Wydarzenia
+### /api/events/
+###### Uprawnienia: ?
+| Metoda HTTP | Content-Type     | Opis wejścia | Przykład wejścia | Akcja                                                                                       |
+| ----------- | ---------------- | ------------ | ---------------- | ------------------------------------------------------------------------------------------- |
+| GET         | application/json |              |                  | Pobranie ogólnych informacji (nazwa, data, miejsce) wszystkich wydarzeń                                                                                       |
+| POST        | application/json | JSON |        {"id":27, "event_name":"Maraton", "event_date":"2020-12-31T22:00:00+02:00","city":"Wrocław","country": "Polska"} | Dodanie wydarzenia\wydarzeń |
+| PUT         |                  |              |                  | Brak                                                                                        |
+| DELETE      |                  |              |                  | Brak                                                                                        |
+
+> curl -X GET http://127.0.0.1:8000/api/events/
+
+> curl -X POST -d '{"id":27, "event_name":"Maraton", "event_date":"2020-12-31T22:00:00+02:00","city":"Wrocław","country": "Polska"}' -H 'Content-Type: application/json' http://127.0.0.1:8000/api/events/
+
+### Wydarzenie - szczegóły
+### /api/events/<int: id>
+###### Uprawnienia: Każdy
+| Metoda HTTP | Content-Type     | Opis wejścia | Przykład wejścia | Akcja                                                                                       |
+| ----------- | ---------------- | ------------ | ---------------- | ------------------------------------------------------------------------------------------- |
+| GET         | application/json |              |                  | Pobranie wszystkich informacji wybranego wydarzenia                                         |
+| POST        |                  |              |                  | Brak                                                                                        |
+| PUT         |                  |              |                  | Brak                                                                                        |
+| DELETE      |                  |              |                  | Brak                                                                                        |
+
+> curl -X GET http://127.0.0.1:8000/api/events/1/
