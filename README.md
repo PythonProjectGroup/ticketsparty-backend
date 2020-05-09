@@ -35,12 +35,14 @@ Do każdego połączenia z serwerem należy dołączyć do adresu zmienną Beare
 | :---: | ---------------------------------------------- |
 | 200   | Sukces                                         |
 | 201   | Sukces - pomyślnie utworzono obiekt(y)         |
+| 204   | Sukces - pomyślnie usunięto obiekt             |
 
 ### Błąd
 | Kod   | Opis                                                      |
 | :---: | --------------------------------------------------------- |
 | 400   | Serwer otrzymał złe dane                                  |
 | 401   | Serwer nie otrzymał danych                                |
+| 403   | Brak uprawnień                                            |
 | 404   | Żądany obiekt nie istnieje                                |
 
 
@@ -102,27 +104,49 @@ Do każdego połączenia z serwerem należy dołączyć do adresu zmienną Beare
 > curl -X POST -d '{"email": "arus@arus.com","password": "maslotoniehaslo"}' -H 'Content-Type: application/json' http://127.0.0.1:8000/auth/jwt/create
 
 ### Wydarzenia
-### /api/events/
-###### Uprawnienia: ?
+### /api/events
+###### Uprawnienia: GET - każdy, POST - admin
 | Metoda HTTP | Content-Type     | Opis wejścia | Przykład wejścia | Akcja                                                                                       |
 | ----------- | ---------------- | ------------ | ---------------- | ------------------------------------------------------------------------------------------- |
-| GET         | application/json |              |                  | Pobranie ogólnych informacji (nazwa, data, miejsce) wszystkich wydarzeń                                                                                       |
-| POST        | application/json | JSON |        {"id":27, "event_name":"Maraton", "event_date":"2020-12-31T22:00:00+02:00","city":"Wrocław","country": "Polska"} | Dodanie wydarzenia\wydarzeń |
-| PUT         |                  |              |                  | Brak                                                                                        |
-| DELETE      |                  |              |                  | Brak                                                                                        |
+| GET         |                  |              |                  | Pobranie podstawowych informacji (nazwa, data, miejsce) wszystkich wydarzeń                                                                                       |
+| POST        | application/json | JSON         |{"event_name":"Maraton",   "descriptions":"Opis wydarzenia",   "pictures":"https://strona.pl/adres/url/zdjecia.jpg",    "event_date":"2020-04-17T11:22:42+02:00",    "city":"Wrocław",    "street":"Długa",    "post_code":"53-615",    "street_address":"1",    "country":"Polska"} | Dodanie wydarzenia\wydarzeń |
+| (PUT)       |                  |              |                  | Brak                                                                                        |
+| (DELETE)    |                  |              |                  | Brak                                                                                        |
 
 > curl -X GET http://127.0.0.1:8000/api/events/
 
-> curl -X POST -d '{"id":27, "event_name":"Maraton", "event_date":"2020-12-31T22:00:00+02:00","city":"Wrocław","country": "Polska"}' -H 'Content-Type: application/json' http://127.0.0.1:8000/api/events/
-
-### Wydarzenie - szczegóły
+### Szczegóły wydarzenia
 ### /api/events/<int: id>
-###### Uprawnienia: Każdy
+###### Uprawnienia: GET - każdy, PUT, DELETE - admin
 | Metoda HTTP | Content-Type     | Opis wejścia | Przykład wejścia | Akcja                                                                                       |
 | ----------- | ---------------- | ------------ | ---------------- | ------------------------------------------------------------------------------------------- |
-| GET         | application/json |              |                  | Pobranie wszystkich informacji wybranego wydarzenia                                         |
-| POST        |                  |              |                  | Brak                                                                                        |
-| PUT         |                  |              |                  | Brak                                                                                        |
-| DELETE      |                  |              |                  | Brak                                                                                        |
+| GET         |                  |              |                  | Pobranie wszystkich informacji wybranego wydarzenia                                         |
+| (POST)      |                  |              |                  | Brak                                                                                        |
+| PUT         | application/json |JSON          |{"event_name":"Maraton",   "descriptions":"Zaktualizowany opis",   "pictures":"https://strona.pl/adres/url/zdjecia.jpg",    "event_date":"2020-04-17T11:22:42+02:00",    "city":"Wrocław",    "street":"Długa",    "post_code":"53-615",    "street_address":"1",    "country":"Polska"} | Aktualizacja informacji o wybranym wydarzeniu|       
+| DELETE      |                  |              |                  | Usunięcie wybranego wydarzenia                                                                                       |
 
 > curl -X GET http://127.0.0.1:8000/api/events/1/
+
+### Bilety
+### /api/tickets
+###### Uprawnienia: admin
+| Metoda HTTP | Content-Type     | Opis wejścia | Przykład wejścia | Akcja                                                                                       |
+| ----------- | ---------------- | ------------ | ---------------- | ------------------------------------------------------------------------------------------- |
+| GET         |                  |              |                  | Pobranie podstawowych infromacji o wszystkich biletach                                      |
+| (POST)      |                  |              |                  | Brak                                                                                        |
+| (PUT)       |                  |              |                  | Brak                                                                                        |       
+| (DELETE)    |                  |              |                  | Brak                                                                                        |
+
+> curl -X GET http://127.0.0.1:8000/api/tickets/
+
+### Szczegóły biletu
+### /api/tickets/<int: id>
+###### Uprawnienia: admin
+| Metoda HTTP | Content-Type     | Opis wejścia | Przykład wejścia | Akcja                                                                                       |
+| ----------- | ---------------- | ------------ | ---------------- | ------------------------------------------------------------------------------------------- |
+| GET         |                  |              |                  | Pobranie wszystkich informacji wybranego biletu                                             |
+| (POST)      |                  |              |                  | Brak                                                                                        |
+| PUT         | application/json |JSON          |                  | Aktualizacja informacji o wybranym bilecie                                                  |       
+| DELETE      |                  |              |                  | Usunięcie wybranego biletu                                                                  |
+
+> curl -X GET http://127.0.0.1:8000/api/tickets/1/

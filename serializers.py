@@ -13,18 +13,17 @@ class EventListSerializer(serializers.ModelSerializer):
         model = Event
         fields = ['id', 'event_name', 'event_date', 'city', 'country']
 
-
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = '__all__'
 
 class TicketListSerializer(serializers.ModelSerializer):
-    class Meta:
+     class Meta:
         model = ClientTickets
-        fields = ['used', 'amount', 'id', 'client_id', 'event_id', 'ticket_id']
+        fields = ['id', 'names', 'amount',  'bought_date', 'used']
 
 class TicketSerializer(serializers.ModelSerializer):
-    class Meta:
+   class Meta:
         model = ClientTickets
-        fields = ['used', 'amount', 'id', 'client_id', 'event_id', 'ticket_id']
+        fields = '__all__'

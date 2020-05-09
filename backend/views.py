@@ -8,14 +8,21 @@ from django.shortcuts import redirect
 from django import template
 from django.db import transaction
 from django.contrib.auth import get_user_model
-from django.http import HttpResponse, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse, JsonResponse, Http404
 
 from backend.forms import SignUpForm
 from backend.models import Event, TicketType, ClientTickets
 from rest_framework.parsers import JSONParser
+from rest_framework.permissions import IsAdminUser
+from .permission import ReadOnly
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.decorators import api_view
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework import generics
+from django_filters.rest_framework import DjangoFilterBackend
 
 from serializers import ClientTickets, TicketSerializer, TicketListSerializer, EventListSerializer, EventSerializer
 
@@ -78,69 +85,33 @@ class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
 
-@csrf_exempt
-def event_list(request):
-    if request.method == 'GET':
-        events = Event.objects.all()
-        serializer = EventListSerializer(events, many=True)
-        return JsonResponse(serializer.data, safe=False)
-    elif request.method == 'POST':
-        data = JSONParser().parse(request)
-        serializer = EventListSerializer(data=data)
+class EventListAPI(generics.ListCreateAPIView):
+    permission_classes = [IsAdminUser|ReadOnly]
+    queryset = Event.objects.all()
+    serializer_class = EventListSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['id', 'event_name', 'descriptions', 'event_date', 'city', 'street', 'post_code',
+                        'street_address', 'country']
 
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
 
-@csrf_exempt
-def event_details(request, event_id):
-    try:
-        event = Event.objects.get(id=event_id)
-    except Event.DoesNotExist:
-        return HttpResponse(status=404)
+class EventDetailsAPI(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAdminUser|ReadOnly]
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
+    lookup_field = 'id'
 
-    if request.method == 'GET':
-        serializer = EventSerializer(event)
-        return JsonResponse(serializer.data)
 
-# @csrf_exempt
-# def client_ticket_list(request):
-#     if request.method == 'GET':
-#         tickets = ClientTickets.objects.all()
-#         serializer = TicketListSerializer(tickets, many=True)
-#         return JsonResponse(serializer.data, safe=False)
+class UserTicketListAPI(generics.ListAPIView):
+    permission_classes = [IsAdminUser]
+    queryset = ClientTickets.objects.all()
+    serializer_class = TicketListSerializer
 
-# @csrf_exempt
-# def ticket_details(request, event_id):
-#     try:
-#         ticket = ClientTickets.objects.get(id=event_id)
-#     except ClientTickets.DoesNotExist:
-#         return HttpResponse(status=404)
-#
-#     if request.method == 'GET':
-#         serializer = TicketSerializer(ticket)
-#         return JsonResponse(serializer.data)
 
-@csrf_exempt
-def check_ticket(request, id):
-    try:
-        ticket = ClientTickets.objects.get(id=id)
-    except TicketType.DoesNotExist:
-        return HttpResponse(status=404)
+class TicketDetailsAPI(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAdminUser]
+    queryset = ClientTickets.objects.all()
+    serializer_class = TicketSerializer
+    lookup_field = 'id'
 
-    if request.method == 'GET':
-        serializer = TicketSerializer(ticket)
-        return JsonResponse(serializer.data)
-
-# @csrf_exempt
-# def validate_ticket(request, id):
-#     try:
-#         ticket = ClientTickets.objects.get(id=id)
-#     except TicketType.DoesNotExist:
-#         return HttpResponse(status=404)
-#
-#     if request.method == 'PUT':
-#         ticket.used = True
-#         ticket.save()
-#         return HttpResponse(status=200)
+    def put(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
