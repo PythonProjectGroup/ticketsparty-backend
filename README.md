@@ -115,6 +115,19 @@ Do każdego połączenia z serwerem należy dołączyć do adresu zmienną Beare
 
 > curl -X GET http://127.0.0.1:8000/api/events/
 
+### Filtrowanie wydarzeń: /api/events/?
+| Parametr wydarzenia |      HTTP       |
+| ------------------- | --------------- |
+| ID                  | ?id=            |
+| Nazwa               | ?event_name=    | 
+| Opis                | ?descriptions=  | 
+| Data                | ?event_date=    | 
+| Miasto              | ?city=          | 
+| Ulica               | ?street=        | 
+| Państwo             | ?country=       |
+
+> curl -X GET http://127.0.0.1:8000/api/events/1/?street=Kolorowa&country=Polska
+
 ### Szczegóły wydarzenia
 ### /api/events/<int: id>
 ###### Uprawnienia: GET - każdy, PUT, DELETE - admin
