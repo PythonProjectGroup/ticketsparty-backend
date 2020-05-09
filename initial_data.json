@@ -1,1 +1,315 @@
-[{"model": "backend.user", "pk": 2, "fields": {"password": "pbkdf2_sha256$180000$h5TDGuW2VcXK$7J9LcPs64Te2J07HKZPtRQs3u6fhlA3z/HzJ2gMnM4o=", "last_login": "2020-04-28T10:35:22.807Z", "is_superuser": true, "first_name": "", "last_name": "", "is_staff": true, "is_active": true, "date_joined": "2020-04-28T10:34:53.886Z", "email": "admin@admin.com", "name": "administrator", "phone": "123456789", "groups": [], "user_permissions": []}}, {"model": "backend.user", "pk": 3, "fields": {"password": "pbkdf2_sha256$180000$Yvwaw6NWwBWG$aclbh1QT0JJdvq/+IY7NH/ecHjucugsftjN2ta2Wjm8=", "last_login": null, "is_superuser": false, "first_name": "", "last_name": "", "is_staff": false, "is_active": true, "date_joined": "2020-04-28T10:36:23.675Z", "email": "test@wp.pl", "name": "", "phone": "", "groups": [], "user_permissions": []}}, {"model": "backend.event", "pk": 1, "fields": {"event_name": "W\u0119dkowanie na gor\u0105co", "descriptions": "Przyjed\u017a do Mo\u017cd\u017canowa, by sprawdzi\u0107 swoje w\u0119dkarskie umiej\u0119tno\u015bci, sp\u0119dzi\u0107 mi\u0142o czas w gronie innych pasjonat\u00f3w w\u0119dkarstwa i zdoby\u0107 puchar W\u00f3jta Gminy So\u015bnie! Zawody skierowane do w\u0119dkarzy amator\u00f3w (ka\u017cdego, dla kogo \u0142owienie ryb jest pasj\u0105 \u2013 bez wzgl\u0119du na wiek i umiej\u0119tno\u015bci) bez karty w\u0119dkarskiej, ale posiadaj\u0105cych w\u0142asny sprz\u0119t.", "pictures": "http://dnikarpia.barycz.pl/upfiles/events/big_dsc06609_ODd8O.jpg", "event_date": "2020-04-17T09:22:42Z", "city": "Mo\u017cd\u017can\u00f3w", "street": "Kolorowa", "post_code": "63-435", "street_address": "12", "country": "Polska"}}, {"model": "backend.event", "pk": 2, "fields": {"event_name": "Akademia Muzyczna w Politechnice: Koncert Beethov", "descriptions": "Koncert z okazji 250. rocznicy urodzin Ludwiga van Beethovena z cyklu \"Akademia Muzyczna w Politechnice\" w ramach \"Politechniki Otwartej\"", "pictures": "https://e.kiwip.pl/39/661173", "event_date": "2020-09-05T16:00:00Z", "city": "Gda\u0144sk", "street": "Narutowicza", "post_code": "80-008", "street_address": "11", "country": "Polska"}}, {"model": "backend.tickettype", "pk": 1, "fields": {"event_id": 1, "start_of_selling": "2020-04-28T10:36:43Z", "end_of_selling": "2020-05-15T10:36:51Z", "price": 12.5, "available_amount": 100, "max_per_client": 2}}, {"model": "backend.tickettype", "pk": 2, "fields": {"event_id": 1, "start_of_selling": "2020-04-29T10:37:23Z", "end_of_selling": "2020-05-07T10:37:29Z", "price": 12.0, "available_amount": 7, "max_per_client": 1}}, {"model": "backend.tickettype", "pk": 3, "fields": {"event_id": 2, "start_of_selling": "2020-04-30T16:00:00Z", "end_of_selling": "2020-06-04T22:00:00Z", "price": 100.0, "available_amount": 96, "max_per_client": 10}}, {"model": "backend.clienttickets", "pk": 1, "fields": {"client_id": 3, "event_id": 1, "ticket_id": 1, "bought_date": "2020-04-29T10:38:10Z", "amount": 1, "used": false, "names": "\"Ares\""}}]
+[
+  {
+    "model": "backend.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$180000$h5TDGuW2VcXK$7J9LcPs64Te2J07HKZPtRQs3u6fhlA3z/HzJ2gMnM4o=",
+      "last_login": "2020-04-28T10:35:22.807Z",
+      "is_superuser": true,
+      "first_name": "",
+      "last_name": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2020-04-28T10:34:53.886Z",
+      "email": "admin@admin.com",
+      "name": "administrator",
+      "phone": "123456789",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "backend.user",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$180000$Yvwaw6NWwBWG$aclbh1QT0JJdvq/+IY7NH/ecHjucugsftjN2ta2Wjm8=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "",
+      "last_name": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2020-04-28T10:36:23.675Z",
+      "email": "test@wp.pl",
+      "name": "",
+      "phone": "",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "backend.event",
+    "pk": 1,
+    "fields": {
+      "event_name": "Akademia Muzyczna w Politechnice: Koncert Beethov",
+      "descriptions": "Koncert z okazji 250. rocznicy urodzin Ludwiga van Beethovena z cyklu \"Akademia Muzyczna w Politechnice\" w ramach \"Politechniki Otwartej\"",
+      "pictures": "https://e.kiwip.pl/39/661173",
+      "event_date": "2020-09-05T16:00:00Z",
+      "city": "Gda\u0144sk",
+      "street": "Narutowicza",
+      "post_code": "80-008",
+      "street_address": "11",
+      "country": "Polska"
+    }
+  },
+  {
+    "model": "backend.event",
+    "pk": 2,
+    "fields": {
+        "event_name": "55. Krakowski Festiwal Filmowy",
+        "descriptions": "W ramach festiwalu odbywają się cztery konkursy: dokumentalny, krótkometrażowy, muzycznych dokumentów DocFilmMusic oraz polski. \r\nOrganizowane są także liczne przeglądy i pokazy pozakonkursowe – retrospektywy uznanych twórców, projekcje szkół artystycznych, krótkie formy mistrzów kina, etiudy studenckie, bloki tematyczne i wiele innych.\r\n\r\nNa festiwal składają się nie tylko pokazy filmowe, lecz także koncerty, warsztaty, debaty, konferencje oraz wystawy. Gale otwierające i kończące festiwal urozmaicone są zazwyczaj występami muzycznymi uznanych artystów.",
+        "pictures": "https://ocdn.eu/pulscms-transforms/1/jvmktkpTURBXy85YWRlMDMzNzZmZmNmYWI5NGY4ZGUyYmU2NzJlY2I0NC5qcGeSlQMAAM0Djc0B_5MFzQMgzQHC",
+        "event_date": "2020-08-18T11:00:00Z",
+        "city": "Kraków",
+        "street": "Filmowa",
+        "post_code": "45-666",
+        "street_address": "12",
+        "country": "Polska"
+    }
+  },
+  {
+    "model": "backend.event",
+    "pk": 3,
+    "fields": {
+        "event_name": "Podsiadło w Gdańsku!",
+        "descriptions": "Wokalista młodego pokolenia Dawid Podsiadło to cieszący się ogromną popularnością piosenkarz i autor tekstów.\r\nJego kariera nabrała tempa, gdy w 2013 roku ukazał się debiutancki album „Comfort and Happiness”. Debiut oraz pozostałe dwa albumy - „Annoyance and Disappointment” i „Małomiasteczkowy” osiągnęły statusy Diamentowej Płyty (łącznie ponad 450 tysięcy sprzedanych egzemplarzy).",
+        "pictures": "https://cdn.galleries.smcloud.net/t/galleries/gf-iY6V-7cSB-Xorg_dawid-podsiadlo-1920x1080-nocrop.jpg",
+        "event_date": "2020-12-12T20:30:00+01:00",
+        "city": "Gdańsk",
+        "street": "Filantropijna",
+        "post_code": "43-567",
+        "street_address": "23",
+        "country": "Polska"
+    }
+  },
+  {
+    "model": "backend.event",
+    "pk": 4,
+    "fields": {
+        "event_name": "Rafał Pacześ - Zoba co jes",
+        "descriptions": "„Zoba Co Jes” to najnowszy solowy program Rafała Paczesia.\r\nCo najmniej 90 minutowy monolog, którego zwiastun mogliście zobaczyć przy okazji wydarzeń Stand-Up Show 2019 rozbawi Was do łez.\r\nO podróżach, związkach, remontach i trudach odnalezienia się wśród normalnych ludzi, Rafał opowie w swoim oryginalnym stylu. Czy Wasze przepony wytrzymają to awaryjne lądowanie?",
+        "pictures": "https://lh3.googleusercontent.com/proxy/VQ2j6x5sEg2cg8YWzma9vNQGvapopy5nFGMIpZQ4MJHVLBpC0OUhGAKRdoecJr_oquYvu0MyJpvQMjK_MTvrwo1fi37cLgPv4FDtnbkmM1s8NcEe2C1yoy675bO-1w",
+        "event_date": "2021-01-12T19:00:00+01:00",
+        "city": "Tychy",
+        "street": "Komediowa",
+        "post_code": "33-200",
+        "street_address": "2",
+        "country": "Polska"
+    }
+  },
+  {
+    "model": "backend.event",
+    "pk": 5,
+    "fields": {
+        "event_name": "8. PKO Nocny Wrocław Półmaraton",
+        "descriptions": "20 czerwca na ulice Wrocławia wybiegnie kilkanaście tysięcy uczestników 8. PKO Nocnego Wrocław Półmaratonu. Po raz kolejny w Stolicy Dolnego Śląska odbędzie się jeden z największych biegów w kraju.\r\n\r\nW poprzednich latach pakiety startowe znajdowały nabywców w rekordowym tempie – kilkanaście tysięcy miejsc rozchodziło się w około dwa tygodnie. W nadchodzącej edycji imprezy będzie miało możliwość wystartować ponownie 13 tysięcy zawodniczek i zawodników. Wszyscy, którzy nabędą pakiet wystartują ze Stadionu Olimpijskiego we Wrocławiu 20 czerwca 2020 r. o 22.00.",
+        "pictures": "https://kochamwroclaw.pl/wp-content/uploads/81389181_2585437701503804_1313791252730216448_o.jpg",
+        "event_date": "2020-06-20T22:00:00+02:00",
+        "city": "Wrocław",
+        "street": "Adama Mickiewicza",
+        "post_code": "52-443",
+        "street_address": "1",
+        "country": "Polska"
+    }
+  },
+  {
+    "model": "backend.event",
+    "pk": 6,
+    "fields": {
+        "event_name": "42. Maraton Warszawski",
+        "descriptions": "12 października, punktualnie o 12:00 ruszyły zapisy do kolejnego Maratonu Warszawskiego. Tegoroczna edycja imprezy będzie mieć wyjątkowy, symboliczny charakter ze względu na zbieżność 42. edycji z 42-kilometrowym dystansem biegu. Właśnie dlatego w oczekiwaniu na start maratonu organizatorzy zapewnią zawodnikom liczne niespodzianki. To będzie prawdziwe święto maratońskiego dystansu.",
+        "pictures": "https://treningbiegacza.pl/wp-content/uploads/2019/11/ruszaja-zapisy-na-42-maraton-warszawski-01.jpg",
+        "event_date": "2020-11-12T12:00:00+01:00",
+        "city": "Warszawa",
+        "street": "Pospolita",
+        "post_code": "00-017",
+        "street_address": "1",
+        "country": "Polska"
+    }
+  },
+  {
+    "model": "backend.event",
+    "pk": 7,
+    "fields": {
+        "event_name": "Puchar Polski w Bulderingu 2021",
+        "descriptions": "W trakcie trzech edycji Pucharu Polski 2021, najlepsze zawodniczki i zawodnicy powalczą o punkty w klasyfikacji generalnej, zwycięstwa w poszczególnych edycjach oraz miano Mistrzyni i Mistrza Polski. Zakopiańska edycja, która będzie finałem cyklu, rozstrzygnie również kto w tym roku sięgnie po tytuł Mistrzyni i Mistrza Polski. \r\n\r\nDo rywalizacji zapraszamy wszystkich zawodników, zawodniczki oraz wspinaczy chcących sprawdzić swoje umiejętności.",
+        "pictures": "https://scontent-waw1-1.xx.fbcdn.net/v/t1.0-9/83560794_2970876582952032_8244761646812102656_o.jpg?_nc_cat=103&_nc_sid=b386c4&_nc_ohc=ad5j63VIeEQAX-Z2aR2&_nc_ht=scontent-waw1-1.xx&oh=053a849d50f69e6e0a34a6301824cc88&oe=5EDC6BF3",
+        "event_date": "2021-03-12T08:00:00+01:00",
+        "city": "Zakopane",
+        "street": "Zakopiańska",
+        "post_code": "34-531",
+        "street_address": "1",
+        "country": "Polska"
+    }
+  },
+  {
+    "model": "backend.event",
+    "pk": 8,
+    "fields": {
+        "event_name": "AUTOSTOP RACE 2020",
+        "descriptions": "[*]",
+        "pictures": "https://autostoprace.pl/wp-content/uploads/2015/12/asr131.jpg",
+        "event_date": "2020-04-25T10:00:00+02:00",
+        "city": "Wrocław",
+        "street": "Komandorska",
+        "post_code": "53-345",
+        "street_address": "118",
+        "country": "Polska"
+    }
+  },
+  {
+    "model": "backend.event",
+    "pk": 9,
+    "fields": {
+        "event_name": "Webinar \"Django od Podstaw\"",
+        "descriptions": "Dominik Kozaczko, którego doskonale znacie z kursu Ukąś Pythona na ATH czy polskiego tłumaczenia książki A Byte of Python, rozpoczął kolejny cykl webinariów dla programistów Pythona. Tematyka szkolenia to zastosowanie frameworka Django do tworzenia serwisów i aplikacji internetowych.",
+        "pictures": "https://i.ytimg.com/vi/xRbrXaf5qYo/maxresdefault.jpg",
+        "event_date": "2020-05-19T19:00:00+02:00",
+        "city": "Online",
+        "street": "Online",
+        "post_code": "00-000",
+        "street_address": "1",
+        "country": "Online"
+    }
+  },
+  {
+    "model": "backend.event",
+    "pk": 10,
+    "fields": {
+        "event_name": "Prelekcja \"Siła pewności siebie\"",
+        "descriptions": "Marta Borowiec - coach, doradca zawodowy, trener umiejętności miękkich zaprasza na warsztaty i prelekcję z zakresu rozwoju osobistego pod nazwą \"Strefa Rozwoju Kobiet\".\r\n\r\nPierwsze spotkanie odbędzie się 27 września o godzinie 17:00 w Szkole Łacińskiej (Stare Miasto 42).\r\nPoprowadzi je Małgorzata Samusiew a tematem będzie \"Siła pewności siebie\".",
+        "pictures": "https://lh3.googleusercontent.com/proxy/sFvbgwtJPFERYFPhJpQcMallgIAttjRoCZOX1rZuhNQhGmRGTQDMyC4C9EFtjcR8BF1gqXzXvDAz94X3VL1X73ZLp1CLz3Y7dUg",
+        "event_date": "2020-09-27T17:00:00+02:00",
+        "city": "Toruń",
+        "street": "Stare Miasto",
+        "post_code": "33-444",
+        "street_address": "42",
+        "country": "Polska"
+    }
+  },
+  {
+    "model": "backend.event",
+    "pk": 11,
+    "fields": {
+        "event_name": "Weszło Travel: Barcelona - Real",
+        "descriptions": "Projekt „Weszło Travel” tworzy zespół organizatorów wyjazdów na mecze piłkarskie w całej Europie z ponad 10-letnim doświadczeniem. Spełniliśmy marzenia tysięcy kibiców wysyłając ich na Camp Nou, Santiago Bernabeu, Anfield, Old Trafford, Wembley, Parc des Princes, Allianz Arena, San Siro i dziesiątki innych europejskich stadionów.\r\n\r\nJedynie w „Weszło Travel” uczestnicy wycieczki mają możliwość obejrzenia największych piłkarskich hitów z najlepszych miejsc na stadionie i w towarzystwie znanych dziennikarzy oraz byłych piłkarzy, służących masą anegdot i fachowym komentarzem. Zróżnicowana oferta kierowana jest zarówno do rodzin z dziećmi, jak i grup znajomych oraz klientów biznesowych.",
+        "pictures": "https://pbs.twimg.com/media/EK2rpQAWwAAacRw.jpg",
+        "event_date": "2020-04-03T20:45:00+02:00",
+        "city": "Barcelona",
+        "street": "C. d'Arístides Maillol",
+        "post_code": "08028",
+        "street_address": "12",
+        "country": "Hiszpania"
+    }
+  },
+  {
+    "model": "backend.event",
+    "pk": 12,
+    "fields": {
+        "event_name": "Zawody MMA \"Wojownicy Ojczyzny\"",
+        "descriptions": "Pierwsze zawody w ramach nowego projektu „Wojownicy Ojczyzny” realizowanego przez Polski Związek MMA, Amatorską Ligę MMA. Zawody prowadzone są w kategoriach:\r\n1. Full Contact powyżej 77 kg\r\n2. Full Contact do 77 kg\r\n3. Full Contact do 70 kg",
+        "pictures": "https://almma.pl/wp-content/uploads/2017/01/15992029_1308069869253758_737931502_o-1080x360.jpg",
+        "event_date": "2020-06-03T09:00:00+02:00",
+        "city": "Środa Śląska",
+        "street": "Waleczna",
+        "post_code": "52-222",
+        "street_address": "8",
+        "country": "Polska"
+    }
+  },
+  {
+    "model": "backend.event",
+    "pk": 13,
+    "fields": {
+        "event_name": "Górski Rajd PWr",
+        "descriptions": "Odjeżdżamy punktualnie i nie pijemy alkoholu.",
+        "pictures": "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTHA5YeGWZjxonv-gw7CAcMTx0svdZwXYM_CnYp9WJrB7Bdy7gt&usqp=CAU",
+        "event_date": "2020-05-03T08:00:00+02:00",
+        "city": "Szklarska Poręba",
+        "street": "Górska",
+        "post_code": "90-000",
+        "street_address": "21",
+        "country": "Polska"
+    }
+  },
+  {
+    "model": "backend.event",
+    "pk": 14,
+    "fields": {
+        "event_name": "Wędkowanie na gorąco",
+        "descriptions": "Przyjedź do Możdżanowa, by sprawdzić swoje wędkarskie umiejętności, spędzić miło czas w gronie innych pasjonatów wędkarstwa i zdobyć puchar Wójta Gminy Sośnie! Zawody skierowane do wędkarzy amatorów (każdego, dla kogo łowienie ryb jest pasją – bez względu na wiek i umiejętności) bez karty wędkarskiej, ale posiadających własny sprzęt.",
+        "pictures": "http://dnikarpia.barycz.pl/upfiles/events/big_dsc06609_ODd8O.jpg",
+        "event_date": "2020-04-17T11:22:42+02:00",
+        "city": "Możdżanów",
+        "street": "Kolorowa",
+        "post_code": "63-435",
+        "street_address": "12",
+        "country": "Polska"
+    }
+  },
+  {
+    "model": "backend.event",
+    "pk": 15,
+    "fields": {
+        "event_name": "Wędkowanie na gorąco vol. 2",
+        "descriptions": "Cyk dwójeczka",
+        "pictures": "https://i.ya-webdesign.com/images/vol-2-png-10.png",
+        "event_date": "2020-04-17T11:22:42+02:00",
+        "city": "Możdżanów",
+        "street": "Tasama",
+        "post_code": "43-203",
+        "street_address": "1",
+        "country": "Polska"
+    }
+  },
+
+  {
+    "model": "backend.tickettype",
+    "pk": 1,
+    "fields": {
+      "event_id": 1,
+      "start_of_selling": "2020-04-28T10:36:43Z",
+      "end_of_selling": "2020-05-15T10:36:51Z",
+      "price": 12.5,
+      "available_amount": 100,
+      "max_per_client": 2
+    }
+  },
+  {
+    "model": "backend.tickettype",
+    "pk": 2,
+    "fields": {
+      "event_id": 1,
+      "start_of_selling": "2020-04-29T10:37:23Z",
+      "end_of_selling": "2020-05-07T10:37:29Z",
+      "price": 12.0,
+      "available_amount": 7,
+      "max_per_client": 1
+    }
+  },
+  {
+    "model": "backend.tickettype",
+    "pk": 3,
+    "fields": {
+      "event_id": 2,
+      "start_of_selling": "2020-04-30T16:00:00Z",
+      "end_of_selling": "2020-06-04T22:00:00Z",
+      "price": 100.0,
+      "available_amount": 96,
+      "max_per_client": 10
+    }
+  },
+  {
+    "model": "backend.clienttickets",
+    "pk": 1,
+    "fields": {
+      "client_id": 3,
+      "event_id": 1,
+      "ticket_id": 1,
+      "bought_date": "2020-04-29T10:38:10Z",
+      "amount": 1,
+      "used": false,
+      "names": "\"Ares\""
+    }
+  }
+]
