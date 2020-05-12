@@ -9,5 +9,5 @@ urlpatterns = [
     path('events/<int:id>/', views.EventDetailsAPI.as_view()),
     path('tickets/', views.UserTicketListAPI.as_view()),
     path('tickets/<int:id>/', views.TicketDetailsAPI.as_view()),
-    #path('tickets/<int:id>/validate/', views.?),
+    path('tickets/<int:id>/validate/', views.validate_ticket),
 ]

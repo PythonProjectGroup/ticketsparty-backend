@@ -115,18 +115,21 @@ Do każdego połączenia z serwerem należy dołączyć do adresu zmienną Beare
 
 > curl -X GET http://127.0.0.1:8000/api/events/
 
-### Filtrowanie wydarzeń: /api/events/?
-| Parametr wydarzenia |      HTTP       |
-| ------------------- | --------------- |
-| ID                  | ?id=            |
-| Nazwa               | ?event_name=    | 
-| Opis                | ?descriptions=  | 
-| Data                | ?event_date=    | 
-| Miasto              | ?city=          | 
-| Ulica               | ?street=        | 
-| Państwo             | ?country=       |
+### Filtrowanie i sortowanie wydarzeń: /api/events/?
+| Parametr wydarzenia | HTTP - filtrowanie |  HTTP - sortowanie   |
+| ------------------- | ------------------ | -------------------- |
+| ID                  | ?id=               | ?ordering=id         |
+| Nazwa               | ?event_name=       | ?ordering=event_name |
+| Opis                | ?descriptions=     |                      |
+| Data                | ?event_date=       | ?ordering=event_date |
+| Miasto              | ?city=             | ?ordering=city       |
+| Ulica               | ?street=           |                      |
+| Państwo             | ?country=          | ?ordering=country    |
+Aby sortować malejąco użyj znaku: -= (?ordering-=id)
 
-> curl -X GET http://127.0.0.1:8000/api/events/1/?street=Kolorowa&country=Polska
+> curl -X GET http://127.0.0.1:8000/api/events/?street=Kolorowa&country=Polska
+>
+> curl -X GET http://127.0.0.1:8000/api/events/?ordering=event_date
 
 ### Szczegóły wydarzenia
 ### /api/events/<int: id>

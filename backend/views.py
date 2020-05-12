@@ -12,17 +12,16 @@ from django.http import HttpResponse, JsonResponse, Http404
 
 from backend.forms import SignUpForm
 from backend.models import Event, TicketType, ClientTickets
-from rest_framework.parsers import JSONParser
-from rest_framework.permissions import IsAdminUser
 from .permission import ReadOnly
+from rest_framework.parsers import JSONParser
+from rest_framework.permissions import IsAdminUser, AllowAny
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
-from rest_framework import generics
-from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import status, generics, filters, permissions
+from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
 
 from serializers import ClientTickets, TicketSerializer, TicketListSerializer, EventListSerializer, EventSerializer
 
@@ -86,16 +85,17 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
 
 class EventListAPI(generics.ListCreateAPIView):
-    permission_classes = [IsAdminUser|ReadOnly]
+    permission_classes = [IsAdminUser | ReadOnly]
     queryset = Event.objects.all()
     serializer_class = EventListSerializer
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['id', 'event_name', 'descriptions', 'event_date', 'city', 'street', 'post_code',
-                        'street_address', 'country']
+    filter_backends = (DjangoFilterBackend, filters.OrderingFilter,)
+    filterset_fields = [
+        'id', 'event_name', 'descriptions', 'event_date', 'city', 'street', 'post_code', 'street_address', 'country']
+    ordering_fields = ['id', 'event_name', 'event_date', 'city', 'country']
 
 
 class EventDetailsAPI(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsAdminUser|ReadOnly]
+    permission_classes = [IsAdminUser | ReadOnly]
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     lookup_field = 'id'
@@ -113,5 +113,17 @@ class TicketDetailsAPI(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TicketSerializer
     lookup_field = 'id'
 
-    def put(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
+
+@api_view(['GET', 'PATCH'])
+@permission_classes((IsAdminUser,))
+def validate_ticket(request, id):
+    ticket = ClientTickets.objects.get(id=id)
+    if ticket.used:
+        return Response("ERROR: The ticket is already validated!", status=status.HTTP_403_FORBIDDEN)
+    serializer = TicketSerializer(ticket, data={"used": True}, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+    else:
+        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+    return Response("The ticket successfully validated.", status=status.HTTP_200_OK)
+    # alternative: return Response(serializer.data, status=status.HTTP_200_OK)
