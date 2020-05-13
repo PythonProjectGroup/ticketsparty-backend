@@ -24,6 +24,7 @@ from rest_framework import status, generics, filters, permissions
 from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
 
 from serializers import ClientTickets, TicketSerializer, TicketListSerializer, EventListSerializer, EventSerializer
+import backend.personal as pers
 
 register = template.Library()
 
@@ -85,7 +86,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
 
 class EventListAPI(generics.ListCreateAPIView):
-    permission_classes = [IsAdminUser | ReadOnly]
+    permission_classes = [] if pers.disableAuth else [IsAdminUser | ReadOnly]
     queryset = Event.objects.all()
     serializer_class = EventListSerializer
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter,)
@@ -95,20 +96,20 @@ class EventListAPI(generics.ListCreateAPIView):
 
 
 class EventDetailsAPI(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsAdminUser | ReadOnly]
+    permission_classes = [] if pers.disableAuth else [IsAdminUser | ReadOnly]
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     lookup_field = 'id'
 
 
 class UserTicketListAPI(generics.ListAPIView):
-    permission_classes = [IsAdminUser]
+    permission_classes = [] if pers.disableAuth else [IsAdminUser]
     queryset = ClientTickets.objects.all()
     serializer_class = TicketListSerializer
 
 
 class TicketDetailsAPI(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsAdminUser]
+    permission_classes = [] if pers.disableAuth else [IsAdminUser]
     queryset = ClientTickets.objects.all()
     serializer_class = TicketSerializer
     lookup_field = 'id'
