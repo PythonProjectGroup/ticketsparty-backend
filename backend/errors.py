@@ -1,0 +1,2 @@
+class NoAvailableTickets(Exception):
+    pass
