@@ -3,8 +3,9 @@ from __future__ import unicode_literals
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-import json
 from django.contrib.auth import get_user_model
+
+from backend.errors import NoAvailableTickets
 
 
 class UserManager(BaseUserManager):
@@ -45,8 +46,10 @@ class UserManager(BaseUserManager):
 class User(AbstractUser):
     username = None
     email = models.EmailField(_('email address'), unique=True)
-    name = models.CharField(verbose_name="nazwa", blank=True, max_length=128, help_text="Imię i nazwisko pracownika")
-    phone = models.CharField(blank=True, verbose_name="telefon", max_length=32, help_text="telefon do pracownika")
+    name = models.CharField(verbose_name="nazwa", blank=True, max_length=128,
+                            help_text="Imię i nazwisko pracownika")
+    phone = models.CharField(blank=True, verbose_name="telefon", max_length=32,
+                             help_text="telefon do pracownika")
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name', 'phone']
     objects = UserManager()
@@ -57,14 +60,15 @@ class User(AbstractUser):
 
 class Event(models.Model):
     id = models.AutoField(primary_key=True)
-    event_name = models.CharField(max_length=50, verbose_name="nazwa eventu")
+    event_name = models.CharField(max_length=80, verbose_name="nazwa eventu")
     descriptions = models.TextField(max_length=800, verbose_name="Opisy")
     pictures = models.TextField(max_length=800, verbose_name="Zdjęcia")
     event_date = models.DateTimeField(verbose_name="Data")
-    city = models.CharField(max_length=20, verbose_name="Miasto")
-    street = models.CharField(max_length=30, verbose_name="Ulica")
-    post_code = models.CharField(max_length=6, verbose_name="Kod pocztowy")
-    street_address = models.CharField(max_length=4, verbose_name="Numer adresu")
+    city = models.CharField(max_length=50, verbose_name="Miasto")
+    street = models.CharField(max_length=100, verbose_name="Ulica")
+    post_code = models.CharField(max_length=10, verbose_name="Kod pocztowy")
+    street_address = models.CharField(max_length=4,
+                                      verbose_name="Numer adresu")
     country = models.CharField(max_length=20, verbose_name="Państwo")
 
     class Meta:
@@ -74,12 +78,16 @@ class Event(models.Model):
 
 class TicketType(models.Model):
     id = models.AutoField(primary_key=True)
-    event_id = models.ForeignKey(Event, on_delete=models.CASCADE, verbose_name="ID wydarzenia")
+    ticket_name = models.CharField(max_length=150, verbose_name="Nazwa biletu")
+    event_id = models.ForeignKey(Event, on_delete=models.CASCADE,
+                                 verbose_name="ID wydarzenia")
     start_of_selling = models.DateTimeField(verbose_name="Początek sprzedaży")
     end_of_selling = models.DateTimeField(verbose_name="Koniec sprzedaży")
     price = models.FloatField(verbose_name="Koszt biletu")
-    available_amount = models.IntegerField(default=0, verbose_name="Dostępna ilość biletów")
-    max_per_client = models.IntegerField(default=2, verbose_name="Ograniczenie na jednego klienta")
+    available_amount = models.IntegerField(default=0,
+                                           verbose_name="Dostępna ilość biletów")
+    max_per_client = models.IntegerField(default=2,
+                                         verbose_name="Ograniczenie na jednego klienta")
 
     class Meta:
         verbose_name = "Rodzaj biletu"
@@ -88,16 +96,27 @@ class TicketType(models.Model):
 
 class ClientTickets(models.Model):
     id = models.AutoField(primary_key=True)
-    client_id = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name="ID klienta")
-    event_id = models.ForeignKey(Event, on_delete=models.CASCADE, verbose_name="ID eventu")
-    ticket_id = models.ForeignKey(TicketType, on_delete=models.CASCADE, verbose_name="ID rodzaju ticketu")
+    client_id = models.ForeignKey(get_user_model(), on_delete=models.CASCADE,
+                                  verbose_name="ID klienta")
+    event_id = models.ForeignKey(Event, on_delete=models.CASCADE,
+                                 verbose_name="ID eventu")
+    ticket_id = models.ForeignKey(TicketType, on_delete=models.CASCADE,
+                                  verbose_name="ID rodzaju ticketu")
     bought_date = models.DateTimeField(verbose_name="Data zakupu")
     amount = models.IntegerField(verbose_name="Ilość biletów")
     used = models.BooleanField(default=False, verbose_name="Wykorzystany")
     names = models.TextField(verbose_name="Zakupiony dla")
 
     def save(self, *args, **kwargs):
-        self.names = json.dumps(self.names)
+        ticket_type = self.ticket_id
+        print(ticket_type)
+        if self.amount > ticket_type.available_amount:
+            raise NoAvailableTickets(
+                "Aktualnie jest tylko " + str(
+                    ticket_type.available_amount) + " miejsc")
+        else:
+            ticket_type.available_amount -= self.amount
+            ticket_type.save(update_fields=["available_amount"])
         super(ClientTickets, self).save(*args, **kwargs)
 
     class Meta:
