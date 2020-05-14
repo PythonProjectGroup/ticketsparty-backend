@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import get_user_model
 
 from backend.errors import NoAvailableTickets
-
+import hashlib
 
 class UserManager(BaseUserManager):
     """Define a model manager for User model with no username field."""
@@ -71,6 +71,9 @@ class Event(models.Model):
                                       verbose_name="Numer adresu")
     country = models.CharField(max_length=20, verbose_name="Państwo")
 
+    def __str__(self):
+        return str(self.id)
+
     class Meta:
         verbose_name = "Wydarzenie"
         verbose_name_plural = "Wydarzenia"
@@ -102,6 +105,7 @@ class ClientTickets(models.Model):
                                  verbose_name="ID eventu")
     ticket_id = models.ForeignKey(TicketType, on_delete=models.CASCADE,
                                   verbose_name="ID rodzaju ticketu")
+    ticket_hash = models.TextField(verbose_name="ticket_hash", blank=True)
     bought_date = models.DateTimeField(verbose_name="Data zakupu")
     amount = models.IntegerField(verbose_name="Ilość biletów")
     used = models.BooleanField(default=False, verbose_name="Wykorzystany")
@@ -117,6 +121,9 @@ class ClientTickets(models.Model):
         else:
             ticket_type.available_amount -= self.amount
             ticket_type.save(update_fields=["available_amount"])
+            self.ticket_hash = hashlib.sha256(
+                (str(self.bought_date) + str(self.client_id) + str(self.client_id.email) + str(self.event_id)).encode(
+                    'utf-8')).hexdigest()
         super(ClientTickets, self).save(*args, **kwargs)
 
     class Meta:
