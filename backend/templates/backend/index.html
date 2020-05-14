@@ -34,7 +34,9 @@
                             {% for event in row %}
                                 <div class="col-md-4 d-flex pb-3 ">
                                     <div class="card box-shadow events-card " >
-                                        <img class="card-img-top " src="{{ event.pictures }}" alt="TEST">
+                                        <div class="inner">
+                                            <img class="card-img-top " src="{{ event.pictures }}" alt="TEST">
+                                        </div>
                                         <div class="card-body ">
                                             <h5 class="card-title">{{ event.event_name }}</h5>
                                             <p class="card-text">{{ event.descriptions }}</p>
@@ -54,7 +56,7 @@
                 {% endif %}
             </div>
             <div class="d-flex justify-content-center p-3 px-md-4 mb-3  bg-white border-bottom box-shadow">
-                <a id="back-to-top" href="#" class="btn btn-lg center-block" role="button"  data-toggle="tooltip">
+                <a id="back-to-top" href="#" class="btn btn-lg center-block test" role="button"  data-toggle="tooltip">
                     <span class="glyphicon glyphicon-chevron-up"></span>Przewiń do góry</a>
             </div>
         </div>
