@@ -1,1 +1,1 @@
-disableAuth = False
+disableAuth = True
