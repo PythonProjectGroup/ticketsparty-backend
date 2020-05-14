@@ -8,6 +8,7 @@ Stay Tuned!
 > pip install django <br>
 > pip install djangorestframework <br>
 > pip install django-registration
+> pip install django-filter
 # Ręczna aktualizacja bazy
 > Usuń db.sqlite3 <br>
 > Usuń wszystko z /backend/migrations <br>

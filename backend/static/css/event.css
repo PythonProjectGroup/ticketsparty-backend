@@ -24,3 +24,6 @@ body {
     object-fit: fill;
 }
 
+#map {
+    height: 500px;
+}
