@@ -22,16 +22,17 @@
 <body>
 <div class="bg-light">
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
-        <h5 class="my-0 mr-md-auto font-weight-normal">Tickets Party</h5>
-        <h2 class="my-0 mr-md-auto font-weight-normal">{{ event.event_name }}</h2>
-        <nav>
-            {% if user.is_authenticated %}
-                <a href="/logout" class="btn btn-primary" role="button">Wyloguj się</a>
-            {% else %}
-                <a href="/login" class="btn btn-primary" role="button">Zaloguj się</a>
-                <a href="/signup" class="btn btn-primary" role="button">Zarejestruj się</a>
-            {% endif %}
-        </nav>
+        <div class="col-md-12 d-flex justify-content-between">
+            <a href="/" class="btn btn-lg center-block test" role="button">Tickets Party</a>
+            <nav>
+                {% if user.is_authenticated %}
+                    <a href="/logout" class="btn btn-primary" role="button">Wyloguj się</a>
+                {% else %}
+                    <a href="/login" class="btn btn-primary" role="button">Zaloguj się</a>
+                    <a href="/signup" class="btn btn-primary" role="button">Zarejestruj się</a>
+                {% endif %}
+            </nav>
+        </div>
     </div>
 
     <div class="d-flex flex-column flex-md-row justify-content-around ">
@@ -42,6 +43,7 @@
                 </div>
             </div>
             <div class="card box-shadow events-card ">
+                <h5 class="card-title">{{ event.event_name }}</h5>
                 <div class="card-body align-items-center d-flex justify-content-center " style="max-width: 100%;">
                     <div class="text-wrap" style="width: 35rem;">
                         <p class="card-text text-center ">{{ event.descriptions }}</p>
@@ -52,26 +54,54 @@
     </div>
 
     {% if ticket_types %}
-        <div class="row ">
-            {% for ticket_type in ticket_types %}
-                <div class="d-flex col-md-4 d-flex pb-3 d-flex justify-content-around  ">
-                    <div class=" card box-shadow events-card " style="width: 30rem; height: auto">
-                        <div class="card-body">
-                            <h5 class="text-uppercase card-title d-flex justify-content-center">{{ ticket_type.ticket_name }}</h5>
-                            <h5 class="card-title">Cena: {{ ticket_type.price }} PLN</h5>
-                            <p class="font-weight-bold text-md-left">Początek
-                                sprzedaży: {{ ticket_type.start_of_selling }}</p>
-                            <p class="font-weight-bold text-md-left">Koniec
-                                sprzedaży: {{ ticket_type.end_of_selling }}</p>
-                            <p class="font-weight-light text-md-center">Zostało
-                                jeszcze: {{ ticket_type.available_amount }} biletów</p>
-                            <p class="blockquote-footer">Jednorazowo możesz kupić: {{ ticket_type.max_per_client }}
-                                bilety</p>
-                            <a href="#" class="stretched-link "></a>
+        <div class="container">
+            <div class="row ">
+                {% for ticket_type in ticket_types %}
+                    <div class=" d-flex col-md-4 d-flex pb-3 d-flex justify-content-around  ">
+                        <div class=" card text-center box-shadow events-card card-hover h-100 "
+                             style="width: 30rem; height: auto">
+                            {% if user.is_authenticated %}
+                                <div class="card-body">
+                                    <h5 class="text-uppercase card-title d-flex justify-content-center">{{ ticket_type.1.ticket_name }}</h5>
+                                    <h5 class="card-title">Cena: {{ ticket_type.1.price }} PLN</h5>
+                                    <p class="font-weight-bold text-md-left">Początek
+                                        sprzedaży: {{ ticket_type.1.start_of_selling }}</p>
+                                    <p class="font-weight-bold text-md-left">Koniec
+                                        sprzedaży: {{ ticket_type.1.end_of_selling }}</p>
+                                    <p class="font-weight-light text-md-center">Zostało
+                                        jeszcze: {{ ticket_type.1.available_amount }} biletów</p>
+                                    <p class="blockquote-footer">Jednorazowo możesz
+                                        kupić: {{ ticket_type.1.max_per_client }}
+                                        bilety</p>
+                                    <select class="selectpicker">
+                                    {% for i in ticket_type.0 %}
+                                           <option>{{ i }}</option>
+                                    {% endfor %}
+                                    </select>
+
+                                    <a href="#" class="btn btn-success">KUP</a>
+                                </div>
+                            {% else %}
+                                <div class="card-body ">
+                                    <h5 class="text-uppercase card-title d-flex justify-content-center">{{ ticket_type.1.ticket_name }}</h5>
+                                    <h5 class="card-title">Cena: {{ ticket_type.1.price }} PLN</h5>
+                                    <p class="font-weight-bold text-md-left">Początek
+                                        sprzedaży: {{ ticket_type.1.start_of_selling }}</p>
+                                    <p class="font-weight-bold text-md-left">Koniec
+                                        sprzedaży: {{ ticket_type.1.end_of_selling }}</p>
+                                    <p class="font-weight-light text-md-center">Zostało
+                                        jeszcze: {{ ticket_type.1.available_amount }} biletów</p>
+                                    <p class="blockquote-footer">Jednorazowo możesz
+                                        kupić: {{ ticket_type.1.max_per_client }}
+                                        bilety</p>
+                                    <a href="/login" class="btn btn-warning ">Aby zakupić bilet musisz się
+                                        zalogować!</a>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
         </div>
     {% else %}
         Nie ma ticketów :(
