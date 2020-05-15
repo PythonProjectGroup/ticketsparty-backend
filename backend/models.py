@@ -116,10 +116,9 @@ class ClientTickets(models.Model):
     used = models.BooleanField(default=False, verbose_name="Wykorzystany")
     names = models.TextField(verbose_name="Zakupiony dla")
 
-    # przy dodawaniu nowego elementu ustaw create=True
     def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None, create=False):
-        if create:
+             update_fields=None):
+        if self.ticket_hash is None or self.ticket_hash == "":
             ticket_type = self.ticket_id
             print(ticket_type)
             if self.amount > ticket_type.available_amount:

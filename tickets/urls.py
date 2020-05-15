@@ -39,6 +39,9 @@ urlpatterns = [
     url(r'^logout/$', core_views.my_logout, name='logout'),
     path('events/<int:event_id>/', views.event, name='event'),
     path('auth/jwt/create/', views.CustomTokenObtainPairView.as_view(), name='custom_token_obtain_pair'),
+
+    path('tickets/<str:hash_id>/validate/', views.validate_ticket),
+
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
