@@ -50,6 +50,10 @@
                         <p class="card-text text-center ">{{ event.descriptions }}</p>
                     </div>
                 </div>
+                <p class="font-weight-light text-md-left">Zaczynamy: {{ event.event_date }}</p>
+                <p class="font-weight-light text-md-left">ulica: {{ event.street }}</p>
+                <p class="font-weight-light text-md-left">{{ event.post_code }} {{ event.city }}</p>
+                <p class="blockquote-footer">Organizatorem tej imprezy jest: {{ event.organizer_name }}</p>
             </div>
         </div>
     </div>
@@ -74,18 +78,22 @@
                                     <p class="blockquote-footer">Jednorazowo możesz
                                         kupić: {{ ticket_type.1.max_per_client }}
                                         bilety</p>
+
                                     <script>
-                                        function test(a) {
-                                            var x = "user id: {{user.id}}, kupił: " + a.selectedIndex + " biletów rodzaju: {{ ticket_type.1.ticket_name }} ,na wydarzene nr.: {{ event.id }}";
+                                        function goToProperPage() {
+                                            var location = document.getElementById("my-dropdown").selectedIndex + 1;
+                                            var x = "user id: {{user.id}}, kupił: " + location + " biletów rodzaju: {{ ticket_type.1.ticket_name }} ,na wydarzene nr.: {{ event.id }}";
                                             alert(x);
                                         }
                                     </script>
-                                    <select class="selectpicker" onchange="test(this)">
-                                    {% for i in ticket_type.0 %}
-                                           <option>{{ i }}</option>
-                                    {% endfor %}
+
+                                    <select class="selectpicker" id="my-dropdown">
+                                        {% for i in ticket_type.0 %}
+                                            <option>{{ i }}</option>
+                                        {% endfor %}
                                     </select>
-                                    <a href="#" class="btn btn-success ">KUP</a>
+
+                                    <button onclick="goToProperPage()" class="btn btn-success">KUP</button>
                                 </div>
                             {% else %}
                                 <div class="card-body ">
@@ -121,7 +129,7 @@
 
                     function initMap() {
                         map = new google.maps.Map(document.getElementById('map'), {
-                            center: {lat: -34.397, lng: 150.644},
+                            center: {{ event.coordinates }},
                             zoom: 8
                         });
                     }
