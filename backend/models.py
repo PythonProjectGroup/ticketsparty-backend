@@ -62,6 +62,9 @@ class User(AbstractUser):
 class Event(models.Model):
     id = models.AutoField(primary_key=True),
     organizer_name = models.TextField(verbose_name="nazwa organizatora")
+    coordinates = models.CharField(max_length=50,
+                                   verbose_name="koordynaty wydarzenia",
+                                   blank=True)
     event_name = models.CharField(max_length=80, verbose_name="nazwa eventu")
     descriptions = models.TextField(max_length=800, verbose_name="Opisy")
     pictures = models.TextField(max_length=800, verbose_name="Zdjęcia")
