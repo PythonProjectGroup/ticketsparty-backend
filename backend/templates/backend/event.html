@@ -20,6 +20,7 @@
 
 </head>
 <body>
+
 <div class="bg-light">
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
         <div class="col-md-12 d-flex justify-content-between">
@@ -42,7 +43,7 @@
                 <div class="card-img-overlay">
                 </div>
             </div>
-            <div class="card box-shadow events-card ">
+            <div class="card text-center box-shadow events-card ">
                 <h5 class="card-title">{{ event.event_name }}</h5>
                 <div class="card-body align-items-center d-flex justify-content-center " style="max-width: 100%;">
                     <div class="text-wrap" style="width: 35rem;">
@@ -73,13 +74,18 @@
                                     <p class="blockquote-footer">Jednorazowo możesz
                                         kupić: {{ ticket_type.1.max_per_client }}
                                         bilety</p>
-                                    <select class="selectpicker">
+                                    <script>
+                                        function test(a) {
+                                            var x = "user id: {{user.id}}, kupił: " + a.selectedIndex + " biletów rodzaju: {{ ticket_type.1.ticket_name }} ,na wydarzene nr.: {{ event.id }}";
+                                            alert(x);
+                                        }
+                                    </script>
+                                    <select class="selectpicker" onchange="test(this)">
                                     {% for i in ticket_type.0 %}
                                            <option>{{ i }}</option>
                                     {% endfor %}
                                     </select>
-
-                                    <a href="#" class="btn btn-success">KUP</a>
+                                    <a href="#" class="btn btn-success ">KUP</a>
                                 </div>
                             {% else %}
                                 <div class="card-body ">
