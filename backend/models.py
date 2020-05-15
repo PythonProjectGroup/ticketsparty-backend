@@ -8,6 +8,7 @@ from django.contrib.auth import get_user_model
 from backend.errors import NoAvailableTickets
 import hashlib
 
+
 class UserManager(BaseUserManager):
     """Define a model manager for User model with no username field."""
 
@@ -59,7 +60,8 @@ class User(AbstractUser):
 
 
 class Event(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True),
+    organizer_name = models.TextField(verbose_name="nazwa organizatora")
     event_name = models.CharField(max_length=80, verbose_name="nazwa eventu")
     descriptions = models.TextField(max_length=800, verbose_name="Opisy")
     pictures = models.TextField(max_length=800, verbose_name="Zdjęcia")
@@ -111,20 +113,26 @@ class ClientTickets(models.Model):
     used = models.BooleanField(default=False, verbose_name="Wykorzystany")
     names = models.TextField(verbose_name="Zakupiony dla")
 
-    def save(self, *args, **kwargs):
-        ticket_type = self.ticket_id
-        print(ticket_type)
-        if self.amount > ticket_type.available_amount:
-            raise NoAvailableTickets(
-                "Aktualnie jest tylko " + str(
-                    ticket_type.available_amount) + " miejsc")
-        else:
-            ticket_type.available_amount -= self.amount
-            ticket_type.save(update_fields=["available_amount"])
-            self.ticket_hash = hashlib.sha256(
-                (str(self.bought_date) + str(self.client_id) + str(self.client_id.email) + str(self.event_id)).encode(
-                    'utf-8')).hexdigest()
-        super(ClientTickets, self).save(*args, **kwargs)
+    # przy dodawaniu nowego elementu ustaw create=True
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None, create=False):
+        if create:
+            ticket_type = self.ticket_id
+            print(ticket_type)
+            if self.amount > ticket_type.available_amount:
+                raise NoAvailableTickets(
+                    "Aktualnie jest tylko " + str(
+                        ticket_type.available_amount) + " miejsc")
+            else:
+                ticket_type.available_amount -= self.amount
+                ticket_type.save(update_fields=["available_amount"])
+                self.ticket_hash = hashlib.sha256(
+                    (str(self.bought_date) + str(self.client_id) + str(
+                        self.client_id.email) + str(self.event_id)).encode(
+                        'utf-8')).hexdigest()
+        super(ClientTickets, self).save(force_insert=force_insert,
+                                        force_update=force_update, using=using,
+                                        update_fields=update_fields)
 
     class Meta:
         verbose_name = "Bilet klienta"
