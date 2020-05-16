@@ -7,7 +7,7 @@ Stay Tuned!
 > pip install django-user-accounts <br>
 > pip install django <br>
 > pip install djangorestframework <br>
-> pip install django-registration
+> pip install django-registration <br>
 > pip install django-filter
 # Ręczna aktualizacja bazy
 > Usuń db.sqlite3 <br>
