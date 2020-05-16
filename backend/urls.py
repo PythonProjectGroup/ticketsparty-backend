@@ -9,6 +9,7 @@ urlpatterns = [
     path('events/<int:id>/', views.EventDetailsAPI.as_view()),
     path('tickets/', views.UserTicketListAPI.as_view()),
     path('tickets/<int:id>/', views.TicketDetailsAPI.as_view()),
+    path('eventkey/', views.EventKeys.as_view()),
     #path('tickets/<int:id>/create/', ?views.TicketDetailsAPI.as_view()),
 
 ]

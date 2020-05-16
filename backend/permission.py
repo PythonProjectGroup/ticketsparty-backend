@@ -9,3 +9,4 @@ class ReadOnly(BasePermission):
 class HasTemplate(BasePermission):  # Zostawiam Wam do wglądu pisanie permisji do API
     def has_permission(self, request, view):
         pass
+

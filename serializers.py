@@ -27,3 +27,8 @@ class TicketSerializer(serializers.ModelSerializer):
    class Meta:
         model = ClientTickets
         fields = '__all__'
+
+class EventKeySerializer(serializers.ModelSerializer):
+   class Meta:
+        model = get_user_model()
+        fields = ['eventkeys']

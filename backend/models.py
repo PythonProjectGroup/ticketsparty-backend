@@ -51,6 +51,7 @@ class User(AbstractUser):
                             help_text="Imię i nazwisko pracownika")
     phone = models.CharField(blank=True, verbose_name="telefon", max_length=32,
                              help_text="telefon do pracownika")
+    eventkeys = models.TextField(verbose_name="klucze API", blank=True, default="[]")
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name', 'phone']
     objects = UserManager()

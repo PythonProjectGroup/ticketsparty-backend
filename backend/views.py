@@ -25,7 +25,9 @@ from rest_framework.response import Response
 from rest_framework import status, generics, filters, permissions
 from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
 
-from serializers import ClientTickets, TicketSerializer, TicketListSerializer, EventListSerializer, EventSerializer
+from rest_framework.permissions import IsAuthenticated
+
+from serializers import ClientTickets, TicketSerializer, TicketListSerializer, EventListSerializer, EventSerializer, EventKeySerializer
 import backend.personal as pers
 from operator import attrgetter
 
@@ -133,6 +135,13 @@ class TicketDetailsAPI(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TicketSerializer
     lookup_field = 'id'
 
+class EventKeys(generics.ListAPIView):
+    serializer_class = EventKeySerializer
+    permission_classes= [] if pers.disableAuth else [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return (user,)
 
 @api_view(['GET', 'PATCH'])
 @permission_classes((IsAdminUser,))
