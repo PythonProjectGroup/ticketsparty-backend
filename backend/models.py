@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import get_user_model
-
+import time
 from backend.errors import NoAvailableTickets
 import hashlib
 
@@ -77,6 +77,15 @@ class Event(models.Model):
     street_address = models.CharField(max_length=4,
                                       verbose_name="Numer adresu")
     country = models.CharField(max_length=20, verbose_name="Państwo")
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        if self.eventkey is None or self.eventkey == "":
+            self.eventkey = hashlib.sha256(
+                    str(time.time()).encode('utf-8')).hexdigest()
+        super(Event, self).save(force_insert=force_insert,
+                                        force_update=force_update, using=using,
+                                        update_fields=update_fields)
 
     def __str__(self):
         return str(self.id)
