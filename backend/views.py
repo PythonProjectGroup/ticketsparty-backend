@@ -88,6 +88,12 @@ def my_logout(request):
     response = redirect('/')
     return response
 
+def tickets(request):
+    tickets = ""
+    if request.user.is_authenticated:
+        tickets = ClientTickets.objects.filter(client_id=request.user)
+
+    return render(request, 'backend/tickets.html', {'tickets' : tickets})
 
 def e404(request):
     return render(request, 'backend/404.html')
@@ -142,6 +148,7 @@ class EventKeys(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         return (user,)
+
 
 @api_view(['GET', 'PATCH'])
 @permission_classes((IsAdminUser,))

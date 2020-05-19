@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+{% load static %}
+{% load qr_tags %}
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Event Not Found</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+{% block content %}
+    {% if user.is_authenticated %}
+        {% if tickets %}
+            {% for ticket in tickets %}
+                {{ ticket.event_id.event_name }}<br>
+                {% qr_from_text ticket.ticket_hash %}<br>
+                {{ ticket.bought_date }}<br>
+                Ilosc: {{ ticket.amount }}<br>
+                Uzyty: {{ ticket.used }}<br>
+                Imiona: {{ ticket.names }}<br>
+                <br><br><br>
+            {% endfor %}
+        {% else %}
+            Nie masz zadnych biletow
+        {% endif %}
+    {% else %}
+        Nie zalogowano
+    {% endif %}
+
+
+
+{% endblock content %}
+</body>
+</html>

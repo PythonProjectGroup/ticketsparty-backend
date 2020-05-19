@@ -42,7 +42,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'djoser',
-    'django_filters'
+    'django_filters',
+    'django.contrib.sites',
+    'qrcode',
 ]
 
 DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
