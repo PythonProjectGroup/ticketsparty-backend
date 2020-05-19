@@ -70,6 +70,7 @@ class Event(models.Model):
     descriptions = models.TextField(max_length=800, verbose_name="Opisy")
     pictures = models.TextField(max_length=800, verbose_name="Zdjęcia")
     event_date = models.DateTimeField(verbose_name="Data")
+    eventkey = models.TextField(verbose_name='event key', blank=True)
     city = models.CharField(max_length=50, verbose_name="Miasto")
     street = models.CharField(max_length=100, verbose_name="Ulica")
     post_code = models.CharField(max_length=10, verbose_name="Kod pocztowy")

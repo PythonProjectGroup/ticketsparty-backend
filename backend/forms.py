@@ -10,3 +10,7 @@ class SignUpForm(UserCreationForm):
     (attrs={'placeholder': 'Imię i nazwisko'}))
     phone = forms.CharField(max_length=128, help_text="Telefon kontaktowy", required=False, widget=forms.TextInput
     (attrs={'placeholder': 'telefon kontaktowy'}))
+
+    class Meta:
+        model = get_user_model()
+        fields = ('email', 'password1', 'password2', 'name', 'phone')

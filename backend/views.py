@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import json
 from django.core import serializers
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
@@ -164,6 +164,51 @@ def validate_ticket(request, hash_id):
     except IndexError:
         return Response("Invalid ticket", status=status.HTTP_404_NOT_FOUND)
     # alternative: return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['POST', 'DELETE'])
+@permission_classes((IsAuthenticated, ))
+def manage_eventkey(request, slug):
+    #[{"key":"abc123456", "event_id":6}, {...}]
+    if request.method == 'POST':
+        currentkeys = request.user.eventkeys
+        if currentkeys:
+            keyslist = json.loads(currentkeys)
+        else:
+            keyslist = []
+        events = Event.objects.filter(eventkey=slug)
+        if len(events) > 0:
+            event_id = events[0].id
+            for key in keyslist:
+                if slug == key['key']:
+                    return Response(status=status.HTTP_200_OK)
+            else:
+                keyslist.append({"key":slug, "event_id":event_id})
+                print(keyslist)
+                request.user.eventkeys = str(keyslist).replace('\'','\"')
+                request.user.save()
+                return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    elif request.method == 'DELETE':
+        currentkeys = request.user.eventkeys
+        if currentkeys:
+            keyslist = json.loads(currentkeys)
+            keyindex = -1
+            for index, key in enumerate(keyslist):
+                if key['key'] == slug:
+                    keyindex = index
+            if keyindex != -1:
+                keyslist.pop(keyindex)
+                request.user.eventkeys = str(keyslist).replace('\'', '\"')
+                request.user.save()
+                return Response(status=status.HTTP_200_OK)
+            else:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
 
 
 def get_client_search(query=None):
