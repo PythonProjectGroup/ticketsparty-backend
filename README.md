@@ -9,7 +9,7 @@ Stay Tuned!
 > pip install djangorestframework <br>
 > pip install django-registration <br>
 > pip install django-filter
-> pip install django-qr-code
+> pip install django-qrcode
 
 # Ręczna aktualizacja bazy
 > Usuń db.sqlite3 <br>
