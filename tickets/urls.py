@@ -39,7 +39,7 @@ urlpatterns = [
     url(r'^logout/$', core_views.my_logout, name='logout'),
     path('events/<int:event_id>/', views.event, name='event'),
     path('auth/jwt/create/', views.CustomTokenObtainPairView.as_view(), name='custom_token_obtain_pair'),
-
+    path('events/<int:id>/apikey', views.event_apikey),
     path('tickets/<str:hash_id>/validate/', views.validate_ticket),
     path('tickets/', views.tickets),
 

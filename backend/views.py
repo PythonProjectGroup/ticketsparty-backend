@@ -95,6 +95,10 @@ def tickets(request):
 
     return render(request, 'backend/tickets.html', {'tickets' : tickets})
 
+def event_apikey(request, id):
+    events = Event.objects.filter(id=id)
+    return render(request, 'backend/event_apikey.html', {'events' : events})
+
 def e404(request):
     return render(request, 'backend/404.html')
 

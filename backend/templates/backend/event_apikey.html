@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+{% load static %}
+{% load qr_tags %}
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Event Not Found</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+{% block content %}
+
+        {% if events %}
+            {% for event in events %}
+                {{ event.event_name }}<br>
+                {% qr_from_text event.eventkey %}<br>
+                Debug apikey {{ event.eventkey }}<br>
+                Jeśli pusty to mógł nie zostać policzony z powodu starego jsona
+                <br><br><br>
+            {% endfor %}
+        {% else %}
+            404, Nie znalazlem eventu, który spełnia powyższe kryteria
+        {% endif %}
+
+
+
+
+{% endblock content %}
+</body>
+</html>
