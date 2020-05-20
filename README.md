@@ -106,6 +106,33 @@ Do każdego połączenia z serwerem należy dołączyć do adresu zmienną Beare
 
 > curl -X POST -d '{"email": "arus@arus.com","password": "maslotoniehaslo"}' -H 'Content-Type: application/json' http://127.0.0.1:8000/auth/jwt/create
 
+### Pobierz klucze api danego użytkownika
+### /api/eventkeys/
+###### Uprawnienia: Zalogowani
+| Metoda HTTP | Content-Type     | Opis wejścia | Przykład wejścia | Akcja                                                                                       |
+| ----------- | ---------------- | ------------ | ---------------- | ------------------------------------------------------------------------------------------- |
+| GET         |                  |              |                  | Pobranie kluczy api użytkownika                                                                                       |
+| POST        |                  |              |                  | Brak |
+| (PUT)       |                  |              |                  | Brak                                                                                        |
+| (DELETE)    |                  |              |                  | Brak                                                                                        |
+
+> curl -X GET -H "Authorization: Bearer XXX" http://127.0.0.1:8000/api/eventkeys
+
+### Zarządzaj kluczami api
+### /api/eventkeys/<string:apikey>
+###### Uprawnienia: Zalogowani
+| Metoda HTTP | Content-Type     | Opis wejścia | Przykład wejścia | Akcja                                                                                       |
+| ----------- | ---------------- | ------------ | ---------------- | ------------------------------------------------------------------------------------------- |
+| GET         |                  |              |                  | Brak                                                                               |
+| POST        |                  |              |                  |  Dodanie klucza API |
+| (PUT)       |                  |              |                  | Brak                                                                                        |
+| (DELETE)    |                  |              |                  | Usunięcie klucza API                                                                                     |
+
+> curl -X GET http://127.0.0.1:8000/api/events/
+
+> Jeśli przy dodawaniu dostaniemy 404 oznacza to, iż nie ma eventu z tym kluczem
+> Jeśli będziemy próbowali usunąć klucz, którego dany użytkownik nie miał, również dostaniemy 404
+
 ### Wydarzenia
 ### /api/events
 ###### Uprawnienia: GET - każdy, POST - admin
