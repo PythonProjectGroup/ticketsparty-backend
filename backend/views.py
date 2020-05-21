@@ -47,10 +47,12 @@ def event(request, event_id):
         ticket_type_id = int(request.POST.get('ticket_type_id', -1))
         client_id = request.user.id
         #event_id macie wyżej, bought_date nie ma potrzeby
-        names = request.POST.get('names', None)
-        if not names or ticket_type_id == -1:
+        name = request.POST.get('ticket_name', None)
+        mail = request.POST.get('ticket_mail', None)
+
+        if not name or not mail or ticket_type_id == -1:
             print("Warning: Malformed post")
-        print(names)
+
 
 
     return render(request, 'backend/event.html',
