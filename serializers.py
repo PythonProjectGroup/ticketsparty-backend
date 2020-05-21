@@ -11,7 +11,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 class EventListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
-        fields = ['id', 'event_name', 'event_date', 'city', 'country']
+        fields = ['id', 'event_name', 'pictures', 'event_date', 'city', 'country']
 
 class EventSerializer(serializers.ModelSerializer):
     class Meta:

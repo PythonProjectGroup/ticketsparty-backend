@@ -102,7 +102,6 @@ def event_apikey(request, id):
 def e404(request):
     return render(request, 'backend/404.html')
 
-
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
     def validate(self, attrs):
