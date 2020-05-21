@@ -80,13 +80,11 @@
                                             kupić: {{ ticket_type.1.max_per_client }}
                                             bilety</p>
 
-                                        <script>
-                                            function goToProperPage() {
-                                                var location = document.getElementById("my-dropdown").selectedIndex + 1;
-                                                var x = "user id: {{user.id}}, kupił: " + location + " biletów rodzaju: {{ ticket_type.1.ticket_name }} ,na wydarzene nr.: {{ event.id }}";
-                                                alert(x);
-                                            }
-                                        </script>
+
+                                    <form method="post">
+                                        {% csrf_token %}
+                                            <input type="number" name="ticket_type_id" value="{{ticket_type.1.id}}" style="display: none; padding: 0; margin: 0;" readonly>
+                                            <input type="text" name="names" value="Wiesław Kaleta;Anna Adamczak" style="display: none; padding: 0; margin: 0;" readonly>
 
                                         <select class="selectpicker" id="my-dropdown">
                                             {% for i in ticket_type.0 %}
@@ -94,7 +92,9 @@
                                             {% endfor %}
                                         </select>
 
-                                        <button onclick="goToProperPage()" class="btn btn-success">KUP</button>
+                                        <button type="submit" class="btn btn-success">KUP</button>
+                                       </form>
+
                                     </div>
                                 {% else %}
                                     <div class="card-body ">

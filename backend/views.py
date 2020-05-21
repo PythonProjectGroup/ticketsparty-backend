@@ -39,8 +39,17 @@ def event(request, event_id):
         event = Event.objects.get(id=event_id)
     except Event.DoesNotExist:
         return e404(request)
+
     ticket_types = [[[x for x in range(1, 1+min(ticket.available_amount, ticket.max_per_client))],ticket] for ticket in TicketType.objects.filter(event_id=event_id)]
-    print(ticket_types)
+    if request.method == 'POST':
+        print(request.POST)
+        ticket_type_id = int(request.POST.get('ticket_type_id', -1))
+        client_id = request.user.id
+        #event_id macie wyżej, bought_date nie ma potrzeby
+        names = request.POST.get('names', None)
+        if not names or ticket_type_id == -1:
+            print("Warning: Malformed post")
+
 
 
     return render(request, 'backend/event.html',
