@@ -1,38 +1,31 @@
 # -*- coding: utf-8 -*-
 import json
-import backend.errors
-from django.core import serializers
-from django.contrib.auth import login, authenticate
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout
-from django.shortcuts import redirect
-from django import template
-from django.db import transaction
-from django.db.models import Q
-from django.contrib.auth import get_user_model
-from django.http import HttpResponse, JsonResponse, Http404
+from operator import attrgetter
 
-from backend.forms import SignUpForm
-from backend.models import Event, TicketType, ClientTickets
-from .permission import ReadOnly
-from rest_framework.parsers import JSONParser
-from rest_framework.permissions import IsAdminUser, AllowAny
+from django import template
+from django.contrib.auth import login, authenticate
+from django.contrib.auth import logout
+from django.core import serializers
+from django.db.models import Q
+from django.shortcuts import redirect
+from django.shortcuts import render
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import status, generics, filters
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status, generics, filters, permissions
-from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
 
-from rest_framework.permissions import IsAuthenticated
-
+import backend.errors
+import backend.personal as pers
+from backend.forms import SignUpForm
+from backend.models import Event, TicketType
 from serializers import ClientTickets, TicketSerializer, EventListSerializer, \
     EventSerializer, \
     EventKeySerializer
-import backend.personal as pers
-from operator import attrgetter
+from .permission import ReadOnly
 
 register = template.Library()
 
