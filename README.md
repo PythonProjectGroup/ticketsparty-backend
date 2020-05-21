@@ -9,7 +9,7 @@ Stay Tuned!
 > pip install djangorestframework <br>
 > pip install django-registration <br>
 > pip install django-filter <br>
-> pip install django-qrcode
+> pip install django-qrcode <br>
 
 # Ręczna aktualizacja bazy
 > Usuń db.sqlite3 <br>
@@ -139,7 +139,7 @@ Do każdego połączenia z serwerem należy dołączyć do adresu zmienną Beare
 | Metoda HTTP | Content-Type     | Opis wejścia | Przykład wejścia | Akcja                                                                                       |
 | ----------- | ---------------- | ------------ | ---------------- | ------------------------------------------------------------------------------------------- |
 | GET         |                  |              |                  | Pobranie podstawowych informacji (nazwa, data, miejsce) wszystkich wydarzeń                                                                                       |
-| POST        | application/json | JSON         |{"event_name":"Koncert Beethov", "event_date": 2020-09-05T18:00:00+02:00", "city":"Gdańsk", "country": "Polska"} | Dodanie wydarzenia\wydarzeń |
+| POST        | application/json | JSON         |{"event_name":"Maraton",   "descriptions":"Opis wydarzenia",   "pictures":"https://strona.pl/adres/url/zdjecia.jpg",    "event_date":"2020-04-17T11:22:42+02:00",    "city":"Wrocław",    "street":"Długa",    "post_code":"53-615",    "street_address":"1",    "country":"Polska"} | Dodanie wydarzenia\wydarzeń |
 | (PUT)       |                  |              |                  | Brak                                                                                        |
 | (DELETE)    |                  |              |                  | Brak                                                                                        |
 
