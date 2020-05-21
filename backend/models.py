@@ -122,7 +122,7 @@ class ClientTickets(models.Model):
     ticket_id = models.ForeignKey(TicketType, on_delete=models.CASCADE,
                                   verbose_name="ID rodzaju ticketu")
     ticket_hash = models.TextField(verbose_name="ticket_hash", blank=True)
-    bought_date = models.DateTimeField(verbose_name="Data zakupu")
+    bought_date = models.DateTimeField(verbose_name="Data zakupu", auto_now_add=True)
     amount = models.IntegerField(verbose_name="Ilość biletów")
     used = models.BooleanField(default=False, verbose_name="Wykorzystany")
     names = models.TextField(verbose_name="Zakupiony dla")
