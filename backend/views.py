@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
+import backend.errors
 from django.core import serializers
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
@@ -27,7 +28,8 @@ from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
 
 from rest_framework.permissions import IsAuthenticated
 
-from serializers import ClientTickets, TicketSerializer, EventListSerializer, EventSerializer, \
+from serializers import ClientTickets, TicketSerializer, EventListSerializer, \
+    EventSerializer, \
     EventKeySerializer
 import backend.personal as pers
 from operator import attrgetter
@@ -41,19 +43,30 @@ def event(request, event_id):
     except Event.DoesNotExist:
         return e404(request)
 
-    ticket_types = [[[x for x in range(1, 1+min(ticket.available_amount, ticket.max_per_client))],ticket] for ticket in TicketType.objects.filter(event_id=event_id)]
+    ticket_types = [[[x for x in range(1, 1 + min(ticket.available_amount,
+                                                  ticket.max_per_client))],
+                     ticket] for ticket in
+                    TicketType.objects.filter(event_id=event_id)]
     if request.method == 'POST':
         print(request.POST)
         ticket_type_id = int(request.POST.get('ticket_type_id', -1))
         client_id = request.user.id
-        #event_id macie wyżej, bought_date nie ma potrzeby
+        # event_id macie wyżej, bought_date nie ma potrzeby
         name = request.POST.get('ticket_name', None)
         mail = request.POST.get('ticket_mail', None)
-
+        amount = request.POST.get('amount', 0)
         if not name or not mail or ticket_type_id == -1:
             print("Warning: Malformed post")
-
-
+        else:
+            try:
+                ClientTickets(client_id_id=int(client_id),
+                              event_id_id=int(event_id),
+                              ticket_id_id=int(ticket_type_id),
+                              amount=int(amount),
+                              names=name).save()
+            except backend.errors.NoAvailableTickets as e:
+                return render(request, 'backend/errors/no_tickets.html',
+                              {'amount': e.args[0]})
 
     return render(request, 'backend/event.html',
                   {'event': event, 'ticket_types': ticket_types})
@@ -72,7 +85,8 @@ def index(request):
         if len(event.descriptions) >= 120:
             event.descriptions = event.descriptions[0:120] + "..."
     events = sorted(events, key=attrgetter('event_date'))
-    context['all_events_info'] = [events[r * 3:(r + 1) * 3] for r in range(len(events))]
+    context['all_events_info'] = [events[r * 3:(r + 1) * 3] for r in
+                                  range(len(events))]
     print(context['all_events_info'])
 
     return render(request, 'backend/main.html', context)
@@ -112,6 +126,7 @@ def event_apikey(request, id):
     events = Event.objects.filter(id=id)
     return render(request, 'backend/event_apikey.html', {'events': events})
 
+
 def e404(request):
     return render(request, 'backend/404.html')
 
@@ -135,11 +150,13 @@ class EventListAPI(generics.ListCreateAPIView):
     serializer_class = EventListSerializer
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter,)
     filterset_fields = [
-        'id', 'event_name', 'descriptions', 'event_date', 'city', 'street', 'post_code', 'street_address', 'country']
+        'id', 'event_name', 'descriptions', 'event_date', 'city', 'street',
+        'post_code', 'street_address', 'country']
     ordering_fields = ['id', 'event_name', 'event_date', 'city', 'country']
 
 
-class EventDetailsAPI(generics.RetrieveUpdateDestroyAPIView, generics.CreateAPIView):
+class EventDetailsAPI(generics.RetrieveUpdateDestroyAPIView,
+                      generics.CreateAPIView):
     permission_classes = [] if pers.disableAuth else [IsAdminUser | ReadOnly]
     queryset = Event.objects.all()
     serializer_class = EventSerializer
@@ -177,7 +194,8 @@ def validate_ticket(request, ticket_hash):
             if serializer.is_valid():
                 serializer.save()
             else:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response(serializer.errors,
+                                status=status.HTTP_400_BAD_REQUEST)
             return Response(serializers.serialize("json", ticket),
                             status=status.HTTP_200_OK)
     except IndexError:
@@ -186,7 +204,7 @@ def validate_ticket(request, ticket_hash):
 
 
 @api_view(['POST', 'DELETE'])
-@permission_classes((IsAuthenticated, ))
+@permission_classes((IsAuthenticated,))
 def manage_eventkey(request, slug):
     # [{"key":"abc123456", "event_id":6}, {...}]
     if request.method == 'POST':
@@ -239,7 +257,7 @@ def get_client_search(query=None):
             Q(descriptions__icontains=word) |
             Q(city__icontains=word) |
             Q(country__icontains=word)
-        ).distinct() #return uniq results
+        ).distinct()  # return uniq results
 
         for event in events:
             queryset.append(event)

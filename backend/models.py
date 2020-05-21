@@ -131,11 +131,9 @@ class ClientTickets(models.Model):
              update_fields=None):
         if self.ticket_hash is None or self.ticket_hash == "":
             ticket_type = self.ticket_id
-            print(ticket_type)
+            print(self.amount)
             if self.amount > ticket_type.available_amount:
-                raise NoAvailableTickets(
-                    "Aktualnie jest tylko " + str(
-                        ticket_type.available_amount) + " miejsc")
+                raise NoAvailableTickets(str(ticket_type.available_amount))
             else:
                 ticket_type.available_amount -= self.amount
                 ticket_type.save(update_fields=["available_amount"])
