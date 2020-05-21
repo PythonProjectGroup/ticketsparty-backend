@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+
+import hashlib
+import time
+
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth import get_user_model
-import time
+
 from backend.errors import NoAvailableTickets
-import hashlib
 
 
 class UserManager(BaseUserManager):
@@ -82,10 +85,10 @@ class Event(models.Model):
              update_fields=None):
         if self.eventkey is None or self.eventkey == "":
             self.eventkey = hashlib.sha256(
-                    str(time.time()).encode('utf-8')).hexdigest()
+                str(time.time()).encode('utf-8')).hexdigest()
         super(Event, self).save(force_insert=force_insert,
-                                        force_update=force_update, using=using,
-                                        update_fields=update_fields)
+                                force_update=force_update, using=using,
+                                update_fields=update_fields)
 
     def __str__(self):
         return str(self.id)

@@ -44,9 +44,9 @@
     <div class="d-flex flex-column flex-md-row justify-content-around ">
         <div class="row ">
             <div class="card box-shadow events-card   img-fluid" style="width: 45rem; height: auto">
-                 <div class="embed-responsive embed-responsive-16by9 ">
-                    <img alt="TEST" class="embed-responsive-item title-card" src={{event.pictures }} />
-                 </div>
+                <div class="embed-responsive embed-responsive-16by9 ">
+                    <img alt="TEST" class="embed-responsive-item title-card" src={{ event.pictures }}/>
+                </div>
             </div>
 
             <div class="card text-center box-shadow events-card ">
@@ -86,59 +86,80 @@
                                             kupić: {{ ticket_type.1.max_per_client }}
                                             bilety</p>
 
-                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">KUP BILET</button>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                data-target="#myModal">KUP BILET
+                                        </button>
 
-                                          <div class="modal" id="myModal">
+                                        <div class="modal" id="myModal">
                                             <div class="modal-dialog">
-                                              <div class="modal-content">
+                                                <div class="modal-content">
 
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title">Zakup bilet: {{ ticket_type.1.ticket_name }} {{ event.event_name }}</h4>
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Zakup
+                                                            bilet: {{ ticket_type.1.ticket_name }} {{ event.event_name }}</h4>
 
-                                                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        <button type="button" class="close" data-dismiss="modal">
+                                                            &times;
+                                                        </button>
+                                                    </div>
+
+                                                    <div class="modal-body">
+                                                        <h5 class="card-title">Cena: {{ ticket_type.1.price }} PLN</h5>
+                                                        <p class="font-weight-bold text-md-left">Początek
+                                                            sprzedaży: {{ ticket_type.1.start_of_selling }}</p>
+                                                        <p class="font-weight-bold text-md-left">Koniec
+                                                            sprzedaży: {{ ticket_type.1.end_of_selling }}</p>
+                                                        <p class="font-weight-light text-md-center">Zostało
+                                                            jeszcze: {{ ticket_type.1.available_amount }} biletów</p>
+                                                        <p class="blockquote-footer">Jednorazowo możesz
+                                                            kupić: {{ ticket_type.1.max_per_client }}
+                                                            bilety</p>
+                                                        <form method="post" id="buyform">
+                                                            {% csrf_token %}
+                                                            <input type="number" name="ticket_type_id"
+                                                                   value="{{ ticket_type.1.id }}"
+                                                                   style="display: none; padding: 0; margin: 0;"
+                                                                   readonly>
+                                                            <label for="email">Proszę wybrać ilość biletów</label>
+                                                            <select class="selectpicker" id="number-of-tickets"
+                                                                    name="amount">
+                                                                {% for i in ticket_type.0 %}
+                                                                    <option>{{ i }}</option>
+                                                                {% endfor %}
+                                                            </select>
+
+                                                            <div class="form-group" id="person">
+                                                                <label for="email">Proszę podać Adres Email osoby, dla
+                                                                    której kupujesz bilet</label>
+                                                                <input type="email" name="ticket_mail"
+                                                                       class="form-control" id="email"
+                                                                       value="{{ user.email }}"
+                                                                       aria-describedby="emailHelp"
+                                                                       placeholder="Podaj email na jaki mamy wysłać bilet">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="name">Proszę podać Imię i Nazwisko osoby,
+                                                                    dla której kupujesz bilet</label>
+                                                                <input type="text" name="ticket_name"
+                                                                       class="form-control" id="name"
+                                                                       value="{{ user.name }}"
+                                                                       placeholder="Podaj imię osoby, dla której chcesz kupić bilet">
+                                                            </div>
+                                                            <button type="submit" class="btn btn-success">KUPUJĘ
+                                                            </button>
+
+                                                        </form>
+                                                    </div>
+
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-danger"
+                                                                data-dismiss="modal">ZAMKNIJ
+                                                        </button>
+                                                    </div>
+
                                                 </div>
-
-                                                <div class="modal-body">
-                                                    <h5 class="card-title">Cena: {{ ticket_type.1.price }} PLN</h5>
-                                                    <p class="font-weight-bold text-md-left">Początek
-                                                        sprzedaży: {{ ticket_type.1.start_of_selling }}</p>
-                                                    <p class="font-weight-bold text-md-left">Koniec
-                                                        sprzedaży: {{ ticket_type.1.end_of_selling }}</p>
-                                                    <p class="font-weight-light text-md-center">Zostało
-                                                        jeszcze: {{ ticket_type.1.available_amount }} biletów</p>
-                                                    <p class="blockquote-footer">Jednorazowo możesz
-                                                        kupić: {{ ticket_type.1.max_per_client }}
-                                                        bilety</p>
-                                                   <form method="post" id="buyform">
-                                                    {% csrf_token %}
-                                                        <input type="number" name="ticket_type_id" value="{{ticket_type.1.id}}" style="display: none; padding: 0; margin: 0;" readonly>
-                                                    <label for="email">Proszę wybrać ilość biletów</label>
-                                                    <select class="selectpicker" id="number-of-tickets" name="amount">
-                                                        {% for i in ticket_type.0 %}
-                                                            <option>{{ i }}</option>
-                                                        {% endfor %}
-                                                    </select>
-
-                                                      <div class="form-group" id="person">
-                                                        <label for="email">Proszę podać Adres Email osoby, dla której kupujesz bilet</label>
-                                                        <input type="email" name="ticket_mail" class="form-control" id="email" value="{{ user.email }}" aria-describedby="emailHelp" placeholder="Podaj email na jaki mamy wysłać bilet">
-                                                      </div>
-                                                      <div class="form-group">
-                                                        <label for="name">Proszę podać Imię i Nazwisko osoby, dla której kupujesz bilet</label>
-                                                        <input type="text" name="ticket_name" class="form-control" id="name"  value="{{ user.name }}"  placeholder="Podaj imię osoby, dla której chcesz kupić bilet" >
-                                                      </div>
-                                                    <button type="submit" class="btn btn-success">KUPUJĘ</button>
-
-                                                    </form>
-                                                </div>
-
-                                                <div class="modal-footer">
-                                                  <button type="button" class="btn btn-danger" data-dismiss="modal">ZAMKNIJ</button>
-                                                </div>
-
-                                              </div>
                                             </div>
-                                          </div>
+                                        </div>
 
 
                                     </div>
@@ -197,7 +218,6 @@
             <span class="glyphicon glyphicon-chevron-up"></span>Przewiń do góry</a>
     </div>
 {% endif %}
-
 
 
 </body>

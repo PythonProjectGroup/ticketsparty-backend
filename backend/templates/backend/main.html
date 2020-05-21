@@ -18,11 +18,12 @@
         <div class="bg-light">
 
             <div class=" row d-flex justify-content-around p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
-            <div class="col-sm-12 col-md-12 d-flex justify-content-between">
+                <div class="col-sm-12 col-md-12 d-flex justify-content-between">
                     <a href="/" class="btn btn-lg center-block test" role="button">Tickets Party</a>
                     <div class="search-bar">
                         <form method="get">
-                            <input type="text" class="form-control" name="q" id="id_q" placeholder="Search event by name, description, city...">
+                            <input type="text" class="form-control" name="q" id="id_q"
+                                   placeholder="Search event by name, description, city...">
                         </form>
                     </div>
                     <nav>
@@ -33,7 +34,7 @@
                             <a href="/signup" class="btn btn-primary" role="button">Zarejestruj się</a>
                         {% endif %}
                     </nav>
-            </div>
+                </div>
             </div>
             <div class="container">
                 {% if all_events_info %}
@@ -41,7 +42,7 @@
                         <div class="row ">
                             {% for event in row %}
                                 <div class="col-md-4 d-flex pb-3 ">
-                                    <div class="card box-shadow events-card " >
+                                    <div class="card box-shadow events-card ">
                                         <div class="inner">
                                             <img class="card-img-top " src="{{ event.pictures }}" alt="TEST">
                                         </div>
@@ -62,11 +63,11 @@
                 {% else %}
                     Nie ma eventów :(
                 {% endif %}
-            </div>
-            <div class="d-flex justify-content-center p-3 px-md-4 mb-3  bg-white border-bottom box-shadow">
-                <a id="back-to-top" href="#" class="btn btn-lg center-block test" role="button"  data-toggle="tooltip">
-                    <span class="glyphicon glyphicon-chevron-up"></span>Przewiń do góry</a>
-            </div>
+        </div>
+        <div class="d-flex justify-content-center p-3 px-md-4 mb-3  bg-white border-bottom box-shadow">
+            <a id="back-to-top" href="#" class="btn btn-lg center-block test" role="button" data-toggle="tooltip">
+                <span class="glyphicon glyphicon-chevron-up"></span>Przewiń do góry</a>
+        </div>
         </div>
     </main>
 

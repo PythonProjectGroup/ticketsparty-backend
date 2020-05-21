@@ -10,17 +10,17 @@
 <body>
 {% block content %}
 
-        {% if events %}
-            {% for event in events %}
-                {{ event.event_name }}<br>
-                {% qr_from_text event.eventkey %}<br>
-                Debug apikey {{ event.eventkey }}<br>
-                Jeśli pusty to mógł nie zostać policzony z powodu starego jsona
-                <br><br><br>
-            {% endfor %}
-        {% else %}
-            404, Nie znalazlem eventu, który spełnia powyższe kryteria
-        {% endif %}
+    {% if events %}
+        {% for event in events %}
+            {{ event.event_name }}<br>
+            {% qr_from_text event.eventkey %}<br>
+            Debug apikey {{ event.eventkey }}<br>
+            Jeśli pusty to mógł nie zostać policzony z powodu starego jsona
+            <br><br><br>
+        {% endfor %}
+    {% else %}
+        404, Nie znalazlem eventu, który spełnia powyższe kryteria
+    {% endif %}
 
 
 

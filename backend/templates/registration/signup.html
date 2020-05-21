@@ -2,65 +2,67 @@
 <html lang="pl" xmlns="http://www.w3.org/1999/html">
 {% load static %} {% block content %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Rejestracja</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap-theme.min.css">
-     <link rel="stylesheet" href="{% static 'css/login.css' %}">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <title>Rejestracja</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    </head>
 
-<body>
+    <body>
     <div id="login">
         <a href="/" class="btn btn-lg center-block test" id="logo-button" role="button">Tickets Party</a>
         <div class="container">
             <div id="login-row" class="row justify-content-center ">
                 <div id="login-column" class="w-50 p-3 col-md-6 ">
-                    <div id="login-box" class="h-75 d-inline-block col-md-10" >
+                    <div id="login-box" class="h-75 d-inline-block col-md-10">
                         <div id="login-form" class="form " action="" method="post">
                             <h3 class="text-center text-info">Zarejestruj się</h3>
 
-                                {% if form.non_field_errors %}
-                                    {% for error in form.non_field_errors %}
-                                        {{error}}
-                                    {% endfor %}
-                                {% endif %}
+                            {% if form.non_field_errors %}
+                                {% for error in form.non_field_errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            {% endif %}
 
                             <div class="form">
                                 <form method="post">
                                     {% csrf_token %}
-                                        {% for field in form %}
-                                            <div class="d-flex justify-content-center">
-                                                <p>
-                                                    {{ field }}
-                                                </p>
-                                            </div>
-                                        {% endfor %}
+                                    {% for field in form %}
+                                        <div class="d-flex justify-content-center">
+                                            <p>
+                                                {{ field }}
+                                            </p>
+                                        </div>
+                                    {% endfor %}
                                     <div class="center-block text-center">
-                                        <button class="btn btn-info btn-md " type="submit" value="login" id="register_button">Zarejestruj się</button>
+                                        <button class="btn btn-info btn-md " type="submit" value="login"
+                                                id="register_button">Zarejestruj się
+                                        </button>
                                     </div>
                                 </form>
                             </div>
                             <div id="login-link" class=" text-right mx-auto">
                                 <a href="/login" class="text-info">Zaloguj się tutaj</a>
                             </div>
-                                <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        </div>
-</body>
+    </div>
+    </body>
 
-</html>
+    </html>
 
-<script>
-    $(document).ready(function() {
-        $("#id_password2").attr("placeholder", "Potwierdź Hasło").val("").focus().blur();
-        $("#id_password1").attr("placeholder", "Hasło").val("").focus().blur();
-    })
-</script>
+    <script>
+        $(document).ready(function () {
+            $("#id_password2").attr("placeholder", "Potwierdź Hasło").val("").focus().blur();
+            $("#id_password1").attr("placeholder", "Hasło").val("").focus().blur();
+        })
+    </script>
 
 {% endblock %}

@@ -13,37 +13,32 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path
-from django.conf.urls import url
 from django.conf.urls import include
-from backend import views as core_views
-
-from django.contrib.auth.views import LoginView as login
-from django.views.generic.list import ListView
+from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.auth.views import LoginView as login
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from tickets import settings
-from rest_framework import routers, serializers, viewsets
-import backend.views as views
+from django.urls import path
 
+import backend.views as views
+from backend import views as core_views
+from tickets import settings
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    url(r'^$', views.index, name='index'),
-    url(r'^events/$', views.index, name='index'),
-    url(r'^api/', include('backend.urls')),
-    url(r'^login/$', login.as_view(), {'template_name': 'login.html'}, name='login'),
-    url(r'^signup/$', core_views.signup, name='signup'),
-    url(r'^logout/$', core_views.my_logout, name='logout'),
-    path('events/<int:event_id>/', views.event, name='event'),
-    path('auth/jwt/create/', views.CustomTokenObtainPairView.as_view(), name='custom_token_obtain_pair'),
-    path('events/<int:id>/apikey', views.event_apikey),
+                  path('admin/', admin.site.urls),
+                  url(r'^$', views.index, name='index'),
+                  url(r'^events/$', views.index, name='index'),
+                  url(r'^api/', include('backend.urls')),
+                  url(r'^login/$', login.as_view(), {'template_name': 'login.html'}, name='login'),
+                  url(r'^signup/$', core_views.signup, name='signup'),
+                  url(r'^logout/$', core_views.my_logout, name='logout'),
+                  path('events/<int:event_id>/', views.event, name='event'),
+                  path('auth/jwt/create/', views.CustomTokenObtainPairView.as_view(), name='custom_token_obtain_pair'),
+                  path('events/<int:id>/apikey', views.event_apikey),
 
-
-    path('auth/', include('djoser.urls')),
-    path('auth/', include('djoser.urls.jwt')),
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+                  path('auth/', include('djoser.urls')),
+                  path('auth/', include('djoser.urls.jwt')),
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += staticfiles_urlpatterns()
