@@ -50,6 +50,7 @@ def event(request, event_id):
         names = request.POST.get('names', None)
         if not names or ticket_type_id == -1:
             print("Warning: Malformed post")
+        print(names)
 
 
     return render(request, 'backend/event.html',
