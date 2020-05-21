@@ -27,7 +27,8 @@ from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
 
 from rest_framework.permissions import IsAuthenticated
 
-from serializers import ClientTickets, TicketSerializer, TicketListSerializer, EventListSerializer, EventSerializer, EventKeySerializer
+from serializers import ClientTickets, TicketSerializer, EventListSerializer, EventSerializer, \
+    EventKeySerializer
 import backend.personal as pers
 from operator import attrgetter
 
@@ -51,15 +52,14 @@ def event(request, event_id):
             print("Warning: Malformed post")
 
 
-
     return render(request, 'backend/event.html',
                   {'event': event, 'ticket_types': ticket_types})
 
 
 def index(request):
     context = {}
-    #search bar logic part
-    query=""
+    # search bar logic part
+    query = ""
     if request.GET:
         query = request.GET['q']
         context['query'] = str(query)
@@ -73,7 +73,6 @@ def index(request):
     print(context['all_events_info'])
 
     return render(request, 'backend/main.html', context)
-
 
 
 def signup(request):
@@ -97,19 +96,22 @@ def my_logout(request):
     response = redirect('/')
     return response
 
+
 def tickets(request):
     tickets = ""
     if request.user.is_authenticated:
         tickets = ClientTickets.objects.filter(client_id=request.user)
 
-    return render(request, 'backend/tickets.html', {'tickets' : tickets})
+    return render(request, 'backend/tickets.html', {'tickets': tickets})
+
 
 def event_apikey(request, id):
     events = Event.objects.filter(id=id)
-    return render(request, 'backend/event_apikey.html', {'events' : events})
+    return render(request, 'backend/event_apikey.html', {'events': events})
 
 def e404(request):
     return render(request, 'backend/404.html')
+
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
@@ -141,21 +143,16 @@ class EventDetailsAPI(generics.RetrieveUpdateDestroyAPIView, generics.CreateAPIV
     lookup_field = 'id'
 
 
-class UserTicketListAPI(generics.ListAPIView):
-    permission_classes = [] if pers.disableAuth else [IsAdminUser]
-    queryset = ClientTickets.objects.all()
-    serializer_class = TicketListSerializer
-
-
 class TicketDetailsAPI(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [] if pers.disableAuth else [IsAdminUser]
     queryset = ClientTickets.objects.all()
     serializer_class = TicketSerializer
-    lookup_field = 'id'
+    lookup_field = 'ticket_hash'
+
 
 class EventKeys(generics.ListAPIView):
     serializer_class = EventKeySerializer
-    permission_classes= [] if pers.disableAuth else [IsAuthenticated]
+    permission_classes = [] if pers.disableAuth else [IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
@@ -164,9 +161,9 @@ class EventKeys(generics.ListAPIView):
 
 @api_view(['GET', 'PATCH'])
 @permission_classes((IsAdminUser,))
-def validate_ticket(request, hash_id):
+def validate_ticket(request, ticket_hash):
     try:
-        ticket = ClientTickets.objects.filter(ticket_hash=hash_id)
+        ticket = ClientTickets.objects.filter(ticket_hash=ticket_hash)
         if ticket is not None:
             print(ticket)
             if ticket[0].used:
@@ -184,10 +181,11 @@ def validate_ticket(request, hash_id):
         return Response("Invalid ticket", status=status.HTTP_404_NOT_FOUND)
     # alternative: return Response(serializer.data, status=status.HTTP_200_OK)
 
+
 @api_view(['POST', 'DELETE'])
 @permission_classes((IsAuthenticated, ))
 def manage_eventkey(request, slug):
-    #[{"key":"abc123456", "event_id":6}, {...}]
+    # [{"key":"abc123456", "event_id":6}, {...}]
     if request.method == 'POST':
         currentkeys = request.user.eventkeys
         if currentkeys:
@@ -201,9 +199,9 @@ def manage_eventkey(request, slug):
                 if slug == key['key']:
                     return Response(status=status.HTTP_200_OK)
             else:
-                keyslist.append({"key":slug, "event_id":event_id})
+                keyslist.append({"key": slug, "event_id": event_id})
                 print(keyslist)
-                request.user.eventkeys = str(keyslist).replace('\'','\"')
+                request.user.eventkeys = str(keyslist).replace('\'', '\"')
                 request.user.save()
                 return Response(status=status.HTTP_200_OK)
         else:
@@ -228,8 +226,6 @@ def manage_eventkey(request, slug):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 
-
-
 def get_client_search(query=None):
     queryset = []
     queries = query.split(" ")
@@ -246,4 +242,3 @@ def get_client_search(query=None):
             queryset.append(event)
     print(list(queryset))
     return list(set(queryset))
-
