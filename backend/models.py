@@ -75,6 +75,7 @@ class Event(models.Model):
     descriptions = models.TextField(max_length=800, verbose_name="Opisy")
     pictures = models.TextField(max_length=800, verbose_name="Zdjęcia")
     event_date = models.DateTimeField(verbose_name="Data")
+    timestamp = models.TextField(verbose_name="timestamp", blank=True)
     eventkey = models.TextField(verbose_name='event key', blank=True)
     city = models.CharField(max_length=50, verbose_name="Miasto")
     street = models.CharField(max_length=100, verbose_name="Ulica")
@@ -85,9 +86,16 @@ class Event(models.Model):
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
-        if self.eventkey is None or self.eventkey == "":
+        cur_time = str(time.time())
+        if self.timestamp is None or self.timestamp == "":
+            self.timestamp = cur_time
             self.eventkey = hashlib.sha256(
-                str(time.time()).encode('utf-8')).hexdigest()
+                str(cur_time).encode('utf-8')).hexdigest()
+        else:
+            if self.eventkey is None or self.eventkey == "":
+                self.eventkey = hashlib.sha256(
+                    str(self.timestamp).encode('utf-8')).hexdigest()
+
         super(Event, self).save(force_insert=force_insert,
                                 force_update=force_update, using=using,
                                 update_fields=update_fields)
@@ -133,6 +141,7 @@ class ClientTickets(models.Model):
                                  verbose_name="ID eventu")
     ticket_id = models.ForeignKey(TicketType, on_delete=models.CASCADE,
                                   verbose_name="ID rodzaju ticketu")
+    timestamp = models.TextField(verbose_name="timestamp", blank=True)
     ticket_hash = models.TextField(verbose_name="ticket_hash", blank=True)
     bought_date = models.DateTimeField(verbose_name="Data zakupu",
                                        auto_now_add=True)
@@ -142,6 +151,10 @@ class ClientTickets(models.Model):
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
+        cur_time = str(time.time())
+        if self.timestamp is None or self.timestamp == "":
+            self.timestamp = str(cur_time)
+
         if self.ticket_hash is None or self.ticket_hash == "":
             ticket_type = self.ticket_id
             print(self.amount)
@@ -155,10 +168,16 @@ class ClientTickets(models.Model):
             else:
                 ticket_type.available_amount -= self.amount
                 ticket_type.save(update_fields=["available_amount"])
-                self.ticket_hash = hashlib.sha256(
-                    (str(self.bought_date) + str(self.client_id) + str(
+                if self.timestamp is None or self.timestamp == "":
+                    self.ticket_hash = hashlib.sha256(
+                    (str(cur_time) + str(self.client_id) + str(
                         self.client_id.email) + str(self.event_id)).encode(
                         'utf-8')).hexdigest()
+                else:
+                    self.ticket_hash = hashlib.sha256(
+                        (str(self.timestamp) + str(self.client_id) + str(
+                            self.client_id.email) + str(self.event_id)).encode(
+                            'utf-8')).hexdigest()
         super(ClientTickets, self).save(force_insert=force_insert,
                                         force_update=force_update, using=using,
                                         update_fields=update_fields)
