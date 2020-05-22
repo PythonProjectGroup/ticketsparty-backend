@@ -36,10 +36,18 @@ def event(request, event_id):
     except Event.DoesNotExist:
         return e404(request)
 
-    ticket_types = [[[x for x in range(1, 1 + min(ticket.available_amount,
-                                                  ticket.max_per_client))],
-                     ticket] for ticket in
-                    TicketType.objects.filter(event_id=event_id)]
+    ticket_types = []
+    for ticket in TicketType.objects.filter(event_id=event_id):
+        a = min(ticket.available_amount,
+                ticket.max_per_client - ticket.calculate_amount_of_user_tickets(
+                    client_id=request.user.id))
+        b = [x for x in range(1, 1 + a)]
+        ticket_types.append([b,ticket,a])
+    # ticket_types = [[[x for x in range(1, 1 + min(ticket.available_amount,
+    #                                               ticket.max_per_client - ticket.calculate_amount_of_user_tickets(
+    #                                                   client_id=request.user.id)))],
+    #                  ticket] for ticket in
+    #                 TicketType.objects.filter(event_id=event_id)]
     if request.method == 'POST':
         print(request.POST)
         ticket_type_id = int(request.POST.get('ticket_type_id', -1))
@@ -59,6 +67,10 @@ def event(request, event_id):
                               names=name).save()
             except backend.errors.NoAvailableTickets as e:
                 return render(request, 'backend/errors/no_tickets.html',
+                              {'amount': e.args[0]})
+            except backend.errors.UserHasExceededTheTicketAmountLimit as e:
+                return render(request,
+                              'backend/errors/user_tickets_limit.html',
                               {'amount': e.args[0]})
 
     return render(request, 'backend/event.html',

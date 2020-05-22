@@ -9,7 +9,8 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from backend.errors import NoAvailableTickets
+from backend.errors import NoAvailableTickets, \
+    UserHasExceededTheTicketAmountLimit
 
 
 class UserManager(BaseUserManager):
@@ -54,7 +55,8 @@ class User(AbstractUser):
                             help_text="Imię i nazwisko pracownika")
     phone = models.CharField(blank=True, verbose_name="telefon", max_length=32,
                              help_text="telefon do pracownika")
-    eventkeys = models.TextField(verbose_name="klucze API", blank=True, default="[]")
+    eventkeys = models.TextField(verbose_name="klucze API", blank=True,
+                                 default="[]")
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name', 'phone']
     objects = UserManager()
@@ -115,6 +117,13 @@ class TicketType(models.Model):
         verbose_name = "Rodzaj biletu"
         verbose_name_plural = "Rodzaje biletów"
 
+    def calculate_amount_of_user_tickets(self, client_id):
+        counter = 0
+        for ticket in ClientTickets.objects.filter(client_id_id=client_id,
+                                                   ticket_id__id=self.id):
+            counter += ticket.amount
+        return counter
+
 
 class ClientTickets(models.Model):
     id = models.AutoField(primary_key=True)
@@ -125,7 +134,8 @@ class ClientTickets(models.Model):
     ticket_id = models.ForeignKey(TicketType, on_delete=models.CASCADE,
                                   verbose_name="ID rodzaju ticketu")
     ticket_hash = models.TextField(verbose_name="ticket_hash", blank=True)
-    bought_date = models.DateTimeField(verbose_name="Data zakupu", auto_now_add=True)
+    bought_date = models.DateTimeField(verbose_name="Data zakupu",
+                                       auto_now_add=True)
     amount = models.IntegerField(verbose_name="Ilość biletów")
     used = models.BooleanField(default=False, verbose_name="Wykorzystany")
     names = models.TextField(verbose_name="Zakupiony dla")
@@ -137,6 +147,11 @@ class ClientTickets(models.Model):
             print(self.amount)
             if self.amount > ticket_type.available_amount:
                 raise NoAvailableTickets(str(ticket_type.available_amount))
+
+            a = ticket_type.calculate_amount_of_user_tickets(self.client_id_id)
+            if a + self.amount > ticket_type.max_per_client:
+                raise UserHasExceededTheTicketAmountLimit(
+                    str(ticket_type.max_per_client - a))
             else:
                 ticket_type.available_amount -= self.amount
                 ticket_type.save(update_fields=["available_amount"])
