@@ -2,9 +2,15 @@ body {
     background-image: url("https://trello-backgrounds.s3.amazonaws.com/SharedBackground/2400x1600/0dcaf259403508a136e8dde0b8f9626f/photo-1578575436955-ef29da568c6c.jpg");
 }
 
+.centered{
+    text-align: center;
+}
+
 .error-template {
     padding: 40px 15px;
     text-align: center;
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+    color: darkblue;
 }
 
 .error-actions {
