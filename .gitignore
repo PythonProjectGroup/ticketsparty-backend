@@ -3,3 +3,4 @@
 /venv
 /.idea
 backend/__pycache__
+/backend/personal.py
