@@ -46,11 +46,11 @@ def event(request, event_id):
                     client_id=request.user.id))
         b = [x for x in range(1, 1 + a)]
         ticket_types.append([b, ticket, a])
+    pictures = json.loads(event.pictures)
     if request.method == 'POST':
         print(request.POST)
         ticket_type_id = int(request.POST.get('ticket_type_id', -1))
         client_id = request.user.id
-        # event_id macie wyżej, bought_date nie ma potrzeby
         name = request.POST.get('ticket_name', None)
         mail = request.POST.get('ticket_mail', None)
         amount = request.POST.get('amount', 0)
@@ -72,7 +72,8 @@ def event(request, event_id):
                               {'amount': e.args[0]})
 
     return render(request, 'backend/event.html',
-                  {'event': event, 'ticket_types': ticket_types})
+                  {'event': event, 'ticket_types': ticket_types,
+                   'pictures': pictures})
 
 
 def index(request):
@@ -85,6 +86,7 @@ def index(request):
 
     events = get_client_search(query)
     for event in events:
+        event.pictures = json.loads(event.pictures)[0]
         if len(event.descriptions) >= 120:
             event.descriptions = event.descriptions[0:120] + "..."
     events = sorted(events, key=attrgetter('event_date'))
@@ -277,7 +279,8 @@ def add_event(request):
             fs = FileSystemStorage()
             invalid = []
             for f in request.FILES.getlist('files'):
-                if (f.content_type == 'image/jpeg' or f.content_type == 'image/png') and f.size < 5000001:
+                if (
+                        f.content_type == 'image/jpeg' or f.content_type == 'image/png') and f.size < 5000001:
                     filename = fs.save(f.name, f)
                     uploaded_file_url.append(fs.url(filename))
                 else:
@@ -297,31 +300,36 @@ def add_event(request):
             # event_date =datetime.strptime('09/19/18 13:55:26', '%m/%d/%y %H:%M:%S')
             event_date = request.POST.get('event_date', None)
             if len(uploaded_file_url) > 0:
-                Event(
-                    organizer_name= organizer_name,
-                    coordinates=coordinates,
-                    event_name=event_name,
-                    descriptions=descriptions,
-                    city=city,
-                    street=street,
-                    post_code=post_code,
-                    street_address=street_address,
-                    country=country,
-                    event_date=event_date,
-                    pictures=uploaded_file_url
-                ).save()
+                try:
+                    Event(
+                        organizer_name=organizer_name,
+                        coordinates=coordinates,
+                        event_name=event_name,
+                        descriptions=descriptions,
+                        city=city,
+                        street=street,
+                        post_code=post_code,
+                        street_address=street_address,
+                        country=country,
+                        event_date=event_date,
+                        pictures=json.dumps(uploaded_file_url)
+                    ).save()
+                except:
+                    return render(request, 'backend/add_event.html', {
+                        'info': 'Nie udało się stworzyć wydarzenia, błędne dane'
+                    })
                 if len(invalid) == 0:
                     return render(request, 'backend/add_event.html', {
-                    'uploaded_file_url': uploaded_file_url
+                        'uploaded_file_url': uploaded_file_url
                     })
                 else:
                     return render(request, 'backend/add_event.html', {
                         'uploaded_file_url': uploaded_file_url,
-                        'info' : 'Błędne pliki to: '+str(invalid)
+                        'info': 'Błędne pliki to: ' + str(invalid)
                     })
             else:
                 return render(request, 'backend/add_event.html', {
-                    'info' : 'Nie udało się stworzyć wydarzenia, błędne wszystkie pliki'
+                    'info': 'Nie udało się stworzyć wydarzenia, błędne wszystkie pliki'
                 })
     except MultiValueDictKeyError:
         return render(request, 'backend/add_event.html', {
