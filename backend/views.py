@@ -40,12 +40,6 @@ def event(request, event_id):
         return e404(request)
 
     ticket_types = []
-    for ticket in TicketType.objects.filter(event_id=event_id):
-        a = min(ticket.available_amount,
-                ticket.max_per_client - ticket.calculate_amount_of_user_tickets(
-                    client_id=request.user.id))
-        b = [x for x in range(1, 1 + a)]
-        ticket_types.append([b, ticket, a])
     pictures = json.loads(event.pictures)
     if request.method == 'POST':
         print(request.POST)
@@ -70,7 +64,12 @@ def event(request, event_id):
                 return render(request,
                               'backend/errors/user_tickets_limit.html',
                               {'amount': e.args[0]})
-
+    for ticket in TicketType.objects.filter(event_id=event_id):
+        a = min(ticket.available_amount,
+                ticket.max_per_client - ticket.calculate_amount_of_user_tickets(
+                    client_id=request.user.id))
+        b = [x for x in range(1, 1 + a)]
+        ticket_types.append([b, ticket, a])
     return render(request, 'backend/event.html',
                   {'event': event, 'ticket_types': ticket_types,
                    'pictures': pictures})
