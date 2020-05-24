@@ -6,9 +6,11 @@ from django import template
 from django.contrib.auth import login, authenticate
 from django.contrib.auth import logout
 from django.core import serializers
+from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
 from django.shortcuts import redirect
 from django.shortcuts import render
+from django.utils.datastructures import MultiValueDictKeyError
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, generics, filters
 from rest_framework.decorators import api_view, permission_classes
@@ -42,7 +44,7 @@ def event(request, event_id):
                 ticket.max_per_client - ticket.calculate_amount_of_user_tickets(
                     client_id=request.user.id))
         b = [x for x in range(1, 1 + a)]
-        ticket_types.append([b,ticket,a])
+        ticket_types.append([b, ticket, a])
     if request.method == 'POST':
         print(request.POST)
         ticket_type_id = int(request.POST.get('ticket_type_id', -1))
@@ -85,8 +87,8 @@ def index(request):
         if len(event.descriptions) >= 120:
             event.descriptions = event.descriptions[0:120] + "..."
     events = sorted(events, key=attrgetter('event_date'))
-    context['all_events_info'] = [events[x:x+3] for x in
-                                  range(0,len(events),3)]
+    context['all_events_info'] = [events[x:x + 3] for x in
+                                  range(0, len(events), 3)]
     print(context['all_events_info'])
 
     return render(request, 'backend/main.html', context)
@@ -263,3 +265,22 @@ def get_client_search(query=None):
             queryset.append(event)
     print(list(queryset))
     return list(set(queryset))
+
+
+# @api_view(['GET', 'PATCH'])
+# @permission_classes((IsAdminUser,))
+def add_event(request):
+    try:
+        if request.method == 'POST' and request.FILES['files']:
+            uploaded_file_url = []
+            fs = FileSystemStorage()
+            files = request.FILES.getlist('files')
+            for i in range(len(files)):
+                filename = fs.save(files[i].name, files[i])
+                uploaded_file_url.append(fs.url(filename))
+            return render(request, 'backend/add_event.html', {
+                'uploaded_file_url': uploaded_file_url
+            })
+    except MultiValueDictKeyError:
+        pass
+    return render(request, 'backend/add_event.html')
