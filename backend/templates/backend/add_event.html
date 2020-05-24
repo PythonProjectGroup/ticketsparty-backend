@@ -1,21 +1,74 @@
 {% load static %}
-
 {% block content %}
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="file" name="files" multiple/>
-        <input type="text" name="organizer_name">
-        <input type="text" name="coordinates">
-        <input type="text" name="event_name">
-        <input type="text" name="descriptions">
-        <input type="text" name="city">
-        <input type="text" name="street">
-        <input type="text" name="post_code">
-        <input type="text" name="street_address">
-        <input type="text" name="country">
-        <input type="date" name="event_date">
-        <button type="submit">Upload</button>
-    </form>
+    <html lang="pl">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>add_event</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    </head>
+
+    <body>
+    <div id="login">
+        <a href="/" class="btn btn-lg center-block test" id="logo-button" role="button">Tickets Party</a>
+        <div class="container">
+            <div id="login-row" class="row justify-content-center ">
+                <div id="login-column" class="w-50 p-3 col-md-6 ">
+                    <div id="login-box" class="h-75 d-inline-block col-md-10  ">
+                        <form id="login-form" class="form" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group" id="files">
+                                        <label for="files">Proszę wybrać zdjęcia dotyczące wydarzenia (pierwsze zdjęcie
+                                            będzie
+                                            zdjęciem głównym)</label>
+                                        <input type="file" name="files"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group" id="organizer_name">
+                                <label for="organizer_name">Proszę wprowadzić nazwę organizatora</label>
+                                <input type="text" name="organizer_name" class="form-control" placeholder="Organizator">
+                            </div>
+                            <div class="form-group" id="coordinates">
+                                <label for="coordinates">Proszę wybrać mioejsce, w którym odbędzie się
+                                    wydarzenie</label>
+                                <input type="text" name="coordinates" class="form-control" placeholder="Koordynaty">
+                            </div>
+                            <div class="form-group" id="event_name">
+                                <label for="event_name">Proszę wprowadzić nazwę wydarzenia</label>
+                                <input type="text" name="event_name" class="form-control"
+                                       placeholder="Nazwa wydarzenia">
+                            </div>
+                            <div id="desc-label" class="form-group" id="descriptions">
+                                <label for="descriptions">Proszę wprowadzić opis wydarzenia</label>
+                                <textarea type="text" name="descriptions" class="form-control"
+                                          placeholder="Opis wydarzenia" rows="3"></textarea>
+                            </div>
+                            <div class="form-group" id="address">
+                                <label for="address">Proszę wprowadzić adres miejsca, w którym odbędzie się
+                                    wydarzenie</label>
+                                <input type="text" name="street" class="form-control" placeholder="Ulica">
+                                <input type="text" name="street_address" class="form-control" placeholder="Numer">
+                                <input type="text" name="city" class="form-control" placeholder="Miasto">
+                                <input type="text" name="post_code" class="form-control" placeholder="Kod pocztowy">
+                                <input type="text" name="country" class="form-control" placeholder="Państwo">
+                            </div>
+                            <div class="form-group" id="event_date">
+                                <label for="event_date">Proszę podać datę wydarzenia</label>
+                                <input type="date" name="event_date" class="form-control" placeholder="Data wydarzenia">
+                            </div>
+                            <button type="submit" class="btn btn-success ">POTWIERDŹ</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     {% if uploaded_file_url %}
         <p>File uploaded at: <a
