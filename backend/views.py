@@ -304,6 +304,7 @@ def add_event(request):
                 street_address=street_address,
                 country=country,
                 event_date=event_date,
+                pictures=uploaded_file_url
             ).save()
             return render(request, 'backend/add_event.html', {
                 'uploaded_file_url': uploaded_file_url
