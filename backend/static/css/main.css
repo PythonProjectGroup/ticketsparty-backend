@@ -72,3 +72,8 @@ body {
     height: 200px;
     object-fit: cover;
 }
+
+.btn.btn-primary.green {
+    background-color: forestgreen;
+    border-color: transparent;
+}

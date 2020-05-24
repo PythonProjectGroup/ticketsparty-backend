@@ -26,8 +26,9 @@
 
 </head>
 <body>
-{% if "lh3.googleusercontent.com" in pictures or not pictures%}
-    <div class="background-on" style="background-image: url('https://trello-backgrounds.s3.amazonaws.com/SharedBackground/2400x1600/0dcaf259403508a136e8dde0b8f9626f/photo-1578575436955-ef29da568c6c.jpg')"></div>
+{% if "lh3.googleusercontent.com" in pictures or not pictures %}
+    <div class="background-on"
+         style="background-image: url('https://trello-backgrounds.s3.amazonaws.com/SharedBackground/2400x1600/0dcaf259403508a136e8dde0b8f9626f/photo-1578575436955-ef29da568c6c.jpg')"></div>
 {% else %}
     <div class="background-on" style="background-image: url('{{ pictures.0 }}')"></div>
 {% endif %}
@@ -37,6 +38,7 @@
             <a href="/" class="btn btn-lg center-block test" role="button">Tickets Party</a>
             <nav>
                 {% if user.is_authenticated %}
+                    <a href="/events/new" class="btn btn-primary green" role="button">Dodaj wydarzenie</a>
                     <a href="/logout" class="btn btn-primary" role="button">Wyloguj się</a>
                 {% else %}
                     <a href="/login" class="btn btn-primary" role="button">Zaloguj się</a>
@@ -50,8 +52,9 @@
         <div class="row ">
             <div class="card box-shadow events-card   img-fluid" style="width: 45rem; height: auto">
                 <div class="embed-responsive embed-responsive-16by9 ">
-                    {% if "lh3.googleusercontent.com" in pictures or not pictures%}
-                        <img alt="haha" class="embed-responsive-item title-card" src="https://remotecoach.fit/wp-content/uploads/2020/01/placeholder_600x400.svg">
+                    {% if "lh3.googleusercontent.com" in pictures or not pictures %}
+                        <img alt="haha" class="embed-responsive-item title-card"
+                             src="https://remotecoach.fit/wp-content/uploads/2020/01/placeholder_600x400.svg">
                     {% else %}
                         <img alt="TEST" class="embed-responsive-item title-card" src={{ pictures.0 }}>
                     {% endif %}
@@ -89,15 +92,18 @@
                                             sprzedaży: {{ ticket_type.1.start_of_selling }}</p>
                                         <p class="font-weight-bold text-md-left">Koniec
                                             sprzedaży: {{ ticket_type.1.end_of_selling }}</p>
-                                        <p class="font-weight-light text-md-center">Zostało
-                                            jeszcze: {{ ticket_type.1.available_amount }} biletów</p>
-                                        <p class="blockquote-footer">Jednorazowo możesz
-                                            kupić: {{ ticket_type.2 }}
-                                            bilety</p>
+                                        <p class="font-weight-light text-md-center">Pozostała liczba
+                                            biletów: {{ ticket_type.1.available_amount }}</p>
+                                        <p class="blockquote-footer">Możesz
+                                            kupić: {{ ticket_type.2 }}</p>
 
-                                        <button type="button" class="btn btn-primary" data-toggle="modal"
-                                                data-target="#myModal">KUP BILET
-                                        </button>
+                                        {% if ticket_type.2 == 0 %}
+                                            <button class="btn-disabled">KUP BILET</button>
+                                        {% else %}
+                                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                    data-target="#myModal">KUP BILET
+                                            </button>
+                                        {% endif %}
 
                                         <div class="modal" id="myModal">
                                             <div class="modal-dialog">
@@ -118,11 +124,10 @@
                                                             sprzedaży: {{ ticket_type.1.start_of_selling }}</p>
                                                         <p class="font-weight-bold text-md-left">Koniec
                                                             sprzedaży: {{ ticket_type.1.end_of_selling }}</p>
-                                                        <p class="font-weight-light text-md-center">Zostało
-                                                            jeszcze: {{ ticket_type.1.available_amount }} biletów</p>
-                                                        <p class="blockquote-footer">Jednorazowo możesz
-                                                            kupić: {{ ticket_type.1.max_per_client }}
-                                                            bilety</p>
+                                                        <p class="font-weight-light text-md-center">Pozostała liczba
+                                                            biletów: {{ ticket_type.1.available_amount }}</p>
+                                                        <p class="blockquote-footer">Możesz
+                                                            kupić: {{ ticket_type.2 }}</p>
                                                         <form method="post" id="buyform">
                                                             {% csrf_token %}
                                                             <input type="number" name="ticket_type_id"
@@ -137,15 +142,6 @@
                                                                 {% endfor %}
                                                             </select>
 
-                                                            <div class="form-group" id="person">
-                                                                <label for="email">Proszę podać Adres Email osoby, dla
-                                                                    której kupujesz bilet</label>
-                                                                <input type="email" name="ticket_mail"
-                                                                       class="form-control" id="email"
-                                                                       value="{{ user.email }}"
-                                                                       aria-describedby="emailHelp"
-                                                                       placeholder="Podaj email na jaki mamy wysłać bilet">
-                                                            </div>
                                                             <div class="form-group">
                                                                 <label for="name">Proszę podać Imię i Nazwisko osoby,
                                                                     dla której kupujesz bilet</label>
@@ -180,11 +176,10 @@
                                             sprzedaży: {{ ticket_type.1.start_of_selling }}</p>
                                         <p class="font-weight-bold text-md-left">Koniec
                                             sprzedaży: {{ ticket_type.1.end_of_selling }}</p>
-                                        <p class="font-weight-light text-md-center">Zostało
-                                            jeszcze: {{ ticket_type.1.available_amount }} biletów</p>
-                                        <p class="blockquote-footer">Jednorazowo możesz
-                                            kupić: {{ ticket_type.1.max_per_client }}
-                                            bilety</p>
+                                        <p class="font-weight-light text-md-center">Pozostała liczba
+                                            biletów: {{ ticket_type.1.available_amount }}</p>
+                                        <p class="blockquote-footer">Możesz
+                                            kupić: {{ ticket_type.1.max_per_client }}</p>
                                         <a href="/login" class="btn btn-warning ">Aby zakupić bilet musisz się
                                             zalogować!</a>
                                     </div>
@@ -196,30 +191,30 @@
             </div>
         </div>
     {% else %}
-        Nie ma ticketów :(
+        Wydarzenie nie posiada dostępnych biletów.
     {% endif %}
 </div>
 
 {% if event.coordinates %}
-<div class="container-sm">
-    <h2 class="my-0 mr-md-auto font-weight-normal">Znajdź nas tutaj:</h2>
-    <div class="map-responsive">
-        <div id="map">
-            <script>
-                var map;
+    <div class="container-sm">
+        <h2 class="my-0 mr-md-auto font-weight-normal">Znajdź nas tutaj:</h2>
+        <div class="map-responsive">
+            <div id="map">
+                <script>
+                    var map;
 
-                function initMap() {
-                    map = new google.maps.Map(document.getElementById('map'), {
-                        center: {{ event.coordinates }},
-                        zoom: 8
-                    });
-                }
-            </script>
-            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrLNuO7-8mVT4YWF9e5PKeoWmd4BXuF18&callback=initMap"
-                    async defer></script>
+                    function initMap() {
+                        map = new google.maps.Map(document.getElementById('map'), {
+                            center: {{ event.coordinates }},
+                            zoom: 8
+                        });
+                    }
+                </script>
+                <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrLNuO7-8mVT4YWF9e5PKeoWmd4BXuF18&callback=initMap"
+                        async defer></script>
+            </div>
         </div>
     </div>
-</div>
 {% endif %}
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">

@@ -46,9 +46,8 @@ def event(request, event_id):
         ticket_type_id = int(request.POST.get('ticket_type_id', -1))
         client_id = request.user.id
         name = request.POST.get('ticket_name', None)
-        mail = request.POST.get('ticket_mail', None)
         amount = request.POST.get('amount', 0)
-        if not name or not mail or ticket_type_id == -1:
+        if not name or ticket_type_id == -1:
             print("Warning: Malformed post")
         else:
             try:
@@ -132,7 +131,7 @@ def event_apikey(request, id):
 
 
 def e404(request):
-    return render(request, 'backend/404.html')
+    return render(request, '404.html')
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):

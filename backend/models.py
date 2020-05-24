@@ -10,7 +10,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from backend.errors import NoAvailableTickets, \
-    UserHasExceededTheTicketAmountLimit
+    UserHasExceededTheTicketAmountLimit, InvalidAmount
 
 
 class UserManager(BaseUserManager):
@@ -159,6 +159,8 @@ class ClientTickets(models.Model):
         if self.ticket_hash is None or self.ticket_hash == "":
             ticket_type = self.ticket_id
             print(self.amount)
+            if self.amount < 1 :
+                raise InvalidAmount(str(self.amount))
             if self.amount > ticket_type.available_amount:
                 raise NoAvailableTickets(str(ticket_type.available_amount))
 

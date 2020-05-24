@@ -36,7 +36,7 @@ urlpatterns = [
                   path('events/<int:event_id>/', views.event, name='event'),
                   path('auth/jwt/create/', views.CustomTokenObtainPairView.as_view(), name='custom_token_obtain_pair'),
                   path('events/<int:id>/apikey', views.event_apikey),
-                  path('add_event/', views.add_event),
+                  path('events/new', views.add_event),
                   path('auth/', include('djoser.urls')),
                   path('auth/', include('djoser.urls.jwt')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

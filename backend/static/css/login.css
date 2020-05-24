@@ -1,11 +1,14 @@
+html, body {
+    min-height: 100%;
+}
+
 body {
     margin: 0;
     padding: 0;
     background-image: url("https://trello-backgrounds.s3.amazonaws.com/SharedBackground/2400x1600/0dcaf259403508a136e8dde0b8f9626f/photo-1578575436955-ef29da568c6c.jpg");
-    height: auto;
-    background-position: center;
     background-repeat: no-repeat;
-    background-size: auto;
+    background-position: center;
+    background-size: cover;
 }
 
 #login .container #login-row #login-column #login-box {

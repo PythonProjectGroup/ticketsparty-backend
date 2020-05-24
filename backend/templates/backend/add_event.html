@@ -4,7 +4,7 @@
 
     <head>
         <meta charset="UTF-8">
-        <title>add_event</title>
+        <title>Dodaj wydarzenie</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap-theme.min.css">
@@ -24,7 +24,7 @@
 
     <body>
     <div id="login">
-    <a href="/" class="d-flex btn btn-lg center-block test" id="logo-button" role="button">Tickets Party</a>
+        <a href="/" class="d-flex btn btn-lg center-block test" id="logo-button" role="button">Tickets Party</a>
         {% if info %}
             <script>
                 alert("{{info}}");
@@ -32,79 +32,77 @@
         {% endif %}
 
         <div class="container">
-            <div id="login-row" class="row justify-content-center " >
+            <div id="login-row" class="row justify-content-center ">
                 <div id="login-column" class="w-50 p-3 col-md-6 ">
                     <div id="login-box" class="h-75 d-inline-block col-md-10  ">
-                        <form id="login-form" class="form" method="post" enctype="multipart/form-data" style=" margin-bottom: 200px;">
+                        <form id="login-form" class="form" method="post" enctype="multipart/form-data"
+                              style=" margin-bottom: 200px;">
                             {% csrf_token %}
                             <div class="row">
                                 <div class="col">
                                     <div class="form-group" id="files">
-                                        <label for="files">Proszę wybrać zdjęcia dotyczące wydarzenia (pierwsze zdjęcie
-                                            będzie
-                                            zdjęciem głównym)</label>
+                                        <label for="files">Dodaj zdjęcia do Twojego wydarzenia (pierwsze zdjęcie
+                                            będzie wyświetlane jako zdjęcie wydarzenia, pozostałe będą w albumie na
+                                            dole strony wydarzenia)</label>
                                         <input type="file" name="files" multiple/>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group" id="organizer_name">
-                                <label for="organizer_name">Proszę wprowadzić nazwę organizatora</label>
+                                <label for="organizer_name">Nazwa organizatora</label>
                                 <input type="text" name="organizer_name" class="form-control" placeholder="Organizator">
                             </div>
                             <div class="form-group" id="coordinates">
-                                <label for="coordinates">Proszę wybrać miejsce, w którym odbędzie się
-                                    wydarzenie oraz wpisać odpowiednie koordynaty</label>
+                                <label for="coordinates">Miejsce wydarzenia (koordynaty)</label>
                                 <input id="out" type="text" name="coordinates" value="" class="form-control"
                                        placeholder="Koordynaty">
                             </div>
 
-                             <div id="map"></div>
-                                <script type="text/javascript">
-                                    function initMap(listener) {
+                            <div id="map"></div>
+                            <script type="text/javascript">
+                                function initMap(listener) {
 
-                                        var myLatlng = {lat: -25.363, lng: 131.044};
-                                        var map;
-                                        map = new google.maps.Map(
-                                            document.getElementById('map'), {zoom: 4, center: myLatlng});
+                                    var myLatlng = {lat: -25.363, lng: 131.044};
+                                    var map;
+                                    map = new google.maps.Map(
+                                        document.getElementById('map'), {zoom: 4, center: myLatlng});
 
-                                        // Create the initial InfoWindow.
-                                        var infoWindow = new google.maps.InfoWindow(
-                                            {content: 'Click the map to get Lat/Lng!', position: myLatlng});
+                                    // Create the initial InfoWindow.
+                                    var infoWindow = new google.maps.InfoWindow(
+                                        {content: 'Click the map to get Lat/Lng!', position: myLatlng});
 
+                                    infoWindow.open(map);
+
+                                    // Configure the click listener.
+                                    map.addListener('click', function (mapsMouseEvent) {
+                                        // Close the current InfoWindow.
+                                        infoWindow.close();
+
+                                        // Create a new InfoWindow.
+                                        infoWindow = new google.maps.InfoWindow({position: mapsMouseEvent.latLng});
+                                        infoWindow.setContent(mapsMouseEvent.latLng.toString());
                                         infoWindow.open(map);
 
-                                        // Configure the click listener.
-                                        map.addListener('click', function (mapsMouseEvent) {
-                                            // Close the current InfoWindow.
-                                            infoWindow.close();
-
-                                            // Create a new InfoWindow.
-                                            infoWindow = new google.maps.InfoWindow({position: mapsMouseEvent.latLng});
-                                            infoWindow.setContent(mapsMouseEvent.latLng.toString());
-                                            infoWindow.open(map);
-
-                                        });
-                                    }
-                                </script>
-                                <script async defer
-                                        src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
-                                </script>
-
+                                    });
+                                }
+                            </script>
+                            <script async defer
+                                    src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
+                            </script>
 
 
                             <div class="form-group" id="event_name">
-                                <label for="event_name">Proszę wprowadzić nazwę wydarzenia</label>
+                                <label for="event_name">Nazwa wydarzenia</label>
                                 <input type="text" name="event_name" class="form-control"
                                        placeholder="Nazwa wydarzenia">
                             </div>
                             <div id="desc-label" class="form-group" id="descriptions">
-                                <label for="descriptions">Proszę wprowadzić opis wydarzenia</label>
+                                <label for="descriptions">Opis wydarzenia</label>
                                 <textarea type="text" name="descriptions" class="form-control"
                                           placeholder="Opis wydarzenia" rows="3"></textarea>
                             </div>
                             <div class="form-group" id="address">
-                                <label for="address">Proszę wprowadzić adres miejsca, w którym odbędzie się
-                                    wydarzenie</label>
+                                <label for="address">Adres wydarzenia</label>
                                 <input type="text" name="street" class="form-control" placeholder="Ulica">
                                 <input type="text" name="street_address" class="form-control" placeholder="Numer">
                                 <input type="text" name="city" class="form-control" placeholder="Miasto">
@@ -112,7 +110,7 @@
                                 <input type="text" name="country" class="form-control" placeholder="Państwo">
                             </div>
                             <div class="form-group" id="event_date">
-                                <label for="event_date">Proszę podać datę wydarzenia</label>
+                                <label for="event_date">Data wydarzenia</label>
                                 <input type="date" name="event_date" class="form-control" placeholder="Data wydarzenia">
                             </div>
                             <button type="submit" class="btn btn-success">POTWIERDŹ</button>

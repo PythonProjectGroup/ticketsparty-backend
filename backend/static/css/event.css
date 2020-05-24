@@ -14,7 +14,7 @@ body {
     object-fit: cover;
 }
 
-.background-on{
+.background-on {
     overflow: hidden;
     background-size: cover;
     background-position: center;
@@ -27,8 +27,8 @@ body {
     object-fit: cover;
 }
 
-.background-off{
-      z-index: 9999;
+.background-off {
+    z-index: 9999;
 }
 
 .content {
@@ -75,17 +75,26 @@ body {
     transition: opacity 1s ease;
 }
 
+.btn-disabled {
+    color: darkgrey;
+}
+
+.btn.btn-primary.green {
+    background-color: forestgreen;
+    border-color: transparent;
+}
+
 .btn:focus, .btn:active, button:focus, button:active {
-  outline: none !important;
-  box-shadow: none !important;
+    outline: none !important;
+    box-shadow: none !important;
 }
 
-#image-gallery .modal-footer{
-  display: block;
+#image-gallery .modal-footer {
+    display: block;
 }
 
-.thumb{
-  margin-top: 15px;
-  margin-bottom: 15px;
+.thumb {
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 
