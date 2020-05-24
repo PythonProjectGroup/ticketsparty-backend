@@ -22,5 +22,9 @@
                 href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
     {% endif %}
 
+    {% if info %}
+        <p> {{ info }}</p>
+    {% endif %}
+
     <p><a href='/'>Return to home</a></p>
 {% endblock %}

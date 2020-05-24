@@ -275,10 +275,13 @@ def add_event(request):
         if request.method == 'POST' and request.FILES['files']:
             uploaded_file_url = []
             fs = FileSystemStorage()
-            files = request.FILES.getlist('files')
-            for i in range(len(files)):
-                filename = fs.save(files[i].name, files[i])
-                uploaded_file_url.append(fs.url(filename))
+            invalid = []
+            for f in request.FILES.getlist('files'):
+                if (f.content_type == 'image/jpeg' or f.content_type == 'image/png') and f.size < 5000001:
+                    filename = fs.save(f.name, f)
+                    uploaded_file_url.append(fs.url(filename))
+                else:
+                    invalid.append(f.name)
             organizer_name = request.POST.get('organizer_name', None)
             coordinates = request.POST.get('coordinates', None)
             event_name = request.POST.get('event_name', None)
@@ -293,22 +296,35 @@ def add_event(request):
             # event_date = time.strptime(request.POST.get('event_date', None), '%y/%m/%d')
             # event_date =datetime.strptime('09/19/18 13:55:26', '%m/%d/%y %H:%M:%S')
             event_date = request.POST.get('event_date', None)
-            Event(
-                organizer_name= organizer_name,
-                coordinates=coordinates,
-                event_name=event_name,
-                descriptions=descriptions,
-                city=city,
-                street=street,
-                post_code=post_code,
-                street_address=street_address,
-                country=country,
-                event_date=event_date,
-                pictures=uploaded_file_url
-            ).save()
-            return render(request, 'backend/add_event.html', {
-                'uploaded_file_url': uploaded_file_url
-            })
+            if len(uploaded_file_url) > 0:
+                Event(
+                    organizer_name= organizer_name,
+                    coordinates=coordinates,
+                    event_name=event_name,
+                    descriptions=descriptions,
+                    city=city,
+                    street=street,
+                    post_code=post_code,
+                    street_address=street_address,
+                    country=country,
+                    event_date=event_date,
+                    pictures=uploaded_file_url
+                ).save()
+                if len(invalid) == 0:
+                    return render(request, 'backend/add_event.html', {
+                    'uploaded_file_url': uploaded_file_url
+                    })
+                else:
+                    return render(request, 'backend/add_event.html', {
+                        'uploaded_file_url': uploaded_file_url,
+                        'info' : 'Błędne pliki to: '+str(invalid)
+                    })
+            else:
+                return render(request, 'backend/add_event.html', {
+                    'info' : 'Nie udało się stworzyć wydarzenia, błędne wszystkie pliki'
+                })
     except MultiValueDictKeyError:
-        pass
+        return render(request, 'backend/add_event.html', {
+            'info': 'Nie udało się stworzyć wydarzenia, brak plików'
+        })
     return render(request, 'backend/add_event.html')
