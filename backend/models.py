@@ -83,6 +83,7 @@ class Event(models.Model):
     street_address = models.CharField(max_length=4,
                                       verbose_name="Numer adresu")
     country = models.CharField(max_length=20, verbose_name="Państwo")
+    status = models.CharField(max_length=8,choices=[(tag, tag) for tag in ['pending','rejected','accepted']], default='pending')
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
