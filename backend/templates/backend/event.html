@@ -23,10 +23,10 @@
 
 </head>
 <body>
-{% if "lh3.googleusercontent.com" in event.pictures or not event.pictures%}
+{% if "lh3.googleusercontent.com" in pictures or not pictures%}
     <div class="background-on" style="background-image: url('https://trello-backgrounds.s3.amazonaws.com/SharedBackground/2400x1600/0dcaf259403508a136e8dde0b8f9626f/photo-1578575436955-ef29da568c6c.jpg')"></div>
 {% else %}
-    <div class="background-on" style="background-image: url('{{ event.pictures }}')"></div>
+    <div class="background-on" style="background-image: url('{{ pictures.0 }}')"></div>
 {% endif %}
 <div class="background-off">
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
@@ -47,10 +47,10 @@
         <div class="row ">
             <div class="card box-shadow events-card   img-fluid" style="width: 45rem; height: auto">
                 <div class="embed-responsive embed-responsive-16by9 ">
-                    {% if "lh3.googleusercontent.com" in event.pictures or not event.pictures%}
+                    {% if "lh3.googleusercontent.com" in pictures or not pictures%}
                         <img alt="haha" class="embed-responsive-item title-card" src="https://remotecoach.fit/wp-content/uploads/2020/01/placeholder_600x400.svg">
                     {% else %}
-                        <img alt="TEST" class="embed-responsive-item title-card" src={{ event.pictures }}>
+                        <img alt="TEST" class="embed-responsive-item title-card" src={{ pictures.0 }}>
                     {% endif %}
                 </div>
             </div>
