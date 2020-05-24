@@ -43,11 +43,6 @@ def event(request, event_id):
                     client_id=request.user.id))
         b = [x for x in range(1, 1 + a)]
         ticket_types.append([b,ticket,a])
-    # ticket_types = [[[x for x in range(1, 1 + min(ticket.available_amount,
-    #                                               ticket.max_per_client - ticket.calculate_amount_of_user_tickets(
-    #                                                   client_id=request.user.id)))],
-    #                  ticket] for ticket in
-    #                 TicketType.objects.filter(event_id=event_id)]
     if request.method == 'POST':
         print(request.POST)
         ticket_type_id = int(request.POST.get('ticket_type_id', -1))
@@ -90,8 +85,8 @@ def index(request):
         if len(event.descriptions) >= 120:
             event.descriptions = event.descriptions[0:120] + "..."
     events = sorted(events, key=attrgetter('event_date'))
-    context['all_events_info'] = [events[r * 3:(r + 1) * 3] for r in
-                                  range(len(events))]
+    context['all_events_info'] = [events[x:x+3] for x in
+                                  range(0,len(events),3)]
     print(context['all_events_info'])
 
     return render(request, 'backend/main.html', context)
