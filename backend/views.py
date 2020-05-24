@@ -320,7 +320,8 @@ def add_event(request):
                     })
                 if len(invalid) == 0:
                     return render(request, 'backend/add_event.html', {
-                        'uploaded_file_url': uploaded_file_url
+                        'uploaded_file_url': uploaded_file_url,
+                        'info': "Stworzyłeś event"
                     })
                 else:
                     return render(request, 'backend/add_event.html', {
