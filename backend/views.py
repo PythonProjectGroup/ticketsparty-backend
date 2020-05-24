@@ -19,6 +19,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+from datetime import datetime
 
 import backend.errors
 import backend.personal as pers
@@ -278,6 +279,32 @@ def add_event(request):
             for i in range(len(files)):
                 filename = fs.save(files[i].name, files[i])
                 uploaded_file_url.append(fs.url(filename))
+            organizer_name = request.POST.get('organizer_name', None)
+            coordinates = request.POST.get('coordinates', None)
+            event_name = request.POST.get('event_name', None)
+            descriptions = request.POST.get('descriptions', None)
+            city = request.POST.get('city', None)
+            street = request.POST.get('street', None)
+            post_code = request.POST.get('post_code', None)
+            street_address = request.POST.get('street_address', None)
+            country = request.POST.get('country', 'Poland')
+            # Trzeba zrobić dobrze datę
+
+            # event_date = time.strptime(request.POST.get('event_date', None), '%y/%m/%d')
+            # event_date =datetime.strptime('09/19/18 13:55:26', '%m/%d/%y %H:%M:%S')
+            event_date = request.POST.get('event_date', None)
+            Event(
+                organizer_name= organizer_name,
+                coordinates=coordinates,
+                event_name=event_name,
+                descriptions=descriptions,
+                city=city,
+                street=street,
+                post_code=post_code,
+                street_address=street_address,
+                country=country,
+                event_date=event_date,
+            ).save()
             return render(request, 'backend/add_event.html', {
                 'uploaded_file_url': uploaded_file_url
             })

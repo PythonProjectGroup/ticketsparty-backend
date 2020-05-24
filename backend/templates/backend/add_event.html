@@ -1,15 +1,19 @@
 {% load static %}
 
 {% block content %}
-    <script>
-        $(document).ready(function () {
-            $('#id_file').attr("multiple", "true");
-        })
-    </script>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.file }}
         <input type="file" name="files" multiple/>
+        <input type="text" name="organizer_name">
+        <input type="text" name="coordinates">
+        <input type="text" name="event_name">
+        <input type="text" name="descriptions">
+        <input type="text" name="city">
+        <input type="text" name="street">
+        <input type="text" name="post_code">
+        <input type="text" name="street_address">
+        <input type="text" name="country">
+        <input type="date" name="event_date">
         <button type="submit">Upload</button>
     </form>
 
