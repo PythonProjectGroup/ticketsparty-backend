@@ -148,7 +148,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
 
 class EventListAPI(generics.ListCreateAPIView):
-    permission_classes = [] if pers.disableAuth else [IsAdminUser | ReadOnly]
+    permission_classes = [] if pers.disableAuth else [ReadOnly]
     queryset = Event.objects.all()
     serializer_class = EventListSerializer
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter,)
@@ -160,14 +160,14 @@ class EventListAPI(generics.ListCreateAPIView):
 
 class EventDetailsAPI(generics.RetrieveUpdateDestroyAPIView,
                       generics.CreateAPIView):
-    permission_classes = [] if pers.disableAuth else [IsAdminUser | ReadOnly]
+    permission_classes = [] if pers.disableAuth else [ReadOnly]
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     lookup_field = 'id'
 
 
 class TicketDetailsAPI(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [] if pers.disableAuth else [IsAdminUser]
+    permission_classes = [] if pers.disableAuth else []
     queryset = ClientTickets.objects.all()
     serializer_class = TicketSerializer
     lookup_field = 'ticket_hash'
@@ -183,7 +183,7 @@ class EventKeys(generics.ListAPIView):
 
 
 @api_view(['GET', 'PATCH'])
-@permission_classes((IsAdminUser,))
+@permission_classes(())
 def validate_ticket(request, ticket_hash):
     try:
         ticket = ClientTickets.objects.filter(ticket_hash=ticket_hash)
