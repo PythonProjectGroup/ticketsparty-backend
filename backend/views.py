@@ -335,3 +335,33 @@ def add_event(request):
             'info': 'Nie udało się stworzyć wydarzenia, brak plików'
         })
     return render(request, 'backend/add_event.html')
+
+
+def add_ticket_type(request, event_id):
+    try:
+        event = Event.objects.get(id=event_id)
+    except Event.DoesNotExist:
+        return e404(request)
+    if request.POST:
+        ticket_name = request.POST.get('ticket_name', None)
+        start_of_selling = request.POST.get('start_of_selling', None)
+        end_of_selling = request.POST.get('end_of_selling', None)
+        price = float(request.POST.get('price', None))
+        available_amount = int(request.POST.get('available_amount', None))
+        max_per_client = int(request.POST.get('max_per_client', None))
+        try:
+            TicketType(
+                ticket_name=ticket_name, start_of_selling=start_of_selling,
+                end_of_selling=end_of_selling, price=price,
+                available_amount=available_amount,
+                max_per_client=max_per_client, event_id=event
+            ).save()
+        except:
+            return render(request, 'backend/add_ticket_type.html',
+                          {'info': 'Coś nie wyszło',
+                           'event': event})
+        return render(request, 'backend/add_ticket_type.html',
+                      {'info': 'Dodano nowy rodzaj biletu', 'event': event})
+    else:
+        return render(request, 'backend/add_ticket_type.html',
+                      {'event': event})

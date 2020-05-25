@@ -1,0 +1,19 @@
+
+{% load static %}
+
+{% block content %}
+ Event startuje : {{event.event_date}}
+ <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="text" name="ticket_name">
+        <input type="date" name="start_of_selling">
+        <input type="date" name="end_of_selling">
+        <input type="number" name="price" step="0.01">
+        <input type="number" name="available_amount">
+        <input type="number" name="max_per_client">
+        <button type="submit">Dodaj</button>
+    </form>
+    {% if info %}
+        <p>{{info}}</p>
+    {% endif %}
+    {% endblock %}
