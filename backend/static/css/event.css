@@ -90,10 +90,7 @@ body {
 }
 
 
-.ticket-item:hover {
-    transform: scale(1.02);
 
-}
 
 .ticket-item {
     padding: 15px 10px;
