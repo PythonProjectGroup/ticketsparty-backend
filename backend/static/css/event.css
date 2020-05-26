@@ -96,7 +96,6 @@ body {
 }
 
 .ticket-item {
-    transition: transform .25s, background .25s;
     padding: 15px 10px;
     margin-bottom: 20px;
     background-color: white;
