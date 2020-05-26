@@ -86,10 +86,10 @@
         <div class="container-fluid">
             {% for ticket_type in ticket_types %}
                 {% if ticket_type.1.max_per_client > 0 %}
-                    <a class="row ticket-item shadow">
+                    <div class="row ticket-item shadow">
 
-                        <div class="col-xs-8 col-sm-12 ticket-title">
-                            <b>{{ ticket_type.1.ticket_name }}</b>
+                    <div class="col-xs-8 col-sm-12 ticket-title">
+                        <b>{{ ticket_type.1.ticket_name }}</b>
                         </div>
 
                         <div class="col-xs-6 col-sm-5" style="margin-top: 10px">
@@ -185,7 +185,7 @@
                         </div>
 
 
-                    </a>
+                    </d>
                 {% endif %}
             {% endfor %}
         </div>
