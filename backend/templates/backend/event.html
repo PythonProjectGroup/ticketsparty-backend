@@ -36,6 +36,9 @@
             <a href="/" class="btn btn-lg center-block test" role="button">Tickets Party</a>
             <nav>
                 {% if user.is_authenticated %}
+                     <div class="text-center">
+                                <h6>{{ user.name}}</h6>
+                     </div>
                     <a href="/events/{{ event.id}}/add_ticket" class="btn btn-primary green" role="button">Dodaj bilet</a>
                     <a href="/logout" class="btn btn-primary" role="button">Wyloguj się</a>
                 {% else %}
