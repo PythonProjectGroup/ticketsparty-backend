@@ -28,7 +28,10 @@
         <a href="/" class="btn btn-lg center-block test" role="button">Tickets Party</a>
         <nav>
             {% if user.is_authenticated %}
-                <a href="/events/new" class="btn btn-primary green" role="button">Dodaj wydarzenie</a>
+                <div class="text-center">
+                    <h6>{{ user.name }}</h6>
+                </div>
+                <a href="/events/{{ event.id }}/add_ticket" class="btn btn-primary green" role="button">Dodaj bilet</a>
                 <a href="/logout" class="btn btn-primary" role="button">Wyloguj się</a>
             {% else %}
                 <a href="/login" class="btn btn-primary" role="button">Zaloguj się</a>
@@ -74,7 +77,7 @@
                 <span class="day">Niedziela</span>
                 <span class="day-number">18</span>
                 <span class="month">października 2020</span>
-                <span class="hour">19:00</span>
+                <span>19:00</span>
             </div>
         </div>
 
