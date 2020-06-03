@@ -65,8 +65,8 @@ def event(request, event_id):
     date = {'day': event.event_date.day, 'year': event.event_date.year,
             'month': months_pl.get(event.event_date.month),
             'weekday': weekdays_pl.get(event.event_date.weekday()),
-            'time': str(event.event_date.hour) + ':' + str(
-                event.event_date.minute)
+            'time': str(event.event_date.hour).zfill(2) + ':' + str(
+                event.event_date.minute).zfill(2)
             }
 
     ticket_types = []
