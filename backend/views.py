@@ -31,6 +31,30 @@ from serializers import ClientTickets, TicketSerializer, EventListSerializer, \
 from .permission import ReadOnly
 
 register = template.Library()
+months_pl = {
+    1: 'stycznia',
+    2: 'lutego',
+    3: 'marca',
+    4: 'kwietnia',
+    5: 'maja',
+    6: 'czerwca',
+    7: 'lipca',
+    8: 'sierpnia',
+    9: 'września',
+    10: 'października',
+    11: 'listopada',
+    12: 'grudnia'
+}
+
+weekdays_pl = {
+    0: 'Poniedziałek',
+    1: 'Wtorek',
+    2: 'Środa',
+    3: 'Czwartek',
+    4: 'Piątek',
+    5: 'Sobota',
+    6: 'Niedziela'
+}
 
 
 def event(request, event_id):
@@ -38,6 +62,12 @@ def event(request, event_id):
         event = Event.objects.get(id=event_id)
     except Event.DoesNotExist:
         return e404(request)
+    date = {'day': event.event_date.day, 'year': event.event_date.year,
+            'month': months_pl.get(event.event_date.month),
+            'weekday': weekdays_pl.get(event.event_date.weekday()),
+            'time': str(event.event_date.hour) + ':' + str(
+                event.event_date.minute)
+            }
 
     ticket_types = []
     pictures = json.loads(event.pictures)
@@ -71,7 +101,7 @@ def event(request, event_id):
         ticket_types.append([b, ticket, a])
     return render(request, 'backend/event.html',
                   {'event': event, 'ticket_types': ticket_types,
-                   'pictures': pictures})
+                   'pictures': pictures, 'date' : date})
 
 
 def index(request):
