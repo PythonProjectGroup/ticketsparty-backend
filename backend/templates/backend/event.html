@@ -74,10 +74,10 @@
                 </p>
             </div>
             <div class="event-data-right ">
-                <span class="day">Niedziela</span>
-                <span class="day-number">18</span>
-                <span class="month">października 2020</span>
-                <span>19:00</span>
+                <span class="day">{{ date.weekday }}</span>
+                <span class="day-number">{{ date.day }}</span>
+                <span class="month">{{ date.month}} {{ date.year }}</span>
+                <span>{{ date.time }}</span>
             </div>
         </div>
 
