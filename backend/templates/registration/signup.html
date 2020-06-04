@@ -28,6 +28,9 @@
                             {% endif %}
 
                             <div class="form">
+                             <div class="center-block text-center">
+                                <small id="emailHelp" class="form-text text-muted">Pamiętaj aby hasło miało małe i wielkie litery, cyfry oraz znaki specjalne .</small>
+                             </div>
                                 <form method="post">
                                     {% csrf_token %}
                                     {% for field in form %}
@@ -38,6 +41,15 @@
                                         </div>
                                     {% endfor %}
                                     <div class="center-block text-center">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                                            <label class="form-check-label" for="exampleCheck1">Zapoznałem się z</label>
+                                            <a href="http://www.zasadygry.pl/go_28_1.htm" target="_blank" class="link">regulaminem</a>
+                                        </div>
+
+                                    </div>
+                                    <div class="center-block text-center">
+
                                         <button class="btn btn-info btn-md " type="submit" value="login"
                                                 id="register_button">Zarejestruj się
                                         </button>
