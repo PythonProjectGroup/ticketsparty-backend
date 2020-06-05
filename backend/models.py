@@ -3,16 +3,18 @@ from __future__ import unicode_literals
 
 import hashlib
 import time
+from datetime import datetime
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+from django.utils.dateparse import parse_date
 
 from backend.errors import NoAvailableTickets, \
     UserHasExceededTheTicketAmountLimit, InvalidAmount, \
-    PurchaseNotAvailableInThisPeriod
+    PurchaseNotAvailableInThisPeriod, InvalidDate, InvalidData
 
 
 class UserManager(BaseUserManager):
@@ -126,6 +128,15 @@ class TicketType(models.Model):
                                            verbose_name="Dostępna ilość biletów")
     max_per_client = models.IntegerField(default=2,
                                          verbose_name="Ograniczenie na jednego klienta")
+
+    def save(self, *args, **kwargs):
+        start = timezone.make_aware(datetime.strptime(self.start_of_selling,'%Y-%m-%dT%H:%M'), timezone.utc)
+        end = timezone.make_aware(datetime.strptime(self.end_of_selling,'%Y-%m-%dT%H:%M'), timezone.utc)
+        if start > end or end > self.event_id.event_date:
+            raise InvalidDate()
+        if self.max_per_client < 1 or self.price < 0.0 or self.available_amount < 0.0:
+            raise InvalidData()
+        super(TicketType, self).save(args, kwargs)
 
     class Meta:
         verbose_name = "Rodzaj biletu"

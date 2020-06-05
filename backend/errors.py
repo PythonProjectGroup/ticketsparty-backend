@@ -12,3 +12,11 @@ class InvalidAmount(Exception):
 
 class PurchaseNotAvailableInThisPeriod(Exception):
     pass
+
+
+class InvalidDate(Exception):
+    pass
+
+
+class InvalidData(Exception):
+    pass

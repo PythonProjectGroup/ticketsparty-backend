@@ -93,7 +93,7 @@ def event(request, event_id):
                 return render(request,
                               'backend/errors/user_tickets_limit.html',
                               {'amount': e.args[0]})
-            except backend.errors.PurchaseNotAvailableInThisPeriod as e:
+            except backend.errors.PurchaseNotAvailableInThisPeriod:
                 return render(request,
                               'backend/errors/invalid_date.html')
 
@@ -104,12 +104,12 @@ def event(request, event_id):
                     client_id=request.user.id))
         b = [x for x in range(1, 1 + a)]
         to_buy = ticket.start_of_selling <= current_date < ticket.end_of_selling
-        print('Can be bought: ',to_buy)
+        print('Can be bought: ', to_buy)
         # amount_list, ticket, max_to_buy, might be bought
         ticket_types.append([b, ticket, a, to_buy])
     return render(request, 'backend/event.html',
                   {'event': event, 'ticket_types': ticket_types,
-                   'pictures': pictures, 'date' : date})
+                   'pictures': pictures, 'date': date})
 
 
 def index(request):
@@ -328,10 +328,6 @@ def add_event(request):
             post_code = request.POST.get('post_code', None)
             street_address = request.POST.get('street_address', None)
             country = request.POST.get('country', 'Poland')
-            # Trzeba zrobić dobrze datę
-
-            # event_date = time.strptime(request.POST.get('event_date', None), '%y/%m/%d')
-            # event_date =datetime.strptime('09/19/18 13:55:26', '%m/%d/%y %H:%M:%S')
             event_date = request.POST.get('event_date', None)
             if len(uploaded_file_url) > 0:
                 try:
@@ -355,7 +351,7 @@ def add_event(request):
                 if len(invalid) == 0:
                     return render(request, 'backend/add_event.html', {
                         'uploaded_file_url': uploaded_file_url,
-                        'info': "Stworzyłeś event"
+                        'info': "Stworzyłeś wydarzenie"
                     })
                 else:
                     return render(request, 'backend/add_event.html', {
@@ -392,6 +388,14 @@ def add_ticket_type(request, event_id):
                 available_amount=available_amount,
                 max_per_client=max_per_client, event_id=event
             ).save()
+        except backend.errors.InvalidDate:
+            return render(request, 'backend/add_ticket_type.html',
+                          {'info': 'Błędne daty zakupu biletu',
+                           'event': event})
+        except backend.errors.InvalidData:
+            return render(request, 'backend/add_ticket_type.html',
+                          {'info': 'Błędne wartości liczbowe',
+                           'event': event})
         except:
             return render(request, 'backend/add_ticket_type.html',
                           {'info': 'Coś nie wyszło',
