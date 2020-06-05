@@ -62,7 +62,7 @@ def event(request, event_id):
         event = Event.objects.get(id=event_id)
     except Event.DoesNotExist:
         return e404(request)
-    date_of_event = event.event_date
+    date_of_event = timezone.localtime(event.event_date)
     date = {'day': date_of_event.day, 'year': date_of_event.year,
             'month': months_pl.get(date_of_event.month),
             'weekday': weekdays_pl.get(date_of_event.weekday()),
@@ -328,7 +328,7 @@ def add_event(request):
             post_code = request.POST.get('post_code', None)
             street_address = request.POST.get('street_address', None)
             country = request.POST.get('country', 'Poland')
-            event_date = request.POST.get('event_date', None)
+            event_date = request.POST.get('event_date', '')+'T'+request.POST.get('event_time','')
             if len(uploaded_file_url) > 0:
                 try:
                     Event(
@@ -376,8 +376,8 @@ def add_ticket_type(request, event_id):
         return e404(request)
     if request.POST:
         ticket_name = request.POST.get('ticket_name', None)
-        start_of_selling = request.POST.get('start_of_selling', None)
-        end_of_selling = request.POST.get('end_of_selling', None)
+        start_of_selling = request.POST.get('start_of_selling_date', '')+'T'+request.POST.get('start_of_selling_time','')
+        end_of_selling = request.POST.get('end_of_selling_date', '')+'T'+request.POST.get('end_of_selling_time','')
         price = float(request.POST.get('price', None))
         available_amount = int(request.POST.get('available_amount', None))
         max_per_client = int(request.POST.get('max_per_client', None))
