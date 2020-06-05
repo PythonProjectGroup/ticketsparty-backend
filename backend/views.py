@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
+from datetime import timedelta
 from operator import attrgetter
 
 from django import template
@@ -121,6 +122,8 @@ def index(request):
         context['query'] = str(query)
 
     events = get_client_search(query)
+    expiry_date = timezone.now() - timedelta(days=1)
+    events = list(filter(lambda event: event.event_date >= expiry_date, events))
     for event in events:
         event.pictures = json.loads(event.pictures)[0]
         if len(event.descriptions) >= 120:
