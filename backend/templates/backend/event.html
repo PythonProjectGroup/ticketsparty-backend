@@ -76,7 +76,7 @@
             <div class="event-data-right ">
                 <span class="day">{{ date.weekday }}</span>
                 <span class="day-number">{{ date.day }}</span>
-                <span class="month">{{ date.month}} {{ date.year }}</span>
+                <span class="month">{{ date.month }} {{ date.year }}</span>
                 <span>{{ date.time }}</span>
             </div>
         </div>
@@ -88,8 +88,8 @@
                 {% if ticket_type.1.max_per_client > 0 %}
                     <div class="row ticket-item shadow">
 
-                    <div class="col-xs-8 col-sm-12 ticket-title">
-                        <b>{{ ticket_type.1.ticket_name }}</b>
+                        <div class="col-xs-8 col-sm-12 ticket-title">
+                            <b>{{ ticket_type.1.ticket_name }}</b>
                         </div>
 
                         <div class="col-xs-6 col-sm-5" style="margin-top: 10px">
@@ -112,7 +112,9 @@
                             <p style="margin-bottom: 2px">Cena: {{ ticket_type.1.price }}</p>
                             {% if user.is_authenticated %}
                                 {% if ticket_type.2 == 0 %}
-                                    <button class="btn-disabled">KUP BILET</button>
+                                    <button class="btn-disabled btn-dark">NIE MOŻESZ JUŻ KUPIĆ BILETU</button>
+                                {% elif ticket_type.3 == False %}
+                                    <button class="btn-disabled btn-dark">BILET NIEDOSTĘPNY</button>
                                 {% else %}
                                     <button type="button" class="btn btn-primary" data-toggle="modal"
                                             data-target="#myModal{{ ticket_type.1.id }}">KUP BILET
@@ -179,8 +181,12 @@
                                     </div>
                                 {% endif %}
                             {% else %}
-                                <a href="/login" class="btn btn-warning ">Aby zakupić bilet musisz się
-                                    zalogować!</a>
+                                {% if ticket_type.3 == False %}
+                                    <button class="btn-disabled btn-dark">BILET NIEDOSTĘPNY</button>
+                                {% else %}
+                                    <a href="/login" class="btn btn-warning">Aby zakupić bilet musisz się
+                                        zalogować!</a>
+                                {% endif %}
                             {% endif %}
                         </div>
 
