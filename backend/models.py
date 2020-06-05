@@ -7,10 +7,12 @@ import time
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from backend.errors import NoAvailableTickets, \
-    UserHasExceededTheTicketAmountLimit, InvalidAmount
+    UserHasExceededTheTicketAmountLimit, InvalidAmount, \
+    PurchaseNotAvailableInThisPeriod
 
 
 class UserManager(BaseUserManager):
@@ -83,7 +85,10 @@ class Event(models.Model):
     street_address = models.CharField(max_length=4,
                                       verbose_name="Numer adresu")
     country = models.CharField(max_length=20, verbose_name="Państwo")
-    status = models.CharField(max_length=8,choices=[(tag, tag) for tag in ['pending','rejected','accepted']], default='pending')
+    status = models.CharField(max_length=8, choices=[(tag, tag) for tag in
+                                                     ['pending', 'rejected',
+                                                      'accepted']],
+                              default='pending')
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
@@ -158,12 +163,13 @@ class ClientTickets(models.Model):
 
         if self.ticket_hash is None or self.ticket_hash == "":
             ticket_type = self.ticket_id
-            print(self.amount)
-            if self.amount < 1 :
+            if self.amount < 1:
                 raise InvalidAmount(str(self.amount))
             if self.amount > ticket_type.available_amount:
                 raise NoAvailableTickets(str(ticket_type.available_amount))
-
+            if not (ticket_type.start_of_selling <= timezone.now()
+                    < ticket_type.end_of_selling):
+                raise PurchaseNotAvailableInThisPeriod()
             a = ticket_type.calculate_amount_of_user_tickets(self.client_id_id)
             if a + self.amount > ticket_type.max_per_client:
                 raise UserHasExceededTheTicketAmountLimit(
@@ -173,9 +179,9 @@ class ClientTickets(models.Model):
                 ticket_type.save(update_fields=["available_amount"])
                 if self.timestamp is None or self.timestamp == "":
                     self.ticket_hash = hashlib.sha256(
-                    (str(cur_time) + str(self.client_id) + str(
-                        self.client_id.email) + str(self.event_id)).encode(
-                        'utf-8')).hexdigest()
+                        (str(cur_time) + str(self.client_id) + str(
+                            self.client_id.email) + str(self.event_id)).encode(
+                            'utf-8')).hexdigest()
                 else:
                     self.ticket_hash = hashlib.sha256(
                         (str(self.timestamp) + str(self.client_id) + str(

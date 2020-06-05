@@ -8,3 +8,7 @@ class UserHasExceededTheTicketAmountLimit(Exception):
 
 class InvalidAmount(Exception):
     pass
+
+
+class PurchaseNotAvailableInThisPeriod(Exception):
+    pass

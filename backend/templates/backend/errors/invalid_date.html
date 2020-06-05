@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns="http://www.w3.org/1999/html">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Brak tylu biletów</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/errors.css' %}">
+</head>
+
+<body>
+<div class="container">
+    <div class="row centered">
+        <div class="col-md-12">
+            <div class="error-template">
+                <h1>
+                    HA! HA! HA!
+                </h1>
+                <h2>
+                    Nie ma opcji na zakup biletów w tym terminie
+                </h2>
+                <h2>
+                    Nas nie oszukasz!!!
+                </h2>
+            </div>
+            <div class="error-actions">
+                <a href="/" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-home"></span> Powróć do
+                    strony głównej </a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+

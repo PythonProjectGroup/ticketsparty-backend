@@ -19,7 +19,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-from datetime import datetime
+from django.utils import timezone
 
 import backend.errors
 import backend.personal as pers
@@ -62,13 +62,13 @@ def event(request, event_id):
         event = Event.objects.get(id=event_id)
     except Event.DoesNotExist:
         return e404(request)
-    date = {'day': event.event_date.day, 'year': event.event_date.year,
-            'month': months_pl.get(event.event_date.month),
-            'weekday': weekdays_pl.get(event.event_date.weekday()),
-            'time': str(event.event_date.hour).zfill(2) + ':' + str(
-                event.event_date.minute).zfill(2)
+    date_of_event = event.event_date
+    date = {'day': date_of_event.day, 'year': date_of_event.year,
+            'month': months_pl.get(date_of_event.month),
+            'weekday': weekdays_pl.get(date_of_event.weekday()),
+            'time': str(date_of_event.hour).zfill(2) + ':' + str(
+                date_of_event.minute).zfill(2)
             }
-
     ticket_types = []
     pictures = json.loads(event.pictures)
     if request.method == 'POST':
@@ -93,12 +93,20 @@ def event(request, event_id):
                 return render(request,
                               'backend/errors/user_tickets_limit.html',
                               {'amount': e.args[0]})
+            except backend.errors.PurchaseNotAvailableInThisPeriod as e:
+                return render(request,
+                              'backend/errors/invalid_date.html')
+
+    current_date = timezone.now()
     for ticket in TicketType.objects.filter(event_id=event_id):
         a = min(ticket.available_amount,
                 ticket.max_per_client - ticket.calculate_amount_of_user_tickets(
                     client_id=request.user.id))
         b = [x for x in range(1, 1 + a)]
-        ticket_types.append([b, ticket, a])
+        to_buy = ticket.start_of_selling <= current_date < ticket.end_of_selling
+        print('Can be bought: ',to_buy)
+        # amount_list, ticket, max_to_buy, might be bought
+        ticket_types.append([b, ticket, a, to_buy])
     return render(request, 'backend/event.html',
                   {'event': event, 'ticket_types': ticket_types,
                    'pictures': pictures, 'date' : date})
@@ -120,8 +128,6 @@ def index(request):
     events = sorted(events, key=attrgetter('event_date'))
     context['all_events_info'] = [events[x:x + 3] for x in
                                   range(0, len(events), 3)]
-    print(context['all_events_info'])
-
     return render(request, 'backend/main.html', context)
 
 
