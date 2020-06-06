@@ -17,7 +17,7 @@
         <div class="container">
             <div id="login-row" class="row justify-content-center ">
                 <div id="login-column" class="w-50 p-3 col-md-6 ">
-                    <div id="login-box" class="h-75 d-inline-block col-md-10">
+                    <div id="login-box" class=" d-inline-block col-md-10">
                         <div id="login-form" class="form " action="" method="post">
                             <h3 class="text-center text-info">Zarejestruj się</h3>
 
@@ -28,9 +28,10 @@
                             {% endif %}
 
                             <div class="form">
-                             <div class="center-block text-center">
-                                <small id="emailHelp" class="form-text text-muted">Pamiętaj aby hasło miało co najmniej 8 znaków, małe i wielkie litery, cyfry oraz znaki specjalne .</small>
-                             </div>
+                                <div class="center-block text-center">
+                                    <small id="emailHelp" class="form-text text-muted">Pamiętaj aby hasło miało co
+                                        najmniej 8 znaków, małe i wielkie litery, cyfry oraz znaki specjalne .</small>
+                                </div>
                                 <form method="post">
                                     {% csrf_token %}
                                     {% for field in form %}
@@ -39,18 +40,31 @@
                                                 {{ field }}
                                             </p>
                                         </div>
+                                        <div class="d-flex justify-content-center">
+                                            {% for error in field.errors %}
+                                                <p class="text-center text-danger">{{ error }}</p>
+                                            {% endfor %}
+                                        </div>
                                     {% endfor %}
                                     <div class="center-block text-center">
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                                            <input type="checkbox" class="form-check-input" id="exampleCheck1"
+                                                   onchange="isChecked(this,'register_button')">
                                             <label class="form-check-label" for="exampleCheck1">Zapoznałem się z</label>
                                             <a href="http://www.zasadygry.pl/go_28_1.htm" target="_blank" class="link">regulaminem</a>
                                         </div>
+                                        <script>
+                                            function isChecked(chk, register_button) {
+                                                var myLayer = document.getElementById(register_button);
+                                                myLayer.disabled = chk.checked !== true;
+                                            }
+                                        </script>
 
                                     </div>
                                     <div class="center-block text-center">
 
                                         <button class="btn btn-info btn-md " type="submit" value="login"
+                                                disabled="disabled"
                                                 id="register_button">Zarejestruj się
                                         </button>
                                     </div>
