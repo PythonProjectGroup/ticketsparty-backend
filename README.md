@@ -145,7 +145,7 @@ Do każdego połączenia z serwerem należy dołączyć do adresu zmienną Beare
 
 > curl -X GET http://127.0.0.1:8000/api/events/
 
-### Filtrowanie i sortowanie wydarzeń: /api/events/?
+#### Filtrowanie i sortowanie wydarzeń: /api/events/?
 | Parametr wydarzenia | HTTP - filtrowanie |  HTTP - sortowanie   |
 | ------------------- | ------------------ | -------------------- |
 | ID                  | ?id=               | ?ordering=id         |
@@ -175,10 +175,10 @@ Aby sortować malejąco użyj znaku: -= (?ordering-=id)
 
 ### Bilety
 ### /api/tickets
-###### Uprawnienia: admin
+###### Uprawnienia: każdy
 | Metoda HTTP | Content-Type     | Opis wejścia | Przykład wejścia | Akcja                                                                                       |
 | ----------- | ---------------- | ------------ | ---------------- | ------------------------------------------------------------------------------------------- |
-| GET         |                  |              |                  | Pobranie podstawowych infromacji o wszystkich biletach                                      |
+| GET         |                  |              |                  | Pobranie podstawowych infromacji i kodu QR swoich biletów                                      |
 | (POST)      |                  |              |                  | Brak                                                                                        |
 | (PUT)       |                  |              |                  | Brak                                                                                        |       
 | (DELETE)    |                  |              |                  | Brak                                                                                        |
@@ -186,7 +186,7 @@ Aby sortować malejąco użyj znaku: -= (?ordering-=id)
 > curl -X GET http://127.0.0.1:8000/api/tickets/
 
 ### Szczegóły biletu
-### /api/tickets/<int: id>
+### /api/tickets/<int: hash>
 ###### Uprawnienia: admin
 | Metoda HTTP | Content-Type     | Opis wejścia | Przykład wejścia | Akcja                                                                                       |
 | ----------- | ---------------- | ------------ | ---------------- | ------------------------------------------------------------------------------------------- |
@@ -195,4 +195,11 @@ Aby sortować malejąco użyj znaku: -= (?ordering-=id)
 | PUT         | application/json |JSON          |                  | Aktualizacja informacji o wybranym bilecie                                                  |       
 | DELETE      |                  |              |                  | Usunięcie wybranego biletu                                                                  |
 
-> curl -X GET http://127.0.0.1:8000/api/tickets/1/
+### Skasowanie biletu
+### /api/tickets/<int: hash>/validate
+###### Uprawnienia: admin
+| Metoda HTTP | Content-Type     | Opis wejścia | Przykład wejścia | Akcja                                                                                       |
+| ----------- | ---------------- | ------------ | ---------------- | ------------------------------------------------------------------------------------------- |
+| PATCH       |                  |              |                  | Skasowanie wybranego biletu                                             |
+
+> curl -X PATCH http://127.0.0.1:8000/api/tickets/142fs5.../validate/
