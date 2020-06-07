@@ -61,7 +61,7 @@
                             <div id="map"></div>
                             <script type="text/javascript">
                                 function initMap(listener) {
-                                    var myLatlng = {lat: -25.363, lng: 131.044};
+                                    var myLatlng = {lat: 51.086, lng: 17.036};
                                     var map;
                                     map = new google.maps.Map(
                                         document.getElementById('map'), {zoom: 4, center: myLatlng});
@@ -86,7 +86,7 @@
                                 }
                             </script>
                             <script async defer
-                                    src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
+                                    src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap">
                             </script>
 
 

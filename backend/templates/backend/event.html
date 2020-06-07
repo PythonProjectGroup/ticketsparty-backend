@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <title> {{ event.event_name }} </title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet"
+          href="//maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
@@ -25,17 +26,22 @@
 <body>
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
     <div class="col-md-12 d-flex justify-content-between">
-        <a href="/" class="btn btn-lg center-block test" role="button">Tickets Party</a>
+        <a href="/" class="btn btn-lg center-block test" role="button">Tickets
+            Party</a>
         <nav>
             {% if user.is_authenticated %}
                 <div class="text-center">
                     <h6>{{ user.name }}</h6>
                 </div>
-                <a href="/events/{{ event.id }}/add_ticket" class="btn btn-primary green" role="button">Dodaj bilet</a>
-                <a href="/logout" class="btn btn-primary" role="button">Wyloguj się</a>
+                <a href="/events/{{ event.id }}/add_ticket"
+                   class="btn btn-primary green" role="button">Dodaj bilet</a>
+                <a href="/logout" class="btn btn-primary" role="button">Wyloguj
+                    się</a>
             {% else %}
-                <a href="/login" class="btn btn-primary" role="button">Zaloguj się</a>
-                <a href="/signup" class="btn btn-primary" role="button">Zarejestruj się</a>
+                <a href="/login" class="btn btn-primary" role="button">Zaloguj
+                    się</a>
+                <a href="/signup" class="btn btn-primary" role="button">Zarejestruj
+                    się</a>
             {% endif %}
         </nav>
     </div>
@@ -46,10 +52,12 @@
         <div class="col-xs-12 col-sm-4 col-md-4 custom-grid-margins">
             <div class="embed-responsive embed-responsive-16by9 ">
                 {% if not pictures %}
-                    <img alt="Brak zdjęć" class="embed-responsive-item title-card"
+                    <img alt="Brak zdjęć"
+                         class="embed-responsive-item title-card"
                          src="{% static "img/placeholder.svg" %}">
                 {% else %}
-                    <img alt="Błąd przetwarzania zdjęcia" class="embed-responsive-item title-card"
+                    <img alt="Błąd przetwarzania zdjęcia"
+                         class="embed-responsive-item title-card"
                          src={{ pictures.0 }}>
                 {% endif %}
             </div>
@@ -66,7 +74,8 @@
         <div class="row event-data justify-content-between">
             <div class="event-data-left">
                 Organizator:
-                <p style="margin-bottom: 3px"><b>{{ event.organizer_name }}</b></p>
+                <p style="margin-bottom: 3px"><b>{{ event.organizer_name }}</b>
+                </p>
                 Adres:
                 <p style="margin-bottom: 1px"><b>{{ event.street }}</b>
                 </p>
@@ -92,7 +101,8 @@
                             <b>{{ ticket_type.1.ticket_name }}</b>
                         </div>
 
-                        <div class="col-xs-6 col-sm-5" style="margin-top: 10px">
+                        <div class="col-xs-6 col-sm-5"
+                             style="margin-top: 10px">
                             <div class="col-xs-12">
                                 <p style="margin-bottom: 2px">Początek
                                     sprzedaży: {{ ticket_type.1.start_of_selling }}</p>
@@ -101,7 +111,8 @@
                             </div>
                         </div>
 
-                        <div class="col-xs-6 col-sm-3" style="margin-top: 10px">
+                        <div class="col-xs-6 col-sm-3"
+                             style="margin-top: 10px">
                             <p style="margin-bottom: 2px">Pozostała liczba
                                 biletów: {{ ticket_type.1.available_amount }}</p>
                             <p style="margin-bottom: 2px">Możesz
@@ -109,47 +120,70 @@
                         </div>
 
                         <div class="col-xs-5 col-sm-4 text-right">
-                            <p style="margin-bottom: 2px">Cena: {{ ticket_type.1.price }}</p>
+                            <p style="margin-bottom: 2px">
+                                Cena: {{ ticket_type.1.price }}</p>
                             {% if user.is_authenticated %}
                                 {% if ticket_type.2 == 0 %}
-                                    <button class="btn-disabled btn-dark">NIE MOŻESZ JUŻ KUPIĆ BILETU</button>
-                                {% elif ticket_type.3 == False %}
-                                    <button class="btn-disabled btn-dark">BILET NIEDOSTĘPNY</button>
-                                {% else %}
-                                    <button type="button" class="btn btn-primary" data-toggle="modal"
-                                            data-target="#myModal{{ ticket_type.1.id }}">KUP BILET
+                                    <button class="btn-disabled btn-dark">NIE
+                                        MOŻESZ JUŻ KUPIĆ BILETU
                                     </button>
-                                    <div class="modal" id="myModal{{ ticket_type.1.id }}">
+                                {% elif ticket_type.3 == False %}
+                                    <button class="btn-disabled btn-dark">BILET
+                                        NIEDOSTĘPNY
+                                    </button>
+                                {% else %}
+                                    <button type="button"
+                                            class="btn btn-primary"
+                                            data-toggle="modal"
+                                            data-target="#myModal{{ ticket_type.1.id }}">
+                                        KUP BILET
+                                    </button>
+                                    <div class="modal"
+                                         id="myModal{{ ticket_type.1.id }}">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
 
                                                 <div class="modal-header">
-                                                    <h4 class="modal-title">Zakup
+                                                    <h4 class="modal-title">
+                                                        Zakup
                                                         bilet: {{ ticket_type.1.ticket_name }} {{ event.event_name }}</h4>
 
-                                                    <button type="button" class="close" data-dismiss="modal">
+                                                    <button type="button"
+                                                            class="close"
+                                                            data-dismiss="modal">
                                                         &times;
                                                     </button>
                                                 </div>
 
                                                 <div class="modal-body">
-                                                    <h5 class="card-title">Cena: {{ ticket_type.1.price }} PLN</h5>
-                                                    <p class="font-weight-bold text-md-left">Początek
+                                                    <h5 class="card-title">
+                                                        Cena: {{ ticket_type.1.price }}
+                                                        PLN</h5>
+                                                    <p class="font-weight-bold text-md-left">
+                                                        Początek
                                                         sprzedaży: {{ ticket_type.1.start_of_selling }}</p>
-                                                    <p class="font-weight-bold text-md-left">Koniec
+                                                    <p class="font-weight-bold text-md-left">
+                                                        Koniec
                                                         sprzedaży: {{ ticket_type.1.end_of_selling }}</p>
-                                                    <p class="font-weight-light text-md-center">Pozostało
+                                                    <p class="font-weight-light text-md-center">
+                                                        Pozostało
                                                         biletów: {{ ticket_type.1.available_amount }}</p>
-                                                    <p class="blockquote-footer">Możesz
+                                                    <p class="blockquote-footer">
+                                                        Możesz
                                                         kupić: {{ ticket_type.2 }}</p>
-                                                    <form method="post" id="buyform">
+                                                    <form method="post"
+                                                          id="buyform">
                                                         {% csrf_token %}
-                                                        <input type="number" name="ticket_type_id"
+                                                        <input type="number"
+                                                               name="ticket_type_id"
                                                                value="{{ ticket_type.1.id }}"
                                                                style="display: none; padding: 0; margin: 0;"
                                                                readonly>
-                                                        <label for="email">Proszę wybrać ilość biletów</label>
-                                                        <select class="selectpicker" id="number-of-tickets"
+                                                        <label for="email">Proszę
+                                                            wybrać ilość
+                                                            biletów</label>
+                                                        <select class="selectpicker"
+                                                                id="number-of-tickets"
                                                                 name="amount">
                                                             {% for i in ticket_type.0 %}
                                                                 <option>{{ i }}</option>
@@ -157,22 +191,32 @@
                                                         </select>
 
                                                         <div class="form-group">
-                                                            <label for="name">Proszę podać Imię i Nazwisko osoby,
-                                                                dla której kupujesz bilet</label>
-                                                            <input type="text" name="ticket_name"
-                                                                   class="form-control" id="name"
+                                                            <label for="name">Proszę
+                                                                podać Imię i
+                                                                Nazwisko osoby,
+                                                                dla której
+                                                                kupujesz
+                                                                bilet</label>
+                                                            <input type="text"
+                                                                   name="ticket_name"
+                                                                   class="form-control"
+                                                                   id="name"
                                                                    value="{{ user.name }}"
                                                                    placeholder="Podaj imię osoby, dla której chcesz kupić bilet">
                                                         </div>
-                                                        <button type="submit" class="btn btn-success">KUPUJĘ
+                                                        <button type="submit"
+                                                                class="btn btn-success">
+                                                            KUPUJĘ
                                                         </button>
 
                                                     </form>
                                                 </div>
 
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-danger"
-                                                            data-dismiss="modal">ZAMKNIJ
+                                                    <button type="button"
+                                                            class="btn btn-danger"
+                                                            data-dismiss="modal">
+                                                        ZAMKNIJ
                                                     </button>
                                                 </div>
 
@@ -182,9 +226,12 @@
                                 {% endif %}
                             {% else %}
                                 {% if ticket_type.3 == False %}
-                                    <button class="btn-disabled btn-dark">BILET NIEDOSTĘPNY</button>
+                                    <button class="btn-disabled btn-dark">BILET
+                                        NIEDOSTĘPNY
+                                    </button>
                                 {% else %}
-                                    <a href="/login" class="btn btn-warning">Aby zakupić bilet musisz się
+                                    <a href="/login" class="btn btn-warning">Aby
+                                        zakupić bilet musisz się
                                         zalogować!</a>
                                 {% endif %}
                             {% endif %}
@@ -201,34 +248,44 @@
 
     {% if event.coordinates %}
         <div class="container-sm">
-            <h2 class="my-0 mr-md-auto font-weight-normal">Znajdź nas tutaj:</h2>
+            <h2 class="my-0 mr-md-auto font-weight-normal">Znajdź nas
+                tutaj:</h2>
             <div class="map-responsive">
                 <div id="map">
                     <script>
                         var map;
+                        var marker
+                        var coor
 
                         function initMap() {
-                            map = new google.maps.Map(document.getElementById('map'), {
-                                center: {{ event.coordinates }},
-                                zoom: 8
-                            });
+                            coor = {{ event.coordinates }}
+                                map = new google.maps.Map(document.getElementById('map'), {
+                                    center: coor,
+                                    zoom: 8
+                                });
+                            marker = new google.maps.Marker({
+                                position: coor,
+                                map: map});
                         }
                     </script>
-                    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrLNuO7-8mVT4YWF9e5PKeoWmd4BXuF18&callback=initMap"
+                    <script src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap"
                             async defer></script>
                 </div>
             </div>
         </div>
     {% endif %}
 
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
-          integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+          integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+          crossorigin="anonymous">
     <div class="container">
         <div class="row">
             <div class="row">
                 {% for picture in pictures %}
                     <div class="col-lg-3 col-md-4 col-xs-6 thumb">
-                        <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title=""
+                        <a class="thumbnail" href="#" data-image-id=""
+                           data-toggle="modal" data-title=""
                            data-image="{{ picture }}"
                            data-target="#image-gallery">
                             <img class="img-thumbnail"
@@ -238,26 +295,33 @@
                     </div>
                 {% endfor %}
             </div>
-            <div class="modal fade" id="image-gallery" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            <div class="modal fade" id="image-gallery" tabindex="-1"
+                 role="dialog" aria-labelledby="myModalLabel"
                  aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title" id="image-gallery-title"></h4>
-                            <button type="button" class="close" data-dismiss="modal"><span
+                            <h4 class="modal-title"
+                                id="image-gallery-title"></h4>
+                            <button type="button" class="close"
+                                    data-dismiss="modal"><span
                                     aria-hidden="true">×</span><span
                                     class="sr-only">Close</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <img id="image-gallery-image" class="img-responsive col-md-12" src="">
+                            <img id="image-gallery-image"
+                                 class="img-responsive col-md-12" src="">
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary float-left" id="show-previous-image"><i
+                            <button type="button"
+                                    class="btn btn-secondary float-left"
+                                    id="show-previous-image"><i
                                     class="fa fa-arrow-left"></i>
                             </button>
 
-                            <button type="button" id="show-next-image" class="btn btn-secondary float-right"><i
+                            <button type="button" id="show-next-image"
+                                    class="btn btn-secondary float-right"><i
                                     class="fa fa-arrow-right"></i>
                             </button>
                         </div>
@@ -271,7 +335,8 @@
 
 {% if ticket_types %}
     <div class="d-flex justify-content-center p-3 px-md-4 mb-3  bg-white border-bottom box-shadow">
-        <a id="back-to-top" href="#" class="btn btn-lg center-block" role="button" data-toggle="tooltip">
+        <a id="back-to-top" href="#" class="btn btn-lg center-block"
+           role="button" data-toggle="tooltip">
             <span class="glyphicon glyphicon-chevron-up"></span>Przewiń do góry</a>
     </div>
 {% endif %}
