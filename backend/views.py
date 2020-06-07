@@ -13,6 +13,7 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.utils.datastructures import MultiValueDictKeyError
 from django_filters.rest_framework import DjangoFilterBackend
+from django.http import JsonResponse
 from rest_framework import status, generics, filters
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser
@@ -331,7 +332,7 @@ def add_event(request):
             post_code = request.POST.get('post_code', None)
             street_address = request.POST.get('street_address', None)
             country = request.POST.get('country', 'Poland')
-            event_date = request.POST.get('event_date', '')+'T'+request.POST.get('event_time','')
+            event_date = request.POST.get('event_date', '') + 'T' + request.POST.get('event_time', '')
             if len(uploaded_file_url) > 0:
                 try:
                     Event(
@@ -379,8 +380,9 @@ def add_ticket_type(request, event_id):
         return e404(request)
     if request.POST:
         ticket_name = request.POST.get('ticket_name', None)
-        start_of_selling = request.POST.get('start_of_selling_date', '')+'T'+request.POST.get('start_of_selling_time','')
-        end_of_selling = request.POST.get('end_of_selling_date', '')+'T'+request.POST.get('end_of_selling_time','')
+        start_of_selling = request.POST.get('start_of_selling_date', '') + 'T' + request.POST.get(
+            'start_of_selling_time', '')
+        end_of_selling = request.POST.get('end_of_selling_date', '') + 'T' + request.POST.get('end_of_selling_time', '')
         price = float(request.POST.get('price', None))
         available_amount = int(request.POST.get('available_amount', None))
         max_per_client = int(request.POST.get('max_per_client', None))
@@ -408,3 +410,16 @@ def add_ticket_type(request, event_id):
     else:
         return render(request, 'backend/add_ticket_type.html',
                       {'event': event})
+
+
+def username(request):
+    if request.user.is_authenticated:
+        data = {
+            'name': request.user.name,
+            'username': request.user.username
+        }
+    else:
+        data = {
+            'error': 'Nie zalogowales sie'
+        }
+    return JsonResponse(data)

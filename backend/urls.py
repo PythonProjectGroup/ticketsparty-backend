@@ -5,6 +5,7 @@ from . import views
 
 app_name = 'backend'  # przestrzeń nazw aplikacji
 urlpatterns = [
+    path('username/', views.username),
     path('events/', views.EventListAPI.as_view()),
     path('events/<int:id>/', views.EventDetailsAPI.as_view()),
     path('eventkeys/', views.EventKeys.as_view()),

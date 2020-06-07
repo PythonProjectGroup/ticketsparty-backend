@@ -106,6 +106,15 @@ Do każdego połączenia z serwerem należy dołączyć do adresu zmienną Beare
 
 > curl -X POST -d '{"email": "arus@arus.com","password": "maslotoniehaslo"}' -H 'Content-Type: application/json' http://127.0.0.1:8000/auth/jwt/create
 
+### Nazwa użytkownika
+### /api/username/
+###### Uprawnienia: Każdy
+| Metoda HTTP | Content-Type     | Opis wejścia | Przykład wejścia | Akcja                                                                                       |
+| ----------- | ---------------- | ------------ | ---------------- | ------------------------------------------------------------------------------------------- |
+| GET         | application/json |              |                  | Zwraca nazwę zalogowanego użytkownika                                                                                        |
+
+> curl -X GET http://127.0.0.1:8000/api/username/
+
 ### Pobierz klucze api danego użytkownika
 ### /api/eventkeys/
 ###### Uprawnienia: Zalogowani
