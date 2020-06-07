@@ -426,8 +426,9 @@ def username(request):
             'name': request.user.name,
             'username': request.user.username
         }
+        return JsonResponse(data, status=200)
     else:
         data = {
             'error': 'Nie zalogowales sie'
         }
-    return JsonResponse(data)
+        return JsonResponse(data, status=403)
