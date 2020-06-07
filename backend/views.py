@@ -328,7 +328,12 @@ def add_event(request):
                     else:
                         invalid.append(f.name)
                 organizer_name = request.POST.get('organizer_name', None)
-                coordinates = request.POST.get('coordinates', None)
+                try:
+                    c = request.POST.get('coordinates', None).split(',')
+                    coordinates = '{lat: ' + str(c[0]) + ', lng: ' + str(
+                        c[1]) + '}'
+                except:
+                    coordinates = None
                 event_name = request.POST.get('event_name', None)
                 descriptions = request.POST.get('descriptions', None)
                 city = request.POST.get('city', None)
