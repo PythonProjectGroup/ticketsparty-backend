@@ -2,7 +2,6 @@
 import json
 from datetime import timedelta
 from operator import attrgetter
-
 from django import template
 from django.contrib.auth import login, authenticate
 from django.contrib.auth import logout
@@ -31,8 +30,6 @@ from serializers import ClientTickets, TicketSerializer, EventListSerializer, \
     EventSerializer, \
     EventKeySerializer
 from .permission import ReadOnly
-
-
 
 register = template.Library()
 months_pl = {
@@ -92,11 +89,11 @@ def event(request, event_id):
                               names=name).save()
             except backend.errors.NoAvailableTickets as e:
                 return render(request, 'backend/errors/no_tickets.html',
-                              {'amount': e.args[0]})
+                              {'amount': e.args[0], 'api_key': pers.API_KEY})
             except backend.errors.UserHasExceededTheTicketAmountLimit as e:
                 return render(request,
                               'backend/errors/user_tickets_limit.html',
-                              {'amount': e.args[0]})
+                              {'amount': e.args[0], 'api_key': pers.API_KEY})
             except backend.errors.PurchaseNotAvailableInThisPeriod:
                 return render(request,
                               'backend/errors/invalid_date.html')
@@ -113,7 +110,8 @@ def event(request, event_id):
         ticket_types.append([b, ticket, a, to_buy])
     return render(request, 'backend/event.html',
                   {'event': event, 'ticket_types': ticket_types,
-                   'pictures': pictures, 'date': date})
+                   'pictures': pictures, 'date': date,
+                   'api_key': pers.API_KEY})
 
 
 def index(request):
@@ -126,7 +124,8 @@ def index(request):
 
     events = get_client_search(query)
     expiry_date = timezone.now() - timedelta(days=1)
-    events = list(filter(lambda event: event.event_date >= expiry_date, events))
+    events = list(
+        filter(lambda event: event.event_date >= expiry_date, events))
     for event in events:
         event.pictures = json.loads(event.pictures)[0]
         if len(event.descriptions) >= 120:
@@ -187,7 +186,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
-
 
 
 class EventListAPI(generics.ListCreateAPIView):
@@ -342,7 +340,9 @@ def add_event(request):
                 post_code = request.POST.get('post_code', None)
                 street_address = request.POST.get('street_address', None)
                 country = request.POST.get('country', 'Poland')
-                event_date = request.POST.get('event_date', '') + 'T' + request.POST.get('event_time', '')
+                event_date = request.POST.get('event_date',
+                                              '') + 'T' + request.POST.get(
+                    'event_time', '')
                 if len(uploaded_file_url) > 0:
                     try:
                         Event(
@@ -362,28 +362,30 @@ def add_event(request):
                     except:
                         return render(request, 'backend/add_event.html', {
                             'info': 'Nie udało się stworzyć wydarzenia, błędne dane'
-                        })
+                            , 'api_key': pers.API_KEY})
                     if len(invalid) == 0:
                         return render(request, 'backend/add_event.html', {
                             'uploaded_file_url': uploaded_file_url,
                             'info': "Stworzyłeś wydarzenie"
-                        })
+                            , 'api_key': pers.API_KEY})
                     else:
                         return render(request, 'backend/add_event.html', {
                             'uploaded_file_url': uploaded_file_url,
                             'info': 'Błędne pliki to: ' + str(invalid)
-                        })
+                            , 'api_key': pers.API_KEY})
                 else:
                     return render(request, 'backend/add_event.html', {
                         'info': 'Nie udało się stworzyć wydarzenia, błędne wszystkie pliki'
-                    })
+                        , 'api_key': pers.API_KEY})
         except MultiValueDictKeyError:
             return render(request, 'backend/add_event.html', {
                 'info': 'Nie udało się stworzyć wydarzenia, brak plików'
-            })
-        return render(request, 'backend/add_event.html')
+                , 'api_key': pers.API_KEY})
+        return render(request, 'backend/add_event.html',
+                      {'api_key': pers.API_KEY})
     else:
-        return JsonResponse({'status':'false','message':'Admin only'}, status=403)
+        return JsonResponse({'status': 'false', 'message': 'Admin only'},
+                            status=403)
 
 
 def add_ticket_type(request, event_id):
@@ -394,9 +396,12 @@ def add_ticket_type(request, event_id):
             return e404(request)
         if request.POST:
             ticket_name = request.POST.get('ticket_name', None)
-            start_of_selling = request.POST.get('start_of_selling_date', '') + 'T' + request.POST.get(
+            start_of_selling = request.POST.get('start_of_selling_date',
+                                                '') + 'T' + request.POST.get(
                 'start_of_selling_time', '')
-            end_of_selling = request.POST.get('end_of_selling_date', '') + 'T' + request.POST.get('end_of_selling_time', '')
+            end_of_selling = request.POST.get('end_of_selling_date',
+                                              '') + 'T' + request.POST.get(
+                'end_of_selling_time', '')
             price = float(request.POST.get('price', None))
             available_amount = int(request.POST.get('available_amount', None))
             max_per_client = int(request.POST.get('max_per_client', None))
@@ -420,12 +425,14 @@ def add_ticket_type(request, event_id):
                               {'info': 'Coś nie wyszło',
                                'event': event})
             return render(request, 'backend/add_ticket_type.html',
-                          {'info': 'Dodano nowy rodzaj biletu', 'event': event})
+                          {'info': 'Dodano nowy rodzaj biletu',
+                           'event': event})
         else:
             return render(request, 'backend/add_ticket_type.html',
                           {'event': event})
     else:
-        return JsonResponse({'status': 'false', 'message': 'Admin only'}, status=403)
+        return JsonResponse({'status': 'false', 'message': 'Admin only'},
+                            status=403)
 
 
 def username(request):
