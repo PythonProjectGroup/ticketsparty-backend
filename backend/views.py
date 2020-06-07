@@ -314,7 +314,7 @@ def get_client_search(query=None):
 # @api_view(['GET', 'PATCH'])
 # @permission_classes((IsAdminUser,))
 def add_event(request):
-    if request.user.is_authenticated:
+    if request.user.is_superuser:
         try:
             if request.method == 'POST' and request.FILES['files']:
                 uploaded_file_url = []
@@ -378,46 +378,49 @@ def add_event(request):
             })
         return render(request, 'backend/add_event.html')
     else:
-        return JsonResponse({'status':'false','message':'Musisz sie zalogowac'}, status=403)
+        return JsonResponse({'status':'false','message':'Admin only'}, status=403)
 
 
 def add_ticket_type(request, event_id):
-    try:
-        event = Event.objects.get(id=event_id)
-    except Event.DoesNotExist:
-        return e404(request)
-    if request.POST:
-        ticket_name = request.POST.get('ticket_name', None)
-        start_of_selling = request.POST.get('start_of_selling_date', '') + 'T' + request.POST.get(
-            'start_of_selling_time', '')
-        end_of_selling = request.POST.get('end_of_selling_date', '') + 'T' + request.POST.get('end_of_selling_time', '')
-        price = float(request.POST.get('price', None))
-        available_amount = int(request.POST.get('available_amount', None))
-        max_per_client = int(request.POST.get('max_per_client', None))
+    if request.user.is_superuser:
         try:
-            TicketType(
-                ticket_name=ticket_name, start_of_selling=start_of_selling,
-                end_of_selling=end_of_selling, price=price,
-                available_amount=available_amount,
-                max_per_client=max_per_client, event_id=event
-            ).save()
-        except backend.errors.InvalidDate:
+            event = Event.objects.get(id=event_id)
+        except Event.DoesNotExist:
+            return e404(request)
+        if request.POST:
+            ticket_name = request.POST.get('ticket_name', None)
+            start_of_selling = request.POST.get('start_of_selling_date', '') + 'T' + request.POST.get(
+                'start_of_selling_time', '')
+            end_of_selling = request.POST.get('end_of_selling_date', '') + 'T' + request.POST.get('end_of_selling_time', '')
+            price = float(request.POST.get('price', None))
+            available_amount = int(request.POST.get('available_amount', None))
+            max_per_client = int(request.POST.get('max_per_client', None))
+            try:
+                TicketType(
+                    ticket_name=ticket_name, start_of_selling=start_of_selling,
+                    end_of_selling=end_of_selling, price=price,
+                    available_amount=available_amount,
+                    max_per_client=max_per_client, event_id=event
+                ).save()
+            except backend.errors.InvalidDate:
+                return render(request, 'backend/add_ticket_type.html',
+                              {'info': 'Błędne daty zakupu biletu',
+                               'event': event})
+            except backend.errors.InvalidData:
+                return render(request, 'backend/add_ticket_type.html',
+                              {'info': 'Błędne wartości liczbowe',
+                               'event': event})
+            except:
+                return render(request, 'backend/add_ticket_type.html',
+                              {'info': 'Coś nie wyszło',
+                               'event': event})
             return render(request, 'backend/add_ticket_type.html',
-                          {'info': 'Błędne daty zakupu biletu',
-                           'event': event})
-        except backend.errors.InvalidData:
+                          {'info': 'Dodano nowy rodzaj biletu', 'event': event})
+        else:
             return render(request, 'backend/add_ticket_type.html',
-                          {'info': 'Błędne wartości liczbowe',
-                           'event': event})
-        except:
-            return render(request, 'backend/add_ticket_type.html',
-                          {'info': 'Coś nie wyszło',
-                           'event': event})
-        return render(request, 'backend/add_ticket_type.html',
-                      {'info': 'Dodano nowy rodzaj biletu', 'event': event})
+                          {'event': event})
     else:
-        return render(request, 'backend/add_ticket_type.html',
-                      {'event': event})
+        return JsonResponse({'status': 'false', 'message': 'Admin only'}, status=403)
 
 
 def username(request):
