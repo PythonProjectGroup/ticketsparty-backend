@@ -1,0 +1,3 @@
+{% load static %}
+{% load qr_tags %}
+Cześć, zakupiłeś bilet na wydarzenie o nazwie {{ ename }}! Oto Twoj kod QR:<br><br> {% qr_from_text code %}

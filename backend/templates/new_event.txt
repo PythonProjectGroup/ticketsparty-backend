@@ -1,0 +1,1 @@
+Cześć, utworzyłeś nowe wydarzenie o nazwie {{ ename }}! Oto Twoj kod QR uprawniający do sprawdzania biletów: {{ code }}

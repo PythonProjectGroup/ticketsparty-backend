@@ -32,6 +32,8 @@ from serializers import ClientTickets, TicketSerializer, EventListSerializer, \
     EventKeySerializer
 from .permission import ReadOnly
 
+
+
 register = template.Library()
 months_pl = {
     1: 'stycznia',
@@ -187,6 +189,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
 
+
 class EventListAPI(generics.ListCreateAPIView):
     permission_classes = [] if pers.disableAuth else [ReadOnly]
     queryset = Event.objects.all()
@@ -328,6 +331,7 @@ def add_event(request):
             event_name = request.POST.get('event_name', None)
             descriptions = request.POST.get('descriptions', None)
             city = request.POST.get('city', None)
+            organizer_email = request.user.email
             street = request.POST.get('street', None)
             post_code = request.POST.get('post_code', None)
             street_address = request.POST.get('street_address', None)
@@ -341,6 +345,7 @@ def add_event(request):
                         event_name=event_name,
                         descriptions=descriptions,
                         city=city,
+                        organizer_email=organizer_email,
                         street=street,
                         post_code=post_code,
                         street_address=street_address,
