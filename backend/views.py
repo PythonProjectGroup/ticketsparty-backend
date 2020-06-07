@@ -314,68 +314,71 @@ def get_client_search(query=None):
 # @api_view(['GET', 'PATCH'])
 # @permission_classes((IsAdminUser,))
 def add_event(request):
-    try:
-        if request.method == 'POST' and request.FILES['files']:
-            uploaded_file_url = []
-            fs = FileSystemStorage()
-            invalid = []
-            for f in request.FILES.getlist('files'):
-                if (
-                        f.content_type == 'image/jpeg' or f.content_type == 'image/png') and f.size < 5000001:
-                    filename = fs.save(f.name, f)
-                    uploaded_file_url.append(fs.url(filename))
+    if request.user.is_authenticated:
+        try:
+            if request.method == 'POST' and request.FILES['files']:
+                uploaded_file_url = []
+                fs = FileSystemStorage()
+                invalid = []
+                for f in request.FILES.getlist('files'):
+                    if (
+                            f.content_type == 'image/jpeg' or f.content_type == 'image/png') and f.size < 5000001:
+                        filename = fs.save(f.name, f)
+                        uploaded_file_url.append(fs.url(filename))
+                    else:
+                        invalid.append(f.name)
+                organizer_name = request.POST.get('organizer_name', None)
+                coordinates = request.POST.get('coordinates', None)
+                event_name = request.POST.get('event_name', None)
+                descriptions = request.POST.get('descriptions', None)
+                city = request.POST.get('city', None)
+                organizer_email = request.user.email
+                street = request.POST.get('street', None)
+                post_code = request.POST.get('post_code', None)
+                street_address = request.POST.get('street_address', None)
+                country = request.POST.get('country', 'Poland')
+                event_date = request.POST.get('event_date', '') + 'T' + request.POST.get('event_time', '')
+                if len(uploaded_file_url) > 0:
+                    try:
+                        Event(
+                            organizer_name=organizer_name,
+                            coordinates=coordinates,
+                            event_name=event_name,
+                            descriptions=descriptions,
+                            city=city,
+                            organizer_email=organizer_email,
+                            street=street,
+                            post_code=post_code,
+                            street_address=street_address,
+                            country=country,
+                            event_date=event_date,
+                            pictures=json.dumps(uploaded_file_url)
+                        ).save()
+                    except:
+                        return render(request, 'backend/add_event.html', {
+                            'info': 'Nie udało się stworzyć wydarzenia, błędne dane'
+                        })
+                    if len(invalid) == 0:
+                        return render(request, 'backend/add_event.html', {
+                            'uploaded_file_url': uploaded_file_url,
+                            'info': "Stworzyłeś wydarzenie"
+                        })
+                    else:
+                        return render(request, 'backend/add_event.html', {
+                            'uploaded_file_url': uploaded_file_url,
+                            'info': 'Błędne pliki to: ' + str(invalid)
+                        })
                 else:
-                    invalid.append(f.name)
-            organizer_name = request.POST.get('organizer_name', None)
-            coordinates = request.POST.get('coordinates', None)
-            event_name = request.POST.get('event_name', None)
-            descriptions = request.POST.get('descriptions', None)
-            city = request.POST.get('city', None)
-            organizer_email = request.user.email
-            street = request.POST.get('street', None)
-            post_code = request.POST.get('post_code', None)
-            street_address = request.POST.get('street_address', None)
-            country = request.POST.get('country', 'Poland')
-            event_date = request.POST.get('event_date', '') + 'T' + request.POST.get('event_time', '')
-            if len(uploaded_file_url) > 0:
-                try:
-                    Event(
-                        organizer_name=organizer_name,
-                        coordinates=coordinates,
-                        event_name=event_name,
-                        descriptions=descriptions,
-                        city=city,
-                        organizer_email=organizer_email,
-                        street=street,
-                        post_code=post_code,
-                        street_address=street_address,
-                        country=country,
-                        event_date=event_date,
-                        pictures=json.dumps(uploaded_file_url)
-                    ).save()
-                except:
                     return render(request, 'backend/add_event.html', {
-                        'info': 'Nie udało się stworzyć wydarzenia, błędne dane'
+                        'info': 'Nie udało się stworzyć wydarzenia, błędne wszystkie pliki'
                     })
-                if len(invalid) == 0:
-                    return render(request, 'backend/add_event.html', {
-                        'uploaded_file_url': uploaded_file_url,
-                        'info': "Stworzyłeś wydarzenie"
-                    })
-                else:
-                    return render(request, 'backend/add_event.html', {
-                        'uploaded_file_url': uploaded_file_url,
-                        'info': 'Błędne pliki to: ' + str(invalid)
-                    })
-            else:
-                return render(request, 'backend/add_event.html', {
-                    'info': 'Nie udało się stworzyć wydarzenia, błędne wszystkie pliki'
-                })
-    except MultiValueDictKeyError:
-        return render(request, 'backend/add_event.html', {
-            'info': 'Nie udało się stworzyć wydarzenia, brak plików'
-        })
-    return render(request, 'backend/add_event.html')
+        except MultiValueDictKeyError:
+            return render(request, 'backend/add_event.html', {
+                'info': 'Nie udało się stworzyć wydarzenia, brak plików'
+            })
+        return render(request, 'backend/add_event.html')
+    else:
+        return JsonResponse({'status':'false','message':'Musisz sie zalogowac'}, status=403)
 
 
 def add_ticket_type(request, event_id):
