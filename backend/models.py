@@ -16,7 +16,10 @@ from backend.errors import NoAvailableTickets, \
     UserHasExceededTheTicketAmountLimit, InvalidAmount, \
     PurchaseNotAvailableInThisPeriod, InvalidDate, InvalidData
 
-
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
+from django.template import Context
+import backend.personal as pers
 class UserManager(BaseUserManager):
     """Define a model manager for User model with no username field."""
 
@@ -86,6 +89,7 @@ class Event(models.Model):
     post_code = models.CharField(max_length=10, verbose_name="Kod pocztowy")
     street_address = models.CharField(max_length=4,
                                       verbose_name="Numer adresu")
+    organizer_email = models.CharField(max_length=128, blank=True, verbose_name="email organizatora")
     country = models.CharField(max_length=20, verbose_name="Państwo")
     status = models.CharField(max_length=8, choices=[(tag, tag) for tag in
                                                      ['pending', 'rejected',
@@ -99,11 +103,14 @@ class Event(models.Model):
             self.timestamp = cur_time
             self.eventkey = hashlib.sha256(
                 str(cur_time).encode('utf-8')).hexdigest()
+            send_email(self.organizer_email, hashlib.sha256(
+                str(cur_time).encode('utf-8')).hexdigest(), self.event_name, False)
         else:
             if self.eventkey is None or self.eventkey == "":
                 self.eventkey = hashlib.sha256(
                     str(self.timestamp).encode('utf-8')).hexdigest()
-
+                send_email(self.organizer_email, hashlib.sha256(
+                str(cur_time).encode('utf-8')).hexdigest(), self.event_name, False)
         super(Event, self).save(force_insert=force_insert,
                                 force_update=force_update, using=using,
                                 update_fields=update_fields)
@@ -150,6 +157,27 @@ class TicketType(models.Model):
             counter += ticket.amount
         return counter
 
+def send_email(recipient, code, name, isTicket):
+    plaintext = ""
+    htmly = ""
+    subject = ""
+    if isTicket:
+        plaintext = get_template('new_ticket.txt')
+        htmly = get_template('new_ticket.html')
+        subject = "Zakupiłeś nowy bilet"
+    else:
+        plaintext = get_template('new_event.txt')
+        htmly = get_template('new_event.html')
+        subject = "Utworzyłeś nowe wydarzenie"
+
+    d = {'code': code, 'ename' : name}
+
+    from_email, to = pers.EMAIL_HOST_USER, recipient
+    text_content = plaintext.render(d)
+    html_content = htmly.render(d)
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
 
 class ClientTickets(models.Model):
     id = models.AutoField(primary_key=True)
@@ -194,11 +222,19 @@ class ClientTickets(models.Model):
                         (str(cur_time) + str(self.client_id) + str(
                             self.client_id.email) + str(self.event_id)).encode(
                             'utf-8')).hexdigest()
+                    send_email(self.client_id.email, hashlib.sha256(
+                        (str(cur_time) + str(self.client_id) + str(
+                            self.client_id.email) + str(self.event_id)).encode(
+                            'utf-8')).hexdigest(), self.event_id.event_name, True)
                 else:
                     self.ticket_hash = hashlib.sha256(
                         (str(self.timestamp) + str(self.client_id) + str(
                             self.client_id.email) + str(self.event_id)).encode(
                             'utf-8')).hexdigest()
+                    send_email(self.client_id.email, hashlib.sha256(
+                        (str(self.timestamp) + str(self.client_id) + str(
+                            self.client_id.email) + str(self.event_id)).encode(
+                            'utf-8')).hexdigest(), self.event_id.event_name, True)
         super(ClientTickets, self).save(force_insert=force_insert,
                                         force_update=force_update, using=using,
                                         update_fields=update_fields)

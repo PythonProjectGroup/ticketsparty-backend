@@ -1,0 +1,3 @@
+{% load static %}
+{% load qr_tags %}
+Cześć, utworzyłeś nowe wydarzenie o nazwie {{ ename }}! Oto Twoj kod QR uprawniający do sprawdzania biletów: <br><br> {% qr_from_text code %}

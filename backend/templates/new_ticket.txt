@@ -1,0 +1,1 @@
+Cześć, zakupiłeś bilet na wydarzenie o nazwie {{ ename }}! Oto Twoj kod QR: {{ code }}
